@@ -10,7 +10,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'api\controllers',
     'bootstrap' => ['oauth2'],
-    'defaultRoute' => 'api/index',
+    'defaultRoute' => 'swagger/index',
     'modules' => [
         'oauth2' => [
             'class' => \filsh\yii2\oauth2server\Module::class,

@@ -4,7 +4,7 @@ $routes = [
     'POST oauth2/<action:\w+>' => 'rest/<action>',
 
     'GET /doc' => '/doc',
-    'GET /' => '/api',
+    'GET /' => '/',
 
     'POST /carrier' => 'carrier/create',
     'GET /carrier' => 'carrier/index',

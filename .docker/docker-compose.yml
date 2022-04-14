@@ -16,7 +16,6 @@ services:
     build:
       context: ./php
     container_name: tmp_php
-    user: "${CURRENT_UID}:${CURRENT_GID}"
     volumes:
       - ../:/var/www/html
     environment:
