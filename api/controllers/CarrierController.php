@@ -153,18 +153,4 @@ class CarrierController extends BaseController
         $model->delete();
         return $this->success();
     }
-
-    protected function findModel($id, $status = null)
-    {
-        $condition = ['id' => $id];
-        if ($status) {
-            $condition['status'] = $status;
-        }
-        $model = Carrier::findOne($condition);
-        if (!$model) {
-            throw new NotFoundHttpException();
-        }
-
-        return $model;
-    }
 }

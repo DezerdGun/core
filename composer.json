@@ -25,7 +25,8 @@
         "the-real-start/yii2-rest-response": "*",
         "yiisoft/yii2-authclient": "^2.2",
         "bestyii/yii2-openapi-reader": "1.0.2",
-        "ext-json": "*"
+        "ext-json": "*",
+        "symfony/mailer": "^5.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
