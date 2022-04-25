@@ -17,12 +17,15 @@ use yii\web\IdentityInterface;
  * @property string $password_reset_token
  * @property string $verification_token
  * @property string $email
+ * @property string $confirm_code
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
  */
+
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_ACTIVE = 1;
@@ -30,9 +33,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
 
 
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return '{{%user}}';
@@ -54,8 +54,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            // the name, email, subject and body attributes are required
+            [['username', 'email'], 'safe'],
+
+            // the email attribute should be a valid email address
+            ['email', 'email'],
         ];
     }
 
@@ -210,4 +215,5 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
 }

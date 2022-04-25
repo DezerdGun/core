@@ -12,6 +12,9 @@ $routes = [
     'POST /carrier/<id:\d+>/sign' => 'carrier/sign',
     'DELETE /carrier/<id:\d+>' => 'carrier/delete',
 
+    'POST /user' => 'user/create',
+    'POST /user/<confirm_code:\d+>/suspect' => 'user/suspect',
+
 ];
 
 return $routes;

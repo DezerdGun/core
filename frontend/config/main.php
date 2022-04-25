@@ -12,6 +12,19 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'encryption' => 'tls',
+                'host' => 'smtp.gmail.com',
+                'port' => '587',
+                'username' => 'MirsaidJafton@gmail.com',
+                'password' => 'MirsaidJafton',
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
