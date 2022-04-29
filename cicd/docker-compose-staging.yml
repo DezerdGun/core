@@ -1,0 +1,11 @@
+version: "3.9"
+   
+services:
+  app:
+    image: tms2/app:staging
+    env_file: staging.env
+    volumes:
+      - /home/ubuntu/tms2/api/web/uploads:/var/www/app/api/web/uploads
+      - /home/ubuntu/tms2/vendor:/var/www/app/vendor
+    ports:
+      - "100:80"
