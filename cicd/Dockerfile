@@ -16,15 +16,15 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
-COPY .docker/crontab-$APP_ENV /tmp/crontab
+COPY cicd/crontab-$APP_ENV /tmp/crontab
 
 # supercronic
 RUN docker-php-ext-install pdo_pgsql intl gd zip
-COPY .docker/composer-setup.php /tmp
+COPY cicd/composer-setup.php /tmp
 RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
-COPY .docker/api-$APP_ENV.conf /etc/apache2/sites-available/api-$APP_ENV.conf
-COPY .docker/backend-$APP_ENV.conf /etc/apache2/sites-available/backend-$APP_ENV.conf
-COPY .docker/frontend-$APP_ENV.conf /etc/apache2/sites-available/frontend-$APP_ENV.conf
+COPY cicd/api-$APP_ENV.conf /etc/apache2/sites-available/api-$APP_ENV.conf
+COPY cicd/backend-$APP_ENV.conf /etc/apache2/sites-available/backend-$APP_ENV.conf
+COPY cicd/frontend-$APP_ENV.conf /etc/apache2/sites-available/frontend-$APP_ENV.conf
 RUN a2enmod rewrite
 RUN a2ensite api-$APP_ENV
 RUN a2ensite backend-$APP_ENV
@@ -34,11 +34,11 @@ RUN pecl install imagick
 RUN pecl install xdebug
 RUN pecl install apcu_bc
 RUN docker-php-ext-enable memcached imagick xdebug
-COPY .docker/php-$APP_ENV.ini $PHP_INI_DIR/conf.d/tms2.ini
+COPY cicd/php-$APP_ENV.ini $PHP_INI_DIR/conf.d/tms2.ini
 RUN mkdir -p /root/.ssh
-COPY .docker/known_hosts /root/.ssh
-COPY .docker/id_ed25519 /root/.ssh
-COPY .docker/id_ed25519.pub /root/.ssh
+COPY cicd/known_hosts /root/.ssh
+COPY cicd/id_ed25519 /root/.ssh
+COPY cicd/id_ed25519.pub /root/.ssh
 RUN chmod g-r,g-w,g-x,o-r,o-w,o-x /root/.ssh/id_ed25519
 RUN mkdir -p /var/www/app
 WORKDIR /var/www/app
