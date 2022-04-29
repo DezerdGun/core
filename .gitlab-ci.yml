@@ -34,6 +34,6 @@ deploy_staging:
     - echo "DB_USER=$DB_USER" >> .env
     - scp -i key.pem -o StrictHostKeyChecking=no cicd/docker-compose-staging.yml ubuntu@tms.jafton.com:~/tms2/docker-compose.yml
     - scp -i key.pem -o StrictHostKeyChecking=no .env ubuntu@tms.jafton.com:~/tms2/staging.env
-    - ssh -i key.pem -o StrictHostKeyChecking=no ubuntu@tms.jafton.com 'cd cicd && docker login --username '$DOCKER_USERNAME' --password '$DOCKER_PASSWORD' '$REGISTRY'/tms2/app:staging && docker compose -p tms2 stop && docker compose -p tms2 rm -f && docker pull '$REGISTRY'/tms2/app:staging && docker tag '$REGISTRY'/tms2/app:staging tms2/app:staging && docker compose -p tms2 up --remove-orphans --detach'
+    - ssh -i key.pem -o StrictHostKeyChecking=no ubuntu@tms.jafton.com 'cd tms2 && docker login --username '$DOCKER_USERNAME' --password '$DOCKER_PASSWORD' '$REGISTRY'/tms2/app:staging && docker compose -p tms2 stop && docker compose -p tms2 rm -f && docker pull '$REGISTRY'/tms2/app:staging && docker tag '$REGISTRY'/tms2/app:staging tms2/app:staging && docker compose -p tms2 up --remove-orphans --detach'
     - rm key.pem
     - rm .env
