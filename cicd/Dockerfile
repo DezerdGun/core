@@ -44,4 +44,4 @@ RUN mkdir -p /var/www/app
 WORKDIR /var/www/app
 COPY . .
 EXPOSE 80
-CMD [".docker/apache_start.sh"]
+CMD ["cicd/apache_start.sh"]
