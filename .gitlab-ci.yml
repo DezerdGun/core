@@ -1,0 +1,30 @@
+services:
+  - docker:19.03.1-dind
+
+stages:
+  - build_staging
+  - deploy_staging
+
+build_staging:
+  stage: build_staging
+  environment: staging
+  only:
+    - develop
+  script:
+    - docker build -f .docker/Dockerfile -t $REGISTRY/tms2/app:staging --build-arg APP_ENV=staging .
+    - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD $REGISTRY/tms2/app:staging
+    - docker push $REGISTRY/tms2/app:staging
+
+deploy_staging:
+  stage: deploy_staging
+  environment: staging
+  only:
+    - develop
+  script:
+    - apk update
+    - apk add openssh
+    - echo "-----BEGIN RSA PRIVATE KEY-----" > key.pem
+    - echo $SSH_KEY >> key.pem
+    - echo "-----END RSA PRIVATE KEY-----" >> key.pem
+    - scp -i key.pem -o StrictHostKeyChecking=no .docker/docker-compose-staging.yml ubuntu@tms.jafton.com:~/tms2
+    - rm key.pem
