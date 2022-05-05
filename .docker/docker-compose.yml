@@ -60,8 +60,10 @@ services:
      - "./postgres/initdb.sh:/docker-entrypoint-initdb.d/z1.sh"
      - "./postgres/initdb-test.sh:/docker-entrypoint-initdb.d/z2.sh:ro"
      - "./database:/var/lib/postgresql/data"
-  #  for Windows (https://github.com/docker/for-win/issues/445)
-  #  - "postgres_database:/var/lib/postgresql/data"
+# WINDOWS - comment upper line and uncomment lower line
+#     - "postgres_database:/var/lib/postgresql/data"
+
+
     ports:
      - "${DB_PORT}:5432"
 
@@ -79,7 +81,9 @@ services:
       - "PGADMIN_SERVER_JSON_FILE=/tmp/output_file.json"
     ports:
       - "${PGADMIN_PORT}:80"
-  # for Windows (https://github.com/docker/for-win/issues/445)
-  # volumes:
-  #   postgres_database:
-  #     external: true
+
+# docker volume create postgres_database
+# uncomment for WINDOWS
+#volumes:
+#  postgres_database:
+#    external: true
