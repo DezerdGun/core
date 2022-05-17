@@ -34,6 +34,13 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
+# docker runtime
+/.docker/database
+/.docker/pgadmin_storage
+!/.docker/pgadmin_storage/admin_jafton.com/dev_rsa
+/.docker/redis_data
+/.docker/conf/restrict-local
+
 # ignore generated files
 /frontend/web/index.php
 /frontend/web/index-test.php
@@ -41,7 +48,6 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
-/.docker/database
 
 # ignore all log files
 *.log

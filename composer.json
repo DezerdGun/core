@@ -26,7 +26,9 @@
         "yiisoft/yii2-authclient": "^2.2",
         "bestyii/yii2-openapi-reader": "1.0.2",
         "ext-json": "*",
-        "symfony/mailer": "^5.4"
+        "symfony/mailer": "^5.4",
+        "vonage/client": "^3.0",
+        "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

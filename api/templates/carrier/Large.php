@@ -2,10 +2,8 @@
 
 namespace api\templates\carrier;
 
-
 use common\models\Carrier;
 use TRS\RestResponse\templates\BaseTemplate;
-
 
 /**
  *
@@ -16,23 +14,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="string"
  *     ),
  *     @OA\Property(
- *         property="name",
- *         type="string"
- *     ),
- *     @OA\Property(
- *         property="email",
- *         type="string"
- *     ),
- *     @OA\Property(
- *         property="phone",
- *         type="string"
- *     ),
- *     @OA\Property(
- *         property="number",
- *         type="string"
- *     ),
- *     @OA\Property(
- *         property="password",
+ *         property="user_id",
  *         type="string"
  *     ),
  *     @OA\Property(
@@ -66,11 +48,7 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'name' => $model->name,
-            'email' => $model->email,
-            'phone' => $model->phone,
-            'number' => $model->number,
-            'password' => $model->password,
+            'user_id' => $model->user_id,
             'mc' => $model->mc,
             'dot' => $model->dot,
             'ein' => $model->ein,

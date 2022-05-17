@@ -62,11 +62,7 @@ class CarrierController extends BaseController
         if (!$model->validate()) {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        $model->name = $_POST['name'];
-        $model->email = $_POST['email'];
-        $model->phone = $_POST['phone'];
-        $model->number = $_POST['number'];
-        $model->password = md5($_POST['password']);
+        $model->user_id = $_POST['user_id'];
         $model->mc = $_POST['mc'];
         $model->dot = $_POST['dot'];
         $model->ein = $_POST['ein'];
@@ -74,8 +70,6 @@ class CarrierController extends BaseController
         $model->ic = $_POST['ic'];
         $model->save();
         return $model;
-
-
     }
 
     /**

@@ -2,49 +2,23 @@
 
 namespace api\forms;
 
-
 use yii\base\Model;
-
 
 /**
  * Class CarrierCreate
  *
  * @OA\Schema(
- *     required={"name","email","phone","number","password","mc","dot","ein","w9","ic"}
+ *     required={"user_id","mc","dot","ein","w9","ic"}
  * )
  */
 class CarrierCreate extends Model
 {
     /**
      * @OA\Property(
-     *     type="string"
+     *     type="integer"
      * )
      */
-    public $name;
-    /**
-     * @OA\Property(
-     *     type="string"
-     * )
-     */
-    public $email;
-    /**
-     * @OA\Property(
-     *     type="string"
-     * )
-     */
-    public $phone;
-    /**
-     * @OA\Property(
-     *     type="number"
-     * )
-     */
-    public $number;
-    /**
-     * @OA\Property(
-     *     type="password"
-     * )
-     */
-    public $password;
+    public $user_id;
     /**
      * @OA\Property(
      *     type="string"
@@ -83,7 +57,7 @@ class CarrierCreate extends Model
     public function rules()
     {
         return [
-            [['name','email','phone','number','password','mc', 'dot', 'ein', 'ic'], 'required'],
+            [['user_id','mc', 'dot', 'ein', 'ic'], 'required'],
             [['w9'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }

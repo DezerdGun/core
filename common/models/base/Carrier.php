@@ -11,11 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the base-model class for table "carrier".
  *
  * @property integer $id
- * @property string $name
- * @property string $email
- * @property string $phone
- * @property string $number
- * @property string $password
+ * @property integer $user_id
  * @property string $mc
  * @property string $dot
  * @property string $ein
@@ -54,7 +50,8 @@ abstract class Carrier extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','email','phone', 'number', 'password', 'mc', 'dot', 'ein', 'w9', 'ic'], 'string', 'max' => 32]
+            ['user_id', 'integer'],
+            [['mc', 'dot', 'ein', 'w9', 'ic'], 'string', 'max' => 32]
         ];
     }
 
@@ -65,11 +62,7 @@ abstract class Carrier extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'number' => 'Number',
-            'password' => 'Password',
+            'user_id' => "User ID",
             'mc' => 'Mc',
             'dot' => 'Dot',
             'ein' => 'Ein',

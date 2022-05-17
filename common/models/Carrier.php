@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use \common\models\base\Carrier as BaseCarrier;
 use yii\helpers\ArrayHelper;
 
@@ -11,7 +10,6 @@ use yii\helpers\ArrayHelper;
  */
 class Carrier extends BaseCarrier
 {
-
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
