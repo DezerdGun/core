@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220405_131910_carrier
+ * Class m220405_131910_create_carrier_table
  */
-class m220405_131910_carrier extends Migration
+class m220405_131910_create_carrier_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -14,21 +14,25 @@ class m220405_131910_carrier extends Migration
     {
         $this->createTable('{{%carrier}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(32),
-            'email' => $this->string(32),
-            'phone' => $this->string(32),
-            'number' => $this->string(32),
-            'password' => $this->string(32),
+            'user_id' => $this->integer()->notNull(),
             'mc' => $this->string(32),
             'dot' => $this->string(32),
             'ein' => $this->string(32),
             'w9' => $this->string(32),
             'ic' => $this->string(32),
-            'created_at' => $this->integer(),
-            'updated_at' => $this->integer(),
-            'status' =>$this->smallInteger()->notNull()->defaultValue(0),
-
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
         ]);
+
+        // add foreign key for table 'user'
+        $this->addForeignKey(
+            'fk-carrier-user_id',
+            'carrier',
+            'user_id',
+            'user',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**
@@ -36,6 +40,12 @@ class m220405_131910_carrier extends Migration
      */
     public function safeDown()
     {
+        // drops foreign key for table `user`
+        $this->dropForeignKey(
+            'fk-carrier-user_id',
+            'carrier'
+        );
+
         $this->dropTable('{{%carrier}}');
     }
 

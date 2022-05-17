@@ -43,6 +43,24 @@ services:
   #   image: adminer
   #   ports:
   #     - "8081:8080"
+  redis:
+    image: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - "./redis_data:/data"
+    # for Windows (https://github.com/docker/for-win/issues/445)
+    # - "redis_data:/data"
+    ports:
+      - "6379:6379"
+
+  rediscommander:
+    image: rediscommander/redis-commander
+    depends_on:
+      - redis
+    environment:
+      - "REDIS_HOSTS=redis"
+    ports:
+      - "${REDISCOMMANDER_PORT}:8081"
 
   database:
     image: mdillon/postgis

@@ -13,6 +13,7 @@ use yii\web\IdentityInterface;
  *
  * @property integer $id
  * @property string $username
+ * @property string $mobile_number
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $verification_token
@@ -31,7 +32,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
-
 
     public static function tableName()
     {
@@ -214,6 +214,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public static function findByMobileNumber($mobile_number)
+    {
+        return static::findOne([
+            'mobile_number' => $mobile_number,
+            'status' => self::STATUS_INACTIVE
+        ]);
     }
 
 }

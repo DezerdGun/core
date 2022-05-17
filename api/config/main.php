@@ -66,7 +66,7 @@ return [
             'identityClass' => api\components\oauth2\AppIdentity::class,
         ],
         'errorHandler' => [
-            'class' => \api\components\ErrorHandler::class,
+            'class' => api\components\ErrorHandler::class,
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,

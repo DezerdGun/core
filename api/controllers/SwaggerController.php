@@ -54,7 +54,6 @@ class SwaggerController extends Controller
         Yii::$app->getResponse()->content = $openApi->toJson();
     }
 
-
     public function actionIndex()
     {
         return $this->render('index');
