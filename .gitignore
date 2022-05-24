@@ -52,3 +52,5 @@ phpunit.phar
 # ignore all log files
 *.log
 
+/cdn/web/*
+!/cdn/web/.gitkeep
