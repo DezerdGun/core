@@ -28,7 +28,9 @@
         "ext-json": "*",
         "symfony/mailer": "^5.4",
         "vonage/client": "^3.0",
-        "yiisoft/yii2-redis": "^2.0"
+        "yiisoft/yii2-redis": "^2.0",
+        "yiisoft/yii2-imagine": "^2.3",
+        "mohorev/yii2-upload-behavior": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

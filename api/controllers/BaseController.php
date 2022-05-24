@@ -85,7 +85,7 @@ abstract class BaseController extends Controller
     }
 
    protected function saveModel(ActiveRecord $model, $refreshAfterSave = true)
-    {
+   {
         $proxy = false;
         try {
             if (!$model->save()) {
@@ -101,7 +101,7 @@ abstract class BaseController extends Controller
         if ($refreshAfterSave) {
             $model->refresh();
         }
-    }
+   }
 
     protected function index(ActiveQuery $q, int $page, int $pageSize, string $template, array $templateConfig = [])
     {

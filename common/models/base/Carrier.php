@@ -15,8 +15,10 @@ use yii\behaviors\TimestampBehavior;
  * @property string $mc
  * @property string $dot
  * @property string $ein
- * @property string $w9
- * @property string $ic
+ * @property string $w9_file
+ * @property string $w9_mime_type
+ * @property string $ic_file
+ * @property string $ic_mime_type
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $aliasModel
@@ -51,7 +53,7 @@ abstract class Carrier extends \yii\db\ActiveRecord
     {
         return [
             ['user_id', 'integer'],
-            [['mc', 'dot', 'ein', 'w9', 'ic'], 'string', 'max' => 32]
+            [['mc', 'dot', 'ein'], 'string', 'max' => 32]
         ];
     }
 
@@ -66,15 +68,17 @@ abstract class Carrier extends \yii\db\ActiveRecord
             'mc' => 'Mc',
             'dot' => 'Dot',
             'ein' => 'Ein',
-            'w9' => 'W 9',
-            'ic' => 'Ic',
+            'w9_file' => 'W 9',
+            'ic_file' => 'Ic',
+            'w9_mime_type' => 'w9 mime type',
+            'ic_mime_type' => 'ic mime type',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
 
-    
+
     /**
      * @inheritdoc
      * @return \api\models\CarrierQuery the active query used by this AR class.

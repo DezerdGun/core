@@ -4,9 +4,6 @@ namespace api\controllers;
 
 use api\templates\carrier\Large;
 use common\models\Carrier;
-use api\components\HttpException;
-use yii\web\NotFoundHttpException;
-use Yii;
 
 class CarrierController extends BaseController
 {
@@ -21,18 +18,41 @@ class CarrierController extends BaseController
      *     tags={"carrier"},
      *     operationId="createCarrier",
      *     summary="createCarrier",
-     *   @OA\RequestBody(
-     *       description="CarrierCreate",
-     *       @OA\JsonContent(ref="#/components/schemas/CarrierCreate"),
-     *       @OA\MediaType(
-     *           mediaType="multipart/form-data",
-     *           @OA\Schema(
-     *               type="object",
-     *               ref="#/components/schemas/CarrierCreate"
-     *          ),
-     *       )
-     *   ),
-     *       @OA\Response(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="Carrier[user_id]",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Carrier[mc]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Carrier[dot]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Carrier[ein]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Carrier[w9_file]",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Carrier[ic_file]",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
      *         @OA\JsonContent(
@@ -58,18 +78,10 @@ class CarrierController extends BaseController
     public function actionCreate()
     {
         $model = new Carrier();
-        $model->load(Yii::$app->request->post());
-        if (!$model->validate()) {
-            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-        }
-        $model->user_id = $_POST['user_id'];
-        $model->mc = $_POST['mc'];
-        $model->dot = $_POST['dot'];
-        $model->ein = $_POST['ein'];
-        $model->w9 = $_FILES['w9']['name'];
-        $model->ic = $_POST['ic'];
-        $model->save();
-        return $model;
+        $model->setScenario(Carrier::SCENARIO_INSERT);
+        $model->load($this->getAllowedPost());
+        $this->saveModel($model);
+        return $this->success();
     }
 
     /**
