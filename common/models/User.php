@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -32,6 +33,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
+
+    use Template;
 
     public static function tableName()
     {

@@ -52,7 +52,10 @@ abstract class Carrier extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id'], 'required'],
             ['user_id', 'integer'],
+            [['user_id'], 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => ['user_id' => 'id'], 'skipOnEmpty' => true],
+            ['user_id', 'unique', 'targetClass' => '\common\models\Carrier', 'message' => 'Carrier already exists'],
             [['mc', 'dot', 'ein'], 'string', 'max' => 32]
         ];
     }

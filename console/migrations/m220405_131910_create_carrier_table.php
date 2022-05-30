@@ -14,7 +14,7 @@ class m220405_131910_create_carrier_table extends Migration
     {
         $this->createTable('{{%carrier}}', [
             'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull()->unique(),
             'mc' => $this->string(32),
             'dot' => $this->string(32),
             'ein' => $this->string(32),

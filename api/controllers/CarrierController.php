@@ -2,7 +2,9 @@
 
 namespace api\controllers;
 
+use api\components\HttpException;
 use api\templates\carrier\Large;
+use api\templates\carrier\Small;
 use common\models\Carrier;
 
 class CarrierController extends BaseController
@@ -79,9 +81,12 @@ class CarrierController extends BaseController
     {
         $model = new Carrier();
         $model->setScenario(Carrier::SCENARIO_INSERT);
-        $model->load($this->getAllowedPost());
-        $this->saveModel($model);
-        return $this->success();
+        if ($model->load($this->getAllowedPost()) && $model->validate()) {
+            $this->saveModel($model);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+        return $this->success($model->getAsArray(Small::class));
     }
 
     /**

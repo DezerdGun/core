@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\behaviors\UploadBehavior;
 use \common\models\base\Carrier as BaseCarrier;
+use common\models\traits\Template;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -15,6 +16,8 @@ class Carrier extends BaseCarrier
     const STATUS_ACTIVE = 1;
 
     const SCENARIO_INSERT = 'insert';
+
+    use Template;
 
     public function behaviors()
     {

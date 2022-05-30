@@ -16,6 +16,8 @@ $routes = [
     'POST /user/<confirm_code:\d+>/suspect' => 'user/suspect',
     'POST /user/verify' => 'user/verify',
     'POST /user/check' => 'user/check',
+
+    'POST /customer' => 'customer/create',
 ];
 
 return $routes;
