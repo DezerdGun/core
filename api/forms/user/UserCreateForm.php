@@ -46,22 +46,21 @@ class UserCreateForm extends Model
         ];
     }
 
-    public function signup()
+    public function signup(User $model)
     {
-        $user = new User();
-        $user->email = $this->email;
-        $user->mobile_number = $this->mobile_number;
+        $model->email = $this->email;
+        $model->mobile_number = $this->mobile_number;
         if ($this->email) {
-            if (!$this->sendEmail($user)) {
+            if (!$this->sendEmail($model)) {
                return false;
             }
         } else {
             $smsRequest = new SMSRequest();
             $smsRequest->verify($this->mobile_number);
         }
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        $user->save();
+        $model->setPassword($this->password);
+        $model->generateAuthKey();
+        $model->save();
 
     }
 

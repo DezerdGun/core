@@ -7,6 +7,7 @@ use api\components\sms\SMSRequest;
 use api\forms\user\UserCheckForm;
 use api\forms\user\UserVerifyForm;
 use api\forms\user\UserCreateForm;
+use api\templates\user\Small;
 use common\models\User;
 use Yii;
 
@@ -31,6 +32,7 @@ class UserController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
+     *                 ref="#/components/schemas/UserSmall"
      *             )
      *         )
      *     ),
@@ -43,13 +45,14 @@ class UserController extends BaseController
 
     public function actionCreate()
     {
-       $model = new UserCreateForm();
-       if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-           $model->signup();
+       $createForm = new UserCreateForm();
+       $model = new User();
+       if ($createForm->load(Yii::$app->request->post()) && $createForm->validate()) {
+           $createForm->signup($model);
        } else {
-           throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+           throw new HttpException(400, [$createForm->formName() => $createForm->getErrors()]);
        }
-       return $this->success();
+       return $this->success($model->getAsArray(Small::class));
     }
 
     /**
