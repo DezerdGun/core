@@ -29,8 +29,20 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','_form','_search','create', 'index','update', 'view'],
                 'rules' => [
+                    // Index Доступен для роли author и admin
+                    [
+                        'allow' => true,
+                        'actions' =>  ['index'],
+                        'roles' => ['author', 'admin'],
+                    ],
+                    // 'view','_form','_search', 'update','create' доступны только администратору. Если пользователь с ролью author попытается зайти, то он получит сообщение с ошибкой 403
+                    [
+                        'allow' => true,
+                        'actions' =>  ['view','_form','_search', 'update','create'],
+                        'roles' => ['admin'],
+                    ],
                     [
                         'actions' => ['signup'],
                         'allow' => true,
