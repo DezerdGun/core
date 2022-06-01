@@ -4,6 +4,7 @@ namespace api\controllers;
 
 use common\controllers\traits\AllowedAttributes;
 use common\controllers\traits\RequiredAttributes;
+use common\models\User;
 use Exception;
 use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
 use api\components\AccessRule;

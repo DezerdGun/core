@@ -30,7 +30,9 @@
         "vonage/client": "^3.0",
         "yiisoft/yii2-redis": "^2.0",
         "yiisoft/yii2-imagine": "^2.3",
-        "mohorev/yii2-upload-behavior": "*"
+        "mohorev/yii2-upload-behavior": "*",
+        "hail812/yii2-adminlte3": "~1.1"
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

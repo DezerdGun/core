@@ -8,7 +8,7 @@ use yii\db\Migration;
 class m220311_104958_create_swagger_user extends Migration
 {
     protected $clientId = 'sf6KKGAhlW-VVkfjTdQCZqB5U5iyZxCf';
-    protected $clientSecret = 'XBwabfg48Voh0MHBRYGsVgIkA03mvF7B';
+        protected $clientSecret = 'XBwabfg48Voh0MHBRYGsVgIkA03mvF7B';
     protected $email = 'swagger@jafton.com';
 
     /**

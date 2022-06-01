@@ -17,6 +17,9 @@ $routes = [
     'POST /user/verify' => 'user/verify',
     'POST /user/check' => 'user/check',
 
+    'POST /user/recovery' => 'recovery/recovery',
+    'POST /user/<confirm_code:\d+>/password' => 'recovery/password',
+
     'POST /customer' => 'customer/create',
 ];
 
