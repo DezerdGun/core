@@ -49,8 +49,8 @@ return [
                 'encryption' => 'tls',
                 'host' => 'smtp.gmail.com',
                 'port' => '587',
-                'username' => 'MirsaidJafton@gmail.com',
-                'password' => 'MirsaidJafton',
+                'username' => 'muzaffarovmirsaid38@gmail.com',
+                'password' => 'vidiqnlohvviwotb',
             ],
         ],
         'request' => [
