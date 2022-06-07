@@ -11,10 +11,10 @@ class StateController extends BaseController
 {
     /**
      * @OA\Get(
-     *     path="/liststate",
-     *     tags={"liststate"},
-     *     operationId="getListstate",
-     *     summary="getListstate",
+     *     path="/lists/state",
+     *     tags={"lists"},
+     *     operationId="getStates",
+     *     summary="getStates",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",

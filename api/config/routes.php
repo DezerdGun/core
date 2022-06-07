@@ -21,6 +21,12 @@ $routes = [
     'POST /user/<confirm_code:\d+>/password' => 'recovery/password',
 
     'POST /customer' => 'customer/create',
+
+    'GET /lists/state' => 'state/index',
+    'GET /lists/load' => 'load/index',
+    'GET /lists/container' => 'container/index',
+    'GET /lists/truck' => 'truck/index',
+
 ];
 
 return $routes;

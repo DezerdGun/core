@@ -31,8 +31,16 @@
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                         'items' => [
-                            ['label' => 'State List', 'url' => ['state/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Container List', 'url' => ['container/index'], 'iconStyle' => 'far'],
+                            [
+                                        'label' => 'Lists',
+                                        'iconStyle' => 'far',
+                                        'items' => [
+                                            ['label' => 'State List', 'url' => ['state/index'], 'iconStyle' => 'far'],
+                                            ['label' => 'Container List', 'url' => ['container/index'], 'iconStyle' => 'far'],
+                                            ['label' => 'Load List', 'url' => ['load/index'], 'iconStyle' => 'far'],
+                                            ['label' => 'Truck List', 'url' => ['truck/index'], 'iconStyle' => 'far'],
+                                        ]
+                            ],
                     ],
                 ]);
             ?>
