@@ -2,20 +2,16 @@
 
 namespace api\controllers;
 
-use common\models\Container;
+use common\models\Load;
 
-
-/**
-* This is the class for controller "ContainerController".
-*/
-class ContainerController extends BaseController
+class LoadController extends BaseController
 {
     /**
      * @OA\Get(
-     *     path="/lists/container",
+     *     path="/lists/load",
      *     tags={"lists"},
-     *     operationId="getContainerTypes",
-     *     summary="getContainerTypes",
+     *     operationId="getLoadTypes",
+     *     summary="getLoadTypes",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -47,9 +43,11 @@ class ContainerController extends BaseController
      *     }
      * )
      */
+
     public function actionIndex()
     {
-        $data = Container::find()->all();
-        return $this->success($data);
+        $load = Load::find()->all();
+        return $this->success($load);
     }
+
 }
