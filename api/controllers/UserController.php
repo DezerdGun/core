@@ -93,8 +93,8 @@ class UserController extends BaseController
             $code->save();
             echo 'Status updated successful';
 //            User::updateAll(['status'=>User::STATUS_ACTIVE]);
-        }else{
-            echo 'wrong';
+        }else {
+            throw new HttpException(400,['wrong']);
         }
     }
     /**
