@@ -8,7 +8,7 @@ use yii\db\Migration;
 class m220311_104958_create_swagger_user extends Migration
 {
     protected $clientId = 'sf6KKGAhlW-VVkfjTdQCZqB5U5iyZxCf';
-        protected $clientSecret = 'XBwabfg48Voh0MHBRYGsVgIkA03mvF7B';
+    protected $clientSecret = 'XBwabfg48Voh0MHBRYGsVgIkA03mvF7B';
     protected $email = 'swagger@jafton.com';
 
     /**
@@ -30,7 +30,7 @@ class m220311_104958_create_swagger_user extends Migration
             'client_secret' => $this->clientSecret,
             'redirect_uri' => 'oob',
             'grant_types' => common\enums\GrantType::PASSWORD,
-            'scope' => common\enums\Scope::CARRIER,
+            'scope' => common\enums\Scope::USER,
             'user_id' => \common\models\User::findOne(['email' => $this->email])->id
         ]);
     }

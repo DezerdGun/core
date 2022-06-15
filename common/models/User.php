@@ -220,11 +220,11 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    public static function findByMobileNumber($mobile_number)
+    public static function findByMobileNumber($mobile_number, $status)
     {
         return static::findOne([
             'mobile_number' => $mobile_number,
-            'status' => self::STATUS_INACTIVE
+            'status' => $status
         ]);
     }
 

@@ -53,6 +53,14 @@ use yii\rest\Controller;
  *             @OA\Property(
  *                 property="password",
  *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="client_id",
+ *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="client_secret",
+ *                 type="string"
  *             )
  *         )
  *     ),
@@ -86,8 +94,7 @@ use yii\rest\Controller;
  *         )
  *     ),
  *     security={
- *         {"httpBasic":{}},
- *      {"ClientCredentials":{}}
+ *         {"main":{}},
  *     }
  * )
  * @OA\Post(
