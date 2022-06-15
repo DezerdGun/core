@@ -55,7 +55,7 @@ class UserCheckForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByMobileNumber($this->mobile_number);
+            $this->_user = User::findByMobileNumber($this->mobile_number, User::STATUS_INACTIVE);
         }
 
         return $this->_user;

@@ -37,7 +37,6 @@ class UserController extends BaseController
      *         )
      *     ),
      *     security={
-     *         {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )

@@ -7,5 +7,5 @@ use TRS\Enum\Enum;
 class Scope extends Enum
 {
     const _PUBLIC = 'public';
-    const CARRIER = 'carrier';
+    const USER = 'user';
 }
