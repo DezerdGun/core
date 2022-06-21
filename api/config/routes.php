@@ -26,6 +26,9 @@ $routes = [
     'GET /lists/load' => 'load/index',
     'GET /lists/container' => 'container/index',
     'GET /lists/truck' => 'truck/index',
+    'GET /lists/truck-types' => 'truck-types/index',
+    'GET /lists/equipment' => 'equipment/index',
+    'GET /lists/load-modes' => 'load-modes/index',
 
 ];
 
