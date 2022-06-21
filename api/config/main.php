@@ -50,7 +50,7 @@ return [
                 'host' => 'smtp.gmail.com',
                 'port' => '587',
                 'username' => 'muzaffarovmirsaid1998@gmail.com',
-                'password' => 'dqggvwcqlrbmgcvy',
+                'password' => 'cpmelhjfchmtmlwl',
             ],
         ],
         'request' => [
