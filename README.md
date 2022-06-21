@@ -90,3 +90,8 @@ http://backend.tms.loc/gii
 
 http://frontend.tms.loc/gii
 
+### backend.tmp.loc and frontend.tmp.loc
+http://localhost:8000
+
+Email/Password: admin@jafton.com/chesnok
+

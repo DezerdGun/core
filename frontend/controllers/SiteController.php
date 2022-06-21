@@ -26,30 +26,46 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
+//        return [
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'only' => ['logout', 'signup'],
+//                'rules' => [
+//                    [
+//                        'actions' => ['signup'],
+//                        'allow' => true,
+//                        'roles' => ['?'],
+//                    ],
+//                    [
+//                        'actions' => ['logout'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                    [
+//                        'allow' => true,
+//                        'actions' =>  ['index'],
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
+//            'verbs' => [
+//                'class' => VerbFilter::class,
+//                'actions' => [
+//                    'logout' => ['post'],
+//                ],
+//            ],
+//        ];
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup','_form','_search','create', 'index','update', 'view'],
                 'rules' => [
-                    // Index Доступен для роли author и admin
                     [
+                        'actions' => ['login', 'error'],
                         'allow' => true,
-                        'actions' =>  ['index'],
-                        'roles' => ['author', 'admin'],
-                    ],
-                    // 'view','_form','_search', 'update','create' доступны только администратору. Если пользователь с ролью author попытается зайти, то он получит сообщение с ошибкой 403
-                    [
-                        'allow' => true,
-                        'actions' =>  ['view','_form','_search', 'update','create'],
-                        'roles' => ['admin'],
                     ],
                     [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -98,8 +114,9 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            echo 'isguest';
         }
+        $this->layout = 'blank';
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {

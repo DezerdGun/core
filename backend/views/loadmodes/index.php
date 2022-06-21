@@ -9,7 +9,7 @@ use yii\grid\GridView;
 * @var yii\data\ActiveDataProvider $dataProvider
 */
 
-$this->title = Yii::t('models', 'User');
+$this->title = Yii::t('models', 'Load Modes');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -21,7 +21,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 ?>
-<div class="giiant-crud user-index">
+<div class="giiant-crud load-modes-index">
 
     <?php
 //         ?>
@@ -30,7 +30,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <h1>
-        <?= Yii::t('models.plural', 'User') ?>
+        <?= Yii::t('models.plural', 'Load Modes') ?>
         <small>
             <?= Yii::t('cruds', 'List') ?>
         </small>
@@ -101,9 +101,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
             },
             'contentOptions' => ['nowrap'=>'nowrap']
         ],
-			'status',
-			'username',
-			'email:email',
+			'name',
                 ]
         ]); ?>
     </div>

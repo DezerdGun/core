@@ -6,8 +6,10 @@ use common\models\traits\Template;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+
 
 /**
  * User model
@@ -65,6 +67,8 @@ class User extends ActiveRecord implements IdentityInterface
 
             // the email attribute should be a valid email address
             ['email', 'email'],
+//            [['id', 'page', 'block', 'text'], 'safe'],
+//            ['page', 'string'],
         ];
     }
 
@@ -93,6 +97,17 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by email
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -227,5 +242,51 @@ class User extends ActiveRecord implements IdentityInterface
             'status' => $status
         ]);
     }
+
+    //Inquiry
+    public function search($params)
+    {
+        //First, we get an activequery
+        $query = self::find();
+        //Then create an activedataprovider object
+        $provider = new ActiveDataProvider([
+            //Provides a query object for the activedataprovider object
+            'query' => $query,
+            //Setting paging parameters
+            'pagination' => [
+                //Page size
+                'pageSize' => 3,
+                //Set the name of the current page number parameter in the address bar
+                'pageParam' => 'p',
+                //Setting the name of the address bar paging size parameter
+                'pageSizeParam' => 'pageSize',
+            ],
+            //Set sort
+            'sort' => [
+                //Default sort method
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ],
+                //Fields involved in sorting
+                'attributes' => [
+                    'id', 'page', 'block', 'text'
+                ],
+            ],
+        ]);
+
+        //If the verification fails, return directly
+        if (!($this->load($params) && $this->validate())) {
+            return $provider;
+        }
+
+        //Add filtering conditions
+        $query->andFilterWhere(['id' => $this->id])
+            ->andFilterWhere(['page' => $this->page])
+            ->andFilterWhere(['block' => $this->block])
+            ->andFilterWhere(['text' => $this->text]);
+
+        return $provider;
+    }
+
 
 }

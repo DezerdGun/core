@@ -4,19 +4,19 @@ use yii\helpers\Html;
 
 /**
 * @var yii\web\View $this
-* @var common\models\User $model
+* @var common\models\TruckTypes $model
 */
 
-$this->title = Yii::t('models', 'User');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Users'), 'url' => ['index']];
+$this->title = Yii::t('models', 'Truck Types');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Truck Types'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="giiant-crud user-create">
+<div class="giiant-crud truck-types-create">
 
     <h1>
-                <?= Html::encode($model->id) ?>
+                <?= Html::encode($model->name) ?>
         <small>
-            <?= Yii::t('models', 'User') ?>
+            <?= Yii::t('models', 'Truck Types') ?>
         </small>
     </h1>
 
