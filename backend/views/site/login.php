@@ -6,27 +6,36 @@
 
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
+use backend\assets\AppAsset;
+AppAsset::register($this);
 
 $this->title = 'Login';
 ?>
-<div class="site-login">
-    <div class="mt-5 offset-lg-3 col-lg-6">
-        <h1><?= Html::encode($this->title) ?></h1>
-
-        <p>Please fill out the following fields to login:</p>
-
-        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-            <div class="form-group">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+<div class="login-wrap">
+    <div class="login-html">
+        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Login</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+        <div class="login-form">
+            <div class="sign-in-htm">
+                <div class="group">
+                    <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                    <?= $form->field($model, 'email')->textInput(['autofocus' => true,'class' => 'input']) ?>
+                </div>
+                <div class="group">
+                    <?= $form->field($model, 'password')->passwordInput(['class' => 'input']) ?>
+                </div>
+                <div class="group">
+                    <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                </div>
+                <div class="group">
+                    <?= Html::submitButton('Login', ['class' => 'button']) ?>
+                </div>
+                <div class="hr"></div>
+                <div class="foot-lnk">
+                    <h4 style="color: white">Welcome To TMC 2</h4>
+                </div>
             </div>
-
-        <?php ActiveForm::end(); ?>
+        </div>
     </div>
 </div>
+<?php ActiveForm::end(); ?>

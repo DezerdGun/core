@@ -41,13 +41,20 @@ use yii\helpers\StringHelper;
             
 
 <!-- attribute status -->
-			<?= $form->field($model, 'status')->textInput() ?>
+<!--			 $form->field($model, 'status')->textInput() -->
+            <?= $form->field($model, 'status')->dropDownList([
+            '1' => 'Admin',
+            '2'=>'User'
+            ]);?>
 
 <!-- attribute username -->
 			<?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute email -->
 			<?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute password_hash -->
+			<?= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
         </p>
         <?php $this->endBlock(); ?>
         

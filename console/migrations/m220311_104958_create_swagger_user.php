@@ -33,6 +33,14 @@ class m220311_104958_create_swagger_user extends Migration
             'scope' => common\enums\Scope::USER,
             'user_id' => \common\models\User::findOne(['email' => $this->email])->id
         ]);
+        $this->insert('{{%user}}', [
+            'username' => 'Admin',
+            'password_hash' => Yii::$app->getSecurity()->generatePasswordHash('chesnok'),
+            'email' => 'admin@jafton.com',
+            'status' => common\models\User::STATUS_ACTIVE,
+            'created_at' => $time,
+            'updated_at' => $time,
+        ]);
     }
 
     /**

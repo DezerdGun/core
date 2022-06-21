@@ -9,16 +9,16 @@ use dmstr\bootstrap\Tabs;
 
 /**
 * @var yii\web\View $this
-* @var common\models\User $model
+* @var common\models\TruckTypes $model
 */
 $copyParams = $model->attributes;
 
-$this->title = Yii::t('models', 'User');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models.plural', 'User'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => (string)$model->id, 'url' => ['view', 'id' => $model->id]];
+$this->title = Yii::t('models', 'Truck Types');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('models.plural', 'Truck Types'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => (string)$model->name, 'url' => ['view', 'code' => $model->code]];
 $this->params['breadcrumbs'][] = 'View';
 ?>
-<div class="giiant-crud user-view">
+<div class="giiant-crud truck-types-view">
 
     <!-- flash message -->
     <?php if (\Yii::$app->session->getFlash('deleteError') !== null) : ?>
@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = 'View';
     <?php endif; ?>
 
     <h1>
-        <?= Html::encode($model->id) ?>
+        <?= Html::encode($model->name) ?>
         <small>
-            <?= Yii::t('models', 'User') ?>
+            <?= Yii::t('models', 'Truck Types') ?>
         </small>
     </h1>
 
@@ -44,14 +44,14 @@ $this->params['breadcrumbs'][] = 'View';
             <?php 
  echo Html::a(
             '<span class="glyphicon glyphicon-pencil"></span> ' . 'Edit',
-            [ 'update', 'id' => $model->id],
+            [ 'update', 'code' => $model->code],
             ['class' => 'btn btn-info'])
           ?>
 
             <?php 
  echo Html::a(
             '<span class="glyphicon glyphicon-copy"></span> ' . 'Copy',
-            ['create', 'id' => $model->id, 'User'=>$copyParams],
+            ['create', 'code' => $model->code, 'TruckTypes'=>$copyParams],
             ['class' => 'btn btn-success'])
           ?>
 
@@ -72,16 +72,15 @@ $this->params['breadcrumbs'][] = 'View';
 
     <hr/>
 
-    <?php $this->beginBlock('common\models\User'); ?>
+    <?php $this->beginBlock('common\models\TruckTypes'); ?>
 
     
     <?php 
  echo DetailView::widget([
     'model' => $model,
     'attributes' => [
-            'status',
-        'username',
-        'email:email',
+            'code',
+        'name',
     ],
     ]);
   ?>
@@ -90,7 +89,7 @@ $this->params['breadcrumbs'][] = 'View';
     <hr/>
 
     <?php 
- echo Html::a('<span class="glyphicon glyphicon-trash"></span> ' . 'Delete', ['delete', 'id' => $model->id],
+ echo Html::a('<span class="glyphicon glyphicon-trash"></span> ' . 'Delete', ['delete', 'code' => $model->code],
     [
     'class' => 'btn btn-danger',
     'data-confirm' => '' . 'Are you sure to delete this item?' . '',
@@ -108,8 +107,8 @@ $this->params['breadcrumbs'][] = 'View';
                      'encodeLabels' => false,
                      'items' => [
  [
-    'label'   => '<b class=""># '.Html::encode($model->id).'</b>',
-    'content' => $this->blocks['common\models\User'],
+    'label'   => '<b class=""># '.Html::encode($model->code).'</b>',
+    'content' => $this->blocks['common\models\TruckTypes'],
     'active'  => true,
 ],
  ]
