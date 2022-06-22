@@ -7,17 +7,17 @@ use api\components\sms\SMSRequest;
 use common\models\User;
 use yii\base\DynamicModel;
 use yii\base\Model;
-use yii;
 use yii\validators\EmailValidator;
 
 /**
- * Class UserCreateForm
+ * Class UserResendForm
  *
  * @OA\Schema(
- *     required={"email_or_mobile_number", "password"}
+ *     required={"email_or_mobile_number"}
  * )
  */
-class UserCreateForm extends Model
+
+class UserResendForm extends Model
 {
     /**
      * @OA\Property(
@@ -25,43 +25,14 @@ class UserCreateForm extends Model
      * )
      */
     public $email_or_mobile_number;
-    /**
-     * @OA\Property(
-     *     type="string"
-     * )
-     */
-    public $password;
     public $email;
     public $mobile_number;
 
     public function rules()
     {
         return [
-            ['email_or_mobile_number', 'validateEmailOrMobilePhone'],
-
-            // the name, subject and body attributes are required
-            ['password', 'safe'],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            ['email_or_mobile_number', 'validateEmailOrMobilePhone']
         ];
-    }
-
-    public function signup(User $user)
-    {
-        $user->email = $this->email;
-        $user->mobile_number = $this->mobile_number;
-        if ($this->email) {
-            $email = new EmailService();
-            $email->sendEmail($user);
-        } else {
-            $smsRequest = new SMSRequest();
-            $smsRequest->verify($this->mobile_number);
-        }
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        $user->save();
-
     }
 
     /**
@@ -78,8 +49,9 @@ class UserCreateForm extends Model
                 ['email', 'trim'],
                 ['email', 'email'],
                 ['email', 'string', 'max' => 320],
-                ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
                 ['email', 'default', 'value' => null],
+                ['email', 'exist', 'targetClass' => '\common\models\User', 'message' => 'This email not found.'],
+                ['email', 'exist', 'targetClass' => '\common\models\User', 'filter' => ['status' => User::STATUS_INACTIVE], 'message' => 'This email has already been verified.'],
             ]);
             if ($model->hasErrors()) {
                 $this->addError('email_or_mobile_number', $model->errors['email']);
@@ -91,7 +63,8 @@ class UserCreateForm extends Model
                 ['mobile_number', 'default', 'value' => null],
                 ['mobile_number', 'string'],
                 ['mobile_number', 'match', 'pattern' => '/^(998)[0-9]{9}$/'],
-                ['mobile_number', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This mobile number has already been taken.'],
+                ['mobile_number', 'exist', 'targetClass' => '\common\models\User', 'message' => 'This mobile number not found.'],
+                ['mobile_number', 'exist', 'targetClass' => '\common\models\User', 'filter' => ['status' => User::STATUS_INACTIVE], 'message' => 'This mobile number has already been verified.'],
             ]);
             if ($model->hasErrors()) {
                 $this->addError('email_or_mobile_number', $model->errors['mobile_number']);
@@ -101,17 +74,30 @@ class UserCreateForm extends Model
         }
 
     }
+
+    public function resend()
+    {
+        if ($this->email) {
+            $user = User::findOne(['email' => $this->email]);
+            $email = new EmailService();
+            $email->sendEmail($user);
+            $user->save();
+        } else {
+            $smsRequest = new SMSRequest();
+            $smsRequest->verify($this->mobile_number);
+        }
+    }
 }
 
 /**
  * @OA\RequestBody(
- *     request="UserCreateForm",
+ *     request="UserResendForm",
  *     required=true,
  *     @OA\JsonContent(
  *         @OA\Property(
- *             property="UserCreateForm",
+ *             property="UserResendForm",
  *             type="object",
- *             ref="#/components/schemas/UserCreateForm"
+ *             ref="#/components/schemas/UserResendForm"
  *         )
  *     )
  * )

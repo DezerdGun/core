@@ -46,12 +46,12 @@ return [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'encryption' => 'tls',
-                'host' => 'smtp.gmail.com',
+                'host' => 'smtp.mailgun.org',
                 'port' => '587',
-                'username' => 'muzaffarovmirsaid1998@gmail.com',
-                'password' => 'cpmelhjfchmtmlwl',
+                'username' => 'info@mail.therealstart.com',
+                'password' => 'cec96099decdffd4d0f2cf962240c9a8-24e2ac64-2f0b250d',
             ],
+            'messageConfig' => ['from' => 'info@mail.therealstart.com']
         ],
         'request' => [
             'parsers' => [

@@ -23,7 +23,7 @@ class m130524_201442_init extends Migration
             'auth_key' => $this->string(32),
             'password_hash' => $this->string()->notNull(),
             'password_reset_token' => $this->string()->unique(),
-            'confirm_code' => $this->string(32),
+            'confirm_code' => $this->string(32)->unique(),
             'scope' => $this->string(255),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
