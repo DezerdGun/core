@@ -13,8 +13,7 @@ $routes = [
     'DELETE /carrier/<id:\d+>' => 'carrier/delete',
 
     'POST /user' => 'user/create',
-    'POST /user/<confirm_code:\d+>/suspect' => 'user/suspect',
-    'POST /user/verify' => 'user/verify',
+    'POST /user/resend' => 'user/resend',
     'POST /user/check' => 'user/check',
 
     'POST /user/recovery' => 'recovery/recovery',

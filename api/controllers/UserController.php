@@ -5,7 +5,8 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\components\sms\SMSRequest;
 use api\forms\user\UserCheckForm;
-use api\forms\user\UserVerifyForm;
+use api\forms\user\UserConfirmEmailForm;
+use api\forms\user\UserResendForm;
 use api\forms\user\UserCreateForm;
 use api\templates\user\Small;
 use common\models\User;
@@ -44,66 +45,24 @@ class UserController extends BaseController
 
     public function actionCreate()
     {
-       $createForm = new UserCreateForm();
-       $model = new User();
-       if ($createForm->load(Yii::$app->request->post()) && $createForm->validate()) {
-           $createForm->signup($model);
+       $model = new UserCreateForm();
+       $user = new User();
+       if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+           $model->signup($user);
        } else {
-           throw new HttpException(400, [$createForm->formName() => $createForm->getErrors()]);
+           throw new HttpException(400, [$model->formName() => $model->getErrors()]);
        }
-       return $this->success($model->getAsArray(Small::class));
+       return $this->success($user->getAsArray(Small::class));
     }
 
     /**
      * @OA\Post(
-     *      path="/user/{confirm_code}/suspect",
+     *     path="/user/resend",
      *     tags={"user"},
-     *     operationId="confirmUser",
-     *     summary="confirmUser",
-     *     @OA\Parameter(
-     *         name="confirm_code",
-     *         in="path",
-     *         required=true
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successfull operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="success"
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *         {"main":{}},
-     *      {"ClientCredentials":{}}
-     *     }
-     * )
-     */
-
-
-    public function actionSuspect($confirm_code)
-    {
-        $code = User::find()->where(['confirm_code'=>$confirm_code])->one();
-        if($code == TRUE){
-            $code->status = '1';
-            $code->save();
-            echo 'Status updated successful';
-//            User::updateAll(['status'=>User::STATUS_ACTIVE]);
-        }else {
-            throw new HttpException(400,['wrong']);
-        }
-    }
-    /**
-     * @OA\Post(
-     *     path="/user/verify",
-     *     tags={"user"},
-     *     operationId="verifyUser",
-     *     summary="verifyUser",
-     *     requestBody={"$ref":"#/components/requestBodies/UserVerifyForm"},
-     *     description="Verify user's phone number. This endpoint can be used to resend confirm code",
+     *     operationId="resendConfirmationCode",
+     *     summary="resendConfirmationCode",
+     *     requestBody={"$ref":"#/components/requestBodies/UserResendForm"},
+     *     description="This endpoint can be used to resend confirm code",
      *       @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -126,12 +85,11 @@ class UserController extends BaseController
      * )
      */
 
-    public function actionVerify()
+    public function actionResend()
     {
-        $model = new UserVerifyForm();
+        $model = new UserResendForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $smsRequest = new SMSRequest();
-            $smsRequest->verify($model->mobile_number);
+           $model->resend();
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
@@ -144,7 +102,7 @@ class UserController extends BaseController
      *     operationId="checkUser",
      *     summary="checkUser",
      *     requestBody={"$ref":"#/components/requestBodies/UserCheckForm"},
-     *     description="Check user's mobile number. If code is right status becomes active",
+     *     description="Checks user's verifaction code. If code is right user status becomes active",
      *       @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -171,13 +129,7 @@ class UserController extends BaseController
     {
         $model = new UserCheckForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $smsRequest = new SMSRequest();
-            $response = $smsRequest->verifyCheck($model);
-            if ($response['status'] == SMSRequest::STATUS_SUCCESS)
-                $model->status();
-            else {
-                throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-            }
+            $model->status();
         }  else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
