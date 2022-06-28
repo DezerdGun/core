@@ -4,7 +4,7 @@ use common\models\page;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /**
 * @var yii\web\View $this
@@ -12,8 +12,9 @@ use yii\grid\GridView;
 */
 
 /**
- * @var common\models\User $model
- * @var common\models\User $provider
+ * @var common\models\page $model
+ * @var common\models\page $provider
+ *
  */
 
 $this->title = Yii::t('models', 'Page');
@@ -24,12 +25,15 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
+    $actionColumnTemplateString = "{view} {payment}{create}{update} {delete} ";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 ?>
-<div class="giiant-crud page-index">
 
+<div class="giiant-crud page-index">
+    <h2 style="margin: 8px;">
+<!--        --><?//= Html::a(' <i class="fas fa-file-pdf"></i> '  , ['privacy']) ?>
+    </h2>
     <?php \yii\widgets\Pjax::begin(['id' => 'list-data-list', 'timeout' => false, 'enablePushState' => false]) ?>
 
     <h1>
@@ -42,32 +46,6 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
         <div class="pull-left">
             <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
-
-        <div class="pull-right">
-
-                        
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
     </div>
 
     <hr />
@@ -75,46 +53,17 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
     <div class="table-responsive">
         <?php echo GridView::widget([
             'layout' => "<div class='tab-bg'>{summary}</div>\n\n<div class='table table-responsive list-table'>{items}\n{pager}</div>",
-
-
             'id' => 'myUserGridView',
             'dataProvider' => $provider,
             'filterModel' => $model,
+            'containerOptions' => ['style'=>'overflow: auto'], // only set when $responsive = false
             'columns' => [
-
-                ['class' => 'yii\grid\CheckboxColumn'],
                 ['class' => 'yii\grid\SerialColumn'],
-                [
-                    //Set field display title
-                    'label' => 'ID',
-                    'attribute' => 'id',
-                    'format' => 'raw',
-                    'headerOptions' => [
-                        'style' => 'width:120px;',
-                    ],
-                ],
                 [
                     'label' =>'Page ',
                     'attribute' => 'page',
                     'format' => 'raw',
                 ],
-//          [
-//            'label' =>'portrait ',
-//            'attribute' => 'head_img',
-//            'format' => 'raw',
-//            'value' => function ($data) {
-//              return '<img src="' . '/' . ltrim($data->head_img, '/') . '" width="60px">';
-//            },
-//          ],
-//          [
-//            'label' =>'Block ',
-//            'filter' => [0 =>'male ', 1 =>'female'],
-//            'attribute' => 'block',
-//            'format' => 'raw',
-//            'value' => function ($data) {
-//              Return ($data -> block == 0)?'male ':'female';
-//            }
-//          ],
                 [
                     'label' =>'Block ',
                     'attribute' => 'block',
@@ -126,19 +75,50 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
                     'format' => 'raw',
                 ],
                 [
+                    'class' => 'kartik\grid\ActionColumn',
+                    'dropdown' => true,
+                    'vAlign'=>'middle',
+                    'urlCreator' => function($action, $model, $key, $index) {
+            return Url::toRoute([$action, 'id' => $model->id]);
+            },
+                    'viewOptions'=>['title'=>'view', 'data-toggle'=>'tooltip'],
+                    'updateOptions'=>['title'=>'update', 'data-toggle'=>'tooltip'],
+                    'deleteOptions'=>['title'=>'delete', 'data-toggle'=>'tooltip'],
+                ],
+                [
                     'header' =>'Operation ',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
+                    'class' => 'kartik\grid\ActionColumn',
+//                    'template' => '{pdf} {update} {view}{delete} ',
+                    'template' => '<div class="column-buttons">
+                                        <span>{pdf}</span>
+                                    </div>',
                     'buttons' => [
+                        'pdf'=> function($action, page $model){
+                                return html::a('<i class="fas fa-file-pdf"></i>',Url::toRoute(['page/pdfsample','id'=>$model->id,'data-pjax' => 0]),['title'=>'Pdf','data-pjax' => 0]);
+                                },
                         [
                             'class' => ActionColumn::className(),
-                            'urlCreator' => function ($action, page $model, $key, $index, $column) {
-                                return Url::toRoute([$action, 'id' => $model->id]);
+                            'urlCreator' => function ($action, page $model) {
+                                return Url::toRoute([$action,'page/index', 'id' => $model->id]);
                             }
                         ],
+
                     ],
+
                 ],
             ],
+            'pjax' => true,
+            'bordered' => true,
+            'striped' => true,
+            'condensed' => true,
+            'responsive' => true,
+            'hover' => true,
+            'floatHeader' => true,
+//                    'floatHeaderOptions' => ['top' => $scrollingTop],
+            'showPageSummary' => false,
+//            'panel' => [
+//                'type' => GridView::TYPE_PRIMARY
+//            ],
         ]); ?>
     </div>
 

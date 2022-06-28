@@ -32,7 +32,13 @@
         "yiisoft/yii2-imagine": "^2.3",
         "mohorev/yii2-upload-behavior": "*",
         "hail812/yii2-adminlte3": "~1.1",
-        "mihaildev/yii2-ckeditor": "*"
+        "mihaildev/yii2-ckeditor": "*",
+        "kartik-v/yii2-mpdf": "dev-master",
+        "kartik-v/yii2-widget-colorinput": "*",
+        "kartik-v/yii2-bootstrap5-dropdown": "@dev",
+        "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-editable": "@dev"
+
 
     },
     "require-dev": {

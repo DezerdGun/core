@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 class Load extends BaseLoad
 {
 
+
     public function behaviors()
     {
         return ArrayHelper::merge(
