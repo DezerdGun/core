@@ -113,6 +113,7 @@ $this->params['breadcrumbs'][] = 'View';
     'content' => $this->blocks['common\models\Page'],
     'active'  => true,
 ],
+
  ]
                  ]
     );

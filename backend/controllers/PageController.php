@@ -2,12 +2,18 @@
 
 namespace backend\controllers;
 
+use common\models\load_modes;
 use common\models\page;
+use kartik\mpdf\Pdf;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+
+use common\models\Load;
 
 /**
  * PageController implements the CRUD actions for page model.
@@ -32,6 +38,51 @@ class PageController extends Controller
         );
     }
 
+    public function allowedAttributes()
+    {
+        $load = new load_modes();
+        return [
+            'clear-load' => [$load->formName() => ['scans']]
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'clear-load' => [
+                'before' => function () {
+                    return page::find()
+                        ->all();
+                },
+                'form' => function ( $page) {
+                    return  $page;
+                },
+            ]
+        ];
+    }
+
+    public function actionPdfsample($id)
+    {
+        $page = $this->findModel($id);
+        $item = load_modes::find()->where(['id' => $id])->all();
+        $content = $this->renderPartial('pdfsample',['model' => $page,'item' => $item]);
+                $pdf = new Pdf([
+                    'mode' => Pdf::MODE_UTF8,
+                    'format' => Pdf::FORMAT_A4,
+                    'orientation' => Pdf::ORIENT_PORTRAIT,
+                    'destination' => Pdf::DEST_DOWNLOAD,
+                    'content' => $content,
+                    'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+                    'cssInline' => '.kv-heading-1{font-size:18px}',
+                    'options' => ['title' => 'T M C 2 for German Trucks {Example}'],
+                    'methods' => [
+                        'SetHeader'=>['T M C 2 for German Trucks {Example}'],
+                        'SetFooter'=>['{PAGENO}'],
+                    ]
+                ]);
+                return $pdf->render();
+    }
+
     /**
      * Lists all page models.
      *
@@ -39,23 +90,6 @@ class PageController extends Controller
      */
     public function actionIndex()
     {
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => page::find(),
-//            /*
-//            'pagination' => [
-//                'pageSize' => 50
-//            ],
-//            'sort' => [
-//                'defaultOrder' => [
-//                    'id' => SORT_DESC,
-//                ]
-//            ],
-//            */
-//        ]);
-//
-//        return $this->render('index', [
-//            'dataProvider' => $dataProvider,
-//        ]);
         $user = new page();
         $provider = $user->search(YII::$app->request->get());
 
@@ -63,7 +97,6 @@ class PageController extends Controller
             'model' => $user,
             'provider' => $provider,
         ]);
-
 
     }
 

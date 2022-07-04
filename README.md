@@ -95,3 +95,6 @@ http://localhost:8000
 
 Email/Password: admin@jafton.com/chesnok
 
+### backend.tmp.loc and frontend.tmp.loc create user
+./yii user/create
+
