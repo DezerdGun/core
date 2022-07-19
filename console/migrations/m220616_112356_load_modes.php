@@ -1,6 +1,6 @@
 <?php
 
-use common\models\load_modes;
+use common\models\Load_modes;
 use yii\db\Migration;
 
 /**

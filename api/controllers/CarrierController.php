@@ -3,9 +3,10 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use api\forms\carrier\CarrierCreateForm;
 use api\templates\carrier\Large;
 use api\templates\carrier\Small;
-use common\models\Carrier;
+use Yii;
 
 class CarrierController extends BaseController
 {
@@ -20,40 +21,9 @@ class CarrierController extends BaseController
      *     tags={"carrier"},
      *     operationId="createCarrier",
      *     summary="createCarrier",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="Carrier[user_id]",
-     *                     type="integer"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Carrier[mc]",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Carrier[dot]",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Carrier[ein]",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Carrier[w9_file]",
-     *                     type="string",
-     *                     format="binary"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Carrier[ic_file]",
-     *                     type="string",
-     *                     format="binary"
-     *                 ),
-     *             )
-     *         )
-     *     ),
+     *     requestBody={
+     *          "$ref":"#/components/requestBodies/CarrierCreateForm",
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -79,14 +49,14 @@ class CarrierController extends BaseController
 
     public function actionCreate()
     {
-        $model = new Carrier();
-        $model->setScenario(Carrier::SCENARIO_INSERT);
-        if ($model->load($this->getAllowedPost()) && $model->validate()) {
-            $this->saveModel($model);
+        $model = new CarrierCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
+            $model->create();
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success($model->getAsArray(Small::class));
+        return $this->success();
     }
 
     /**
