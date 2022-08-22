@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use common\models\load_modes;
-use common\models\page;
+use common\models\Load_modes;
+use common\models\Page;
 use kartik\mpdf\Pdf;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -40,7 +40,7 @@ class PageController extends Controller
 
     public function allowedAttributes()
     {
-        $load = new load_modes();
+        $load = new Load_modes();
         return [
             'clear-load' => [$load->formName() => ['scans']]
         ];
@@ -90,7 +90,7 @@ class PageController extends Controller
      */
     public function actionIndex()
     {
-        $user = new page();
+        $user = new Page();
         $provider = $user->search(YII::$app->request->get());
 
         return $this->render('index', [

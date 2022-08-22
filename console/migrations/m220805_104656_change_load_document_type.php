@@ -1,17 +1,19 @@
 <?php
 
+use common\models\Load;
 use yii\db\Migration;
 
 /**
- * Class m220704_112428_LoadDocumentType
+ * Class m220805_104656_change_load_document_type
  */
-class m220704_112428_LoadDocumentType extends Migration
+class m220805_104656_change_load_document_type extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
+        $this->dropTable("{{%load_document_type}}");
         $this->createTable('{{load_document_type}}',[
             'id' => $this->primaryKey(),
             'name' => $this->string(32)
@@ -71,7 +73,7 @@ class m220704_112428_LoadDocumentType extends Migration
      */
     public function safeDown()
     {
-        echo "m220704_112428_LoadDocumentType cannot be reverted.\n";
+        echo "m220805_104656_change_load_document_type cannot be reverted.\n";
 
         return false;
     }
@@ -85,7 +87,7 @@ class m220704_112428_LoadDocumentType extends Migration
 
     public function down()
     {
-        echo "m220704_112428_LoadDocumentType cannot be reverted.\n";
+        echo "m220805_104656_change_load_document_type cannot be reverted.\n";
 
         return false;
     }

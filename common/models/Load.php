@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\Load as BaseLoad;
 use yii\helpers\ArrayHelper;
@@ -11,14 +12,14 @@ use yii\helpers\ArrayHelper;
  */
 class Load extends BaseLoad
 {
-
+    use Template;
 
     public function behaviors()
     {
         return ArrayHelper::merge(
             parent::behaviors(),
             [
-                # custom behaviors
+
             ]
         );
     }
@@ -28,8 +29,10 @@ class Load extends BaseLoad
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['load_type', 'route_type', 'order'], 'string'],
+                [['customer_id', 'port_id', 'consignee_id'], 'integer'],
             ]
         );
     }
+
 }

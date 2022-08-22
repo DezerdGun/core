@@ -2,18 +2,17 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
-use \common\models\base\State as BaseListstate;
+use \common\models\base\LoadStop as BaseLoadStop;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "liststate".
- * @method search(array|mixed $queryParams)
+ * This is the model class for table "load_stop".
  */
-
-
-class State extends BaseListstate
+class LoadStop extends BaseLoadStop
 {
+    use Template;
 
     public function behaviors()
     {
@@ -34,7 +33,4 @@ class State extends BaseListstate
             ]
         );
     }
-
-
-
 }

@@ -6,6 +6,7 @@ use TRS\RestResponse\templates\BaseTemplate;
 
 trait Template
 {
+
     /**
      * @param string $template
      * @return array
