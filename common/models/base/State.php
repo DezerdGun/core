@@ -50,6 +50,11 @@ abstract class State extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getColor()
+    {
+        return $this->hasOne(\common\models\State::class, ['state_code' => 'id']);
+    }
+
 
 
 

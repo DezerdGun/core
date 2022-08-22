@@ -3,16 +3,13 @@
 namespace common\models;
 
 use Yii;
-use \common\models\base\State as BaseListstate;
+use \common\models\base\LoadDocumentType as BaseLoadDocumentType;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "liststate".
- * @method search(array|mixed $queryParams)
+ * This is the model class for table "load_document_type".
  */
-
-
-class State extends BaseListstate
+class LoadDocumentType extends BaseLoadDocumentType
 {
 
     public function behaviors()
@@ -34,7 +31,4 @@ class State extends BaseListstate
             ]
         );
     }
-
-
-
 }

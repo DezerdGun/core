@@ -2,18 +2,19 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
-use \common\models\base\State as BaseListstate;
+use \common\models\base\LoadTracking as BaseLoadTracking;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "liststate".
- * @method search(array|mixed $queryParams)
+ * This is the model class for table "load_tracking".
  */
-
-
-class State extends BaseListstate
+class LoadTracking extends BaseLoadTracking
 {
+    use Template;
+
+    const SCENARIO_INSERT = 'insert';
 
     public function behaviors()
     {
@@ -34,7 +35,6 @@ class State extends BaseListstate
             ]
         );
     }
-
 
 
 }

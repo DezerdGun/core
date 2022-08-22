@@ -3,18 +3,15 @@
 namespace common\models;
 
 use Yii;
-use \common\models\base\State as BaseListstate;
+use \common\models\base\Address as BaseAddress;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "liststate".
- * @method search(array|mixed $queryParams)
+ * This is the model class for table "address".
  */
 
-
-class State extends BaseListstate
+class Address extends BaseAddress
 {
-
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -30,11 +27,11 @@ class State extends BaseListstate
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+
+                [['street_address', 'zip','city','country'],'required'],
+                // the name, subject and body attributes are required
+                ['state_code', 'safe'],
             ]
         );
     }
-
-
-
 }

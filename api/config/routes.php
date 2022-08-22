@@ -28,8 +28,21 @@ $routes = [
     'GET /lists/truck-types' => 'truck-types/index',
     'GET /lists/equipment' => 'equipment/index',
     'GET /lists/load-modes' => 'load-modes/index',
+    'GET /lists/stop-types' => 'stop-types/index',
 
     'POST /company' => 'company/create',
+
+    'POST /load' => 'load/create',
+    'GET /load' => 'load/index',
+    'GET /load/<id:\d+>' => 'load/show',
+    'POST /load/<id:\d+>/sign' => 'load/sign',
+    'DELETE /load/<id:\d+>' => 'load/delete',
+
+    'POST /tracking<load_id:>' => 'load-tracking/create',
+    'GET /tracking/<load_id:\d+>/list' => 'load-tracking/index',
+
+    'POST /load-stop' => 'load-stop/create',
+
 ];
 
 return $routes;

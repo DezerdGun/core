@@ -10,7 +10,19 @@ use Yii;
  * This is the base-model class for table "load".
  *
  * @property integer $id
- * @property string $name
+ * @property string $load_type
+ * @property integer $customer_id
+ * @property integer $port_id
+ * @property integer $consignee_id
+ * @property string $route_type
+ * @property string $order
+ *
+ * @property \common\models\Company $consignee
+ * @property \common\models\Company $customer
+ * @property \common\models\LoadStop[] $loadStops
+ * @property \common\models\LoadStop[] $loadStops0
+ * @property \common\models\LoadTracking[] $loadTrackings
+ * @property \common\models\Company $port
  * @property string $aliasModel
  */
 abstract class Load extends \yii\db\ActiveRecord
@@ -32,7 +44,13 @@ abstract class Load extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 32]
+            [['customer_id', 'port_id', 'consignee_id'], 'required'],
+            [['customer_id', 'port_id', 'consignee_id'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id'], 'integer'],
+            [['load_type', 'route_type', 'order'], 'string', 'max' => 32],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
+            [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['port_id' => 'id']],
+            [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['consignee_id' => 'id']]
         ];
     }
 
@@ -43,8 +61,61 @@ abstract class Load extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'load_type' => 'Load Type',
+            'customer_id' => 'Customer ID',
+            'port_id' => 'Port ID',
+            'consignee_id' => 'Consignee ID',
+            'route_type' => 'Route Type',
+            'order' => 'Order',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getConsignee()
+    {
+        return $this->hasOne(\common\models\Company::className(), ['id' => 'consignee_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(\common\models\Company::className(), ['id' => 'customer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadStops()
+    {
+        return $this->hasMany(\common\models\LoadStop::className(), ['port_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadStops0()
+    {
+        return $this->hasMany(\common\models\LoadStop::className(), ['company_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadTrackings()
+    {
+        return $this->hasMany(\common\models\LoadTracking::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPort()
+    {
+        return $this->hasOne(\common\models\Company::className(), ['id' => 'port_id']);
     }
 
 
