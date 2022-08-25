@@ -5,12 +5,8 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\templates\load\Large;
 use api\templates\load\Small;
-use Codeception\PHPUnit\Constraint\JsonType;
 use common\models\Load;
 use common\models\LoadStop;
-use common\models\traits\Template;
-use yii\db\Query;
-use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 
@@ -21,8 +17,66 @@ class LoadController extends BaseController
      * @OA\Get(
      *     path="/load",
      *     tags={"load"},
-     *     operationId="getLoad",
-     *     summary="getLoad",
+     *     operationId="getLoads",
+     *     summary="getLoads",
+     *     @OA\Parameter(
+     *         name="customer_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="port_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="consignee_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="load_type",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="route_type",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="from",
+     *         in="query",
+     *         required=false,
+     *         description="2022-07-17 08:16:06",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="to",
+     *         in="query",
+     *         required=false,
+     *         description="2022-07-17",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -51,10 +105,28 @@ class LoadController extends BaseController
      * )
      */
 
-    public function actionIndex($query = '', $page = 0, $pageSize = 25)
+    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0, $load_type =0, $route_type = 0,
+                                $from = 0, $to = 0,  $page = 0, $pageSize = 25)
     {
-        return $this->index(Load::find()->andWhere(['ILIKE', 'load_type', $query]),
-            $page, $pageSize, Large::class);
+        $query = Load::find();
+        if ($customer_id) {
+            $query->andWhere(['customer_id' => $customer_id]);
+        } elseif ($port_id) {
+            $query->andWhere(['port_id' => $port_id]);
+        } elseif ($consignee_id) {
+            $query->andWhere(['consignee_id' => $consignee_id]);
+        } elseif ($load_type) {
+            $query->andWhere(['load_type' => $load_type]);
+        } elseif ($route_type) {
+            $query->andWhere(['route_type' => $route_type]);
+        } elseif ($from) {
+            $query = LoadStop::find();
+            $query->andWhere(['from' => $from]);
+        } elseif ($to) {
+            $query = LoadStop::find();
+            $query->andWhere(['to' => $to]);
+        }
+        return $this->index($query,$page, $pageSize, Large::class);
     }
 
     /**
@@ -82,7 +154,7 @@ class LoadController extends BaseController
      *              type="integer",
      *              ),
      *         @OA\Property(
-     *              property="Load[consignTruckee_id]",
+     *              property="Load[consignee_id]",
      *              type="integer",
      *              ),
      *         @OA\Property(
@@ -121,7 +193,7 @@ class LoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
-        if ($model->load( \Yii::$app->request->post() ) &&  $model->validate() && $model->save()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
             return $this->success();
         } else {
             throw new HttpException(400,
@@ -199,7 +271,8 @@ class LoadController extends BaseController
      * )
      */
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $model = $this->findModel($id);
         $model->delete();
         return $this->success();
