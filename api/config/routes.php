@@ -42,6 +42,7 @@ $routes = [
     'GET /tracking/<load_id:\d+>/list' => 'load-tracking/index',
 
     'POST /load-stop' => 'load-stop/create',
+    'GET /load-stop' => 'load-stop/index',
 
 ];
 

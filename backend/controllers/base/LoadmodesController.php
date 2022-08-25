@@ -4,7 +4,7 @@
 
 namespace backend\controllers\base;
 
-use common\models\load_modes;
+use common\models\Load_modes;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -32,7 +32,7 @@ public $enableCsrfValidation = false;
 public function actionIndex()
 {
     $dataProvider = new \yii\data\ActiveDataProvider([
-    'query' => load_modes::find(),
+    'query' => Load_modes::find(),
     ]);
 
 Tabs::clearLocalStorage();
