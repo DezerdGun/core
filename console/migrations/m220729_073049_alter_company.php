@@ -12,6 +12,7 @@ class m220729_073049_alter_company extends Migration
      */
     public function safeUp()
     {
+        $this->delete('{{%company}}');
         $this->addColumn('{{%company}}', 'address_id', $this->integer()->notNull());
         $this->addColumn('{{%company}}', 'mc_number', $this->string(32));
         $this->addColumn('{{%company}}', 'email', $this->string(32));
