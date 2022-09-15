@@ -35,14 +35,18 @@ $routes = [
     'POST /load' => 'load/create',
     'GET /load' => 'load/index',
     'GET /load/<id:\d+>' => 'load/show',
-    'POST /load/<id:\d+>/sign' => 'load/sign',
     'DELETE /load/<id:\d+>' => 'load/delete',
+
+    'GET /load/<id:\d+>/documents' => 'load/get-documents',
+    'POST /load/<id:>/document' => 'load/create-upload-document',
+    'DELETE /load/<load_id:\d+>/document/<id:\d+>' => 'load/delete-document',
 
     'POST /tracking<load_id:>' => 'load-tracking/create',
     'GET /tracking/<load_id:\d+>/list' => 'load-tracking/index',
 
     'POST /load-stop' => 'load-stop/create',
     'GET /load-stop' => 'load-stop/index',
+
 
 ];
 

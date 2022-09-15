@@ -119,7 +119,9 @@ class CompanyController extends BaseController
                 } else {
                     throw new HttpException(400, [$detail->formName() => $detail->getErrors()]);
                 }
-                return $this->success();
+                return $this->success([
+                    $model->getAsArray(\api\templates\address\Small::class)
+                ]);
 
             }
         } else {

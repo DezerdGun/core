@@ -4,11 +4,12 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\templates\load\Large;
-use api\templates\load\Small;
+use api\templates\loaddocuments\Small;
 use common\models\Load;
+use common\models\LoadDocuments;
 use common\models\LoadStop;
+use Yii;
 use yii\web\NotFoundHttpException;
-
 
 class LoadController extends BaseController
 {
@@ -194,10 +195,10 @@ class LoadController extends BaseController
     {
         $model = new Load();
         if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
-            return $this->success();
+            return $this->success($model->getAsArray(\api\templates\load\Large::class));
         } else {
             throw new HttpException(400,
-                [$model->formName() => $model->getErrors()]);
+                [$model->formName() => $model->getErrors(\api\templates\load\Large::class)]);
         }
     }
 
@@ -239,7 +240,7 @@ class LoadController extends BaseController
     public function actionShow($id)
     {
         $model = $this->findModel($id);
-        return $this->success($model->getAsArray(Small::class));
+        return $this->success($model->getAsArray(\api\templates\load\Small::class));
     }
 
     /**
@@ -278,6 +279,156 @@ class LoadController extends BaseController
         return $this->success();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/load/{id}/documents",
+     *     tags={"load-documents"},
+     *     operationId="getLoadDocuments",
+     *     summary="getLoadDocuments",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+
+    public function actionGetDocuments($id)
+    {
+        $model = $this->findLoadDoc($id);
+        return $this->success($model->getAsArray(\api\templates\loaddocuments\Large::class));
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/load/{id}/document",
+     *     tags={"load-documents"},
+     *     operationId="getLoadDocumentID",
+     *     summary="uploadLoadDocument",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *          @OA\Property(
+     *              property="LoadDocuments[load_id]",
+     *              type="integer",
+     *              ),
+     *           @OA\Property(
+     *               property="LoadDocuments[filename]",
+     *               type="string",
+     *               format="binary"
+     *                 ),
+     *          @OA\Property(
+     *              property="LoadDocuments[doc_type]",
+     *              type="integer",
+     *              ),
+     *            )
+     *         )
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/LoadSmall"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionCreateUploadDocument()
+    {
+        $model = new LoadDocuments();
+        $model->upload_by =Yii::$app->user->id;
+        $model->setScenario(LoadDocuments::SCENARIO_INSERT);
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
+            return $this->success($model->getAsArray(Small::class));
+        } else {
+            throw new HttpException(400,
+                [$model->formName() => $model->getErrors()]);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/load/{load_id}/document/{id}",
+     *     tags={"load-documents"},
+     *     operationId="deleteLoadDocument",
+     *     summary="deleteLoadDocument",
+     *     @OA\Parameter(
+     *         name="load_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionDeleteDocument($id,$load_id)
+    {
+        $docdel = $this->findModelDoc($id,$load_id);
+        $docdel->delete();
+        return $this->success();
+    }
+
+    private function findModelDoc($id,$load_id)
+    {
+        $condition = ['id' => $id,'load_id' => $load_id];
+        $model = LoadDocuments::findOne($condition);
+        if (!$model){
+            throw new HttpException(404,\Yii::t('app', 'ID не найден!'));
+        }
+        return $model;
+
+    }
+
     private function findModel($id)
     {
         $condition = ['id' => $id];
@@ -288,6 +439,17 @@ class LoadController extends BaseController
 
         return $model;
 
+    }
+
+    private function findLoadDoc($id)
+    {
+        $condition = ['id' => $id];
+        $model = LoadDocuments::findOne($condition);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        return $model;
     }
 
 }
