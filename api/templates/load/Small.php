@@ -114,15 +114,12 @@ class Small extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' => [
-                $model->id,
-                LoadStop::find()->where(['port_id' => $model->id])->all()
-            ],
+            'id' => $model->id,
             'load_type' => $model->load_type,
             'customer_id' => [
                 $model->customer_id,
                 Company::find()
-                    ->where(['id' => $model->customer_id])->all()
+                    ->where(['id' => $model->customer_id])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')->all()
 
             ],
             'port_id' => [
@@ -135,7 +132,7 @@ class Small extends BaseTemplate
                 Company::find()
                     ->where([
                         'id' => $model->consignee_id
-                    ])
+                    ])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')
                     ->all()
             ],
             'route_type' => $model->route_type,

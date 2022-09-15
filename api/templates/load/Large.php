@@ -50,10 +50,11 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'load_stop' => [LoadStop::find()->all()],
-            'company' => [
-                Company::find()->all()
-            ]
+            'load_type' => $model->customer_id,
+            'port_id' => $model->port_id,
+            'consignee_id' => $model->consignee_id,
+            'route_type' => $model->route_type,
+            'order' => $model->order
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\Address as BaseAddress;
 use yii\helpers\ArrayHelper;
@@ -12,6 +13,7 @@ use yii\helpers\ArrayHelper;
 
 class Address extends BaseAddress
 {
+    use Template;
     public function behaviors()
     {
         return ArrayHelper::merge(
