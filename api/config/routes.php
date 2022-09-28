@@ -29,6 +29,7 @@ $routes = [
     'GET /lists/equipment' => 'equipment/index',
     'GET /lists/load-modes' => 'load-modes/index',
     'GET /lists/stop-types' => 'stop-types/index',
+    'GET /lists/load-doc-types' => 'doc-types/index',
 
     'POST /company' => 'company/create',
 

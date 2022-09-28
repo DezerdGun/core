@@ -12,7 +12,7 @@
         "name": "modelClass"
     },
     "ns": {
-        "value": "common\\models",
+        "value": "app\\models",
         "name": "ns"
     },
     "baseclass": {
