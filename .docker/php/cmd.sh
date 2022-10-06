@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 30
+sleep 50
 ping -c 1 host.docker.internal
 if [ $? -eq 0 ]; then
   echo "xdebug.client_host=host.docker.internal" > $PHP_INI_DIR/conf.d/custom-002.ini

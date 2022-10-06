@@ -48,6 +48,11 @@ $routes = [
     'POST /load-stop' => 'load-stop/create',
     'GET /load-stop' => 'load-stop/index',
 
+    'POST /load<load_id:>/bid' => 'load-bid/create',
+    'GET /load/<load_id:\d+>/bid/<id:\d+>' => 'load-bid/get-load-bid',
+    'GET /load/<load_id:\d+>/bids' => 'load-bid/get-load-bid-id',
+    'DELETE /load/<load_id:\d+>/bid/<id:\d+>' => 'load-bid/load-bid-details-delete',
+    'PUT /load/<load_id:\d+>/bid' => 'load-bid/update-load-bid-details'
 
 ];
 
