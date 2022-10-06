@@ -13,7 +13,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *     schema="LoadLarge",
  *     @OA\Property(
  *         property="id",
- *         type="string"
+ *         type="integer"
  *     ),
  *     @OA\Property(
  *         property="load_type",

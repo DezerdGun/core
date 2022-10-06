@@ -125,9 +125,9 @@ abstract class BaseController extends Controller
     protected function success($data = null, $meta = null)
     {
         return [
-            'status' => 'success',
-            'data' => $data,
-            'meta' => $meta
+            'statusCode' => 200,
+            'message' => "Success",
+            'data' => $data
         ];
     }
 }
