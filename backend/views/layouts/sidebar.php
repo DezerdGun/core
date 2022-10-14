@@ -46,6 +46,7 @@
                     ],
                     ['label' => 'Users', 'url' => ['user/index'], 'icon' => 'user'],
                     ['label' => 'Pages', 'url' => ['page/index'], 'icon' => 'filter'],
+                    ['label' => 'Load-Bid-History', 'url' => ['load-bid-history/index'], 'icon' => 'fa fa-history'],
                 ],
             ]);
             ?>

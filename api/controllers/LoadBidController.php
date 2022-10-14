@@ -8,6 +8,7 @@ use api\templates\loadbiddetails\Small;
 use common\models\load_modes;
 use common\models\LoadBid;
 use common\models\LoadBidDetails;
+use common\models\LoadNote;
 use kartik\form\ActiveForm;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
@@ -304,6 +305,12 @@ class LoadBidController extends BaseController
                 $detail = new LoadBidDetails();
                 $detail->load_bid_id = $model->load_id;
                 if ($detail->load($this->getAllowedPost()) && $detail->validate()) {
+                    $detail->addNote(sprintf(
+                        'Load_Bid_Details load_bid_id %d. charge_code: %d. price: %d. unit_count: %d.
+                            unit_measure: %s.free_units: %d.notes: %s',
+                        $detail->load_bid_id, $detail->charge_code, $detail->price, $detail->unit_count, $detail->unit_measure,
+                        $detail->free_units, $detail->notes
+                    ));
                     $this->saveModel($detail);
                 } else {
                     throw new HttpException(404, [$detail->formName() => $detail->getErrors()]);
@@ -510,9 +517,29 @@ class LoadBidController extends BaseController
         $loadId = $this->findModelLoadId($model->id);
         $loadId->load($this->getAllowedPost(), 'LoadBidDetails');
         $this->saveModel($loadId);
-        return $this->success();
-
-
+        if ($loadId) {
+            $loadId->addNote(sprintf(
+                'Load_Bid_Details charge_code update from %d to %d.
+                 price update from %d to %d. 
+                 unit_count update from %d to %d.
+                 unit_measure update from %s to %s.
+                 free_units update from %d to %d.
+                 notes: %s to %s ',
+                $loadId->_old_charge_code,
+                $loadId->charge_code,
+                $loadId->_old_price,
+                $loadId->price,
+                $loadId->_old_unit_count,
+                $loadId->unit_count,
+                $loadId->_old_unit_measure,
+                $loadId->unit_measure,
+                $loadId->_old_free_units,
+                $loadId->free_units,
+                $loadId->_old_notes,
+                $loadId->notes
+            ));
+        }
+        return $this->success($model->getAsArray(Large::class));
     }
 
     public function findModelLoadId($model)
