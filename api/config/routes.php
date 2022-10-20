@@ -29,7 +29,6 @@ $routes = [
     'GET /lists/equipment' => 'equipment/index',
     'GET /lists/load-modes' => 'load-modes/index',
     'GET /lists/stop-types' => 'stop-types/index',
-    'GET /lists/load-doc-types' => 'doc-types/index',
 
     'POST /company' => 'company/create',
 
@@ -52,8 +51,12 @@ $routes = [
     'GET /load/<load_id:\d+>/bid/<id:\d+>' => 'load-bid/get-load-bid',
     'GET /load/<load_id:\d+>/bids' => 'load-bid/get-load-bid-id',
     'DELETE /load/<load_id:\d+>/bid/<id:\d+>' => 'load-bid/load-bid-details-delete',
-    'PUT /load/<load_id:\d+>/bid' => 'load-bid/update-load-bid-details'
+    'PUT /load/<load_id:\d+>/bid' => 'load-bid/update-load-bid-details',
 
+    'POST /stripe/customer' => 'stripe-customer/create',
+    'GET /stripe/customer' => 'stripe-customer/show',
+    'POST /stripe/transfer' => 'stripe-transfer/create',
+    'GET /stripe/public-key' => 'stripe/public-key'
 ];
 
 return $routes;

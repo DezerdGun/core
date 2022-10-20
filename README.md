@@ -98,3 +98,10 @@ Email/Password: admin@jafton.com/chesnok
 ### backend.tmp.loc and frontend.tmp.loc create user
 ./yii user/create
 
+### ACH transfer
+
+/stripe/transfer - Endpoint returns client key.
+
+request body:
+amount - amount of money. Ex 1000 -> 10$ 
+
