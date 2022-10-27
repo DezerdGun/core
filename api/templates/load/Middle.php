@@ -2,7 +2,6 @@
 
 namespace api\templates\load;
 
-use api\controllers\LoadContainerInfoController;
 use common\models\Load;
 use common\models\LoadAdditionalInfo;
 use common\models\LoadContainerInfo;
@@ -11,7 +10,7 @@ use TRS\RestResponse\templates\BaseTemplate;
 /**
  *
  * @OA\Schema(
- *     schema="LoadLarge",
+ *     schema="LoadMiddle",
  *     @OA\Property(
  *          property="id",
  *          type="object",
@@ -48,15 +47,18 @@ use TRS\RestResponse\templates\BaseTemplate;
  * )
  */
 
-class Large extends BaseTemplate
+class Middle extends BaseTemplate
 {
-
     protected function prepareResult()
     {
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
+            'id' =>
+                $model->id,
+            LoadContainerInfo::find()->where(['load_id' => $model->id])->all(),
+            LoadAdditionalInfo::find()
+                ->where(['load_id' => $model->id])->all(),
             'customer_id' => $model->customer_id,
             'port_id' => $model->port_id,
             'consignee_id' => $model->consignee_id,

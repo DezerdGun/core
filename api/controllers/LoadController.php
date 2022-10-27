@@ -6,9 +6,12 @@ use api\components\HttpException;
 use api\templates\load\Large;
 use api\templates\loaddocuments\Small;
 use common\models\Load;
+use common\models\LoadAdditionalInfo;
+use common\models\LoadContainerInfo;
 use common\models\LoadDocuments;
 use common\models\LoadStop;
 use Yii;
+use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 
 class LoadController extends BaseController
@@ -45,15 +48,24 @@ class LoadController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="load_type",
+     *         name="load_status",
      *         in="query",
      *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="vessel_eta",
+     *         in="query",
+     *         required=false,
+     *         description="2022-07-17 08:16:06",
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="route_type",
+     *         name="broker_name",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -106,7 +118,7 @@ class LoadController extends BaseController
      * )
      */
 
-    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0, $load_type =0, $route_type = 0,
+    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,$load_status = 0, $vessel_eta =0, $broker_name = 0,
                                 $from = 0, $to = 0,  $page = 0, $pageSize = 25)
     {
         $query = Load::find();
@@ -116,10 +128,12 @@ class LoadController extends BaseController
             $query->andWhere(['port_id' => $port_id]);
         } elseif ($consignee_id) {
             $query->andWhere(['consignee_id' => $consignee_id]);
-        } elseif ($load_type) {
-            $query->andWhere(['load_type' => $load_type]);
-        } elseif ($route_type) {
-            $query->andWhere(['route_type' => $route_type]);
+        }  elseif ($load_status) {
+            $query->andWhere(['load_status' => $load_status]);
+        }elseif ($vessel_eta) {
+            $query->andWhere(['vessel_eta' => $vessel_eta]);
+        } elseif ($broker_name) {
+            $query->andWhere(['broker_name' => $broker_name]);
         } elseif ($from) {
             $query = LoadStop::find();
             $query->andWhere(['from' => $from]);
@@ -142,11 +156,6 @@ class LoadController extends BaseController
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *         @OA\Property(
-     *              property="Load[load_type]",
-     *              type="string",
-     *              enum={"Import","Export","Road","Bill Only"}
-     *              ),
-     *         @OA\Property(
      *              property="Load[customer_id]",
      *              type="integer",
      *              ),
@@ -158,12 +167,20 @@ class LoadController extends BaseController
      *              property="Load[consignee_id]",
      *              type="integer",
      *              ),
-     *         @OA\Property(
-     *              property="Load[route_type]",
-     *              type="string",
+     *          @OA\Property(
+     *              property="Load[load_status]",
+     *              type="integer",
+     *              ),
+     *          @OA\Property(
+     *              property="Load[vessel_eta]",
+     *              type="date",
+     *              format="date-time",
+     *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+     *              example="2021-12-12 14:05:22",
+     *              description="2021-12-12T19:05:33Z"
      *              ),
      *         @OA\Property(
-     *              property="Load[order]",
+     *              property="Load[broker_name]",
      *              type="string",
      *              ),
      *            )
@@ -194,11 +211,11 @@ class LoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
-        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
-            return $this->success($model->getAsArray(\api\templates\load\Large::class));
+        if ($model->load(\Yii::$app->request->post())  && $model->save()) {
+            return $this->success($model->getAsArray(Large::class));
         } else {
             throw new HttpException(400,
-                [$model->formName() => $model->getErrors(\api\templates\load\Large::class)]);
+                [$model->formName() => $model->getErrors()]);
         }
     }
 
@@ -276,7 +293,7 @@ class LoadController extends BaseController
     {
         $model = $this->findModel($id);
         $model->delete();
-        return $this->success();
+        return $this->success($model->getAsArray(\api\templates\load\Large::class));
     }
 
     /**
@@ -433,12 +450,10 @@ class LoadController extends BaseController
     {
         $condition = ['id' => $id];
         $model = Load::findOne($condition);
-        if (!$model) {
+        if (!$model){
             throw new NotFoundHttpException();
         }
-
         return $model;
-
     }
 
     private function findLoadDoc($id)

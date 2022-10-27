@@ -2,18 +2,15 @@
 
 namespace common\models;
 
-use common\models\traits\Template;
 use Yii;
-use \common\models\base\Load as BaseLoad;
+use \common\models\base\Owner as BaseOwner;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "load".
+ * This is the model class for table "owner".
  */
-class Load extends BaseLoad
+class Owner extends BaseOwner
 {
-    use Template;
-
 
     public function behaviors()
     {

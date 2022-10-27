@@ -36,11 +36,8 @@ phpunit.phar
 
 # docker runtime
 /.docker/database
-/.docker/pgadmin_storage
-!/.docker/pgadmin_storage/admin_jafton.com/dev_rsa
 /.docker/redis_data
 /.docker/conf/restrict-local
-
 # ignore generated files
 /frontend/web/index.php
 /frontend/web/index-test.php

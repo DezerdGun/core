@@ -56,7 +56,10 @@ $routes = [
     'POST /stripe/customer' => 'stripe-customer/create',
     'GET /stripe/customer' => 'stripe-customer/show',
     'POST /stripe/transfer' => 'stripe-transfer/create',
-    'GET /stripe/public-key' => 'stripe/public-key'
+    'GET /stripe/public-key' => 'stripe/public-key',
+
+    'POST /load-container-info' => 'load-container-info/create',
+    'POST /load-additional-info' => 'load-additional-info/create',
 ];
 
 return $routes;
