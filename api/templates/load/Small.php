@@ -4,6 +4,8 @@ namespace api\templates\load;
 
 use common\models\Company;
 use common\models\Load;
+use common\models\LoadAdditionalInfo;
+use common\models\LoadContainerInfo;
 use common\models\LoadStop;
 use TRS\RestResponse\templates\BaseTemplate;
 
@@ -114,8 +116,12 @@ class Small extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_type' => $model->load_type,
+            'id' => [
+                $model->id,
+                LoadContainerInfo::find()->where(['load_id' => $model->id])->all(),
+                LoadAdditionalInfo::find()
+                    ->where(['load_id' => $model->id])->all(),
+            ],
             'customer_id' => [
                 $model->customer_id,
                 Company::find()
@@ -135,8 +141,9 @@ class Small extends BaseTemplate
                     ])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')
                     ->all()
             ],
-            'route_type' => $model->route_type,
-            'order' => $model->order,
+            'load_status' => $model->load_status,
+            'broker_name' => $model->broker_name,
+            'vessel_eta' => $model->vessel_eta,
         ];
     }
 }

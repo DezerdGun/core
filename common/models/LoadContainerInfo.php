@@ -4,17 +4,16 @@ namespace common\models;
 
 use common\models\traits\Template;
 use Yii;
-use \common\models\base\Load as BaseLoad;
+use \common\models\base\LoadContainerInfo as BaseLoadContainerInfo;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "load".
+ * This is the model class for table "load_container_info".
  */
-class Load extends BaseLoad
+class LoadContainerInfo extends BaseLoadContainerInfo
 {
+
     use Template;
-
-
     public function behaviors()
     {
         return ArrayHelper::merge(

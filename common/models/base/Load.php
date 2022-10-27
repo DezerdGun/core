@@ -10,15 +10,18 @@ use Yii;
  * This is the base-model class for table "load".
  *
  * @property integer $id
- * @property string $load_type
  * @property integer $customer_id
  * @property integer $port_id
  * @property integer $consignee_id
- * @property string $route_type
- * @property string $order
+ * @property string $vessel_eta
+ * @property string $broker_name
+ * @property integer $load_status
  *
  * @property \common\models\Company $consignee
  * @property \common\models\Company $customer
+ * @property \common\models\LoadBid[] $loadBs
+ * @property \common\models\LoadDocuments[] $loadDocuments
+ * @property \common\models\LoadStatus $loadStatus
  * @property \common\models\LoadStop[] $loadStops
  * @property \common\models\LoadStop[] $loadStops0
  * @property \common\models\LoadTracking[] $loadTrackings
@@ -45,12 +48,14 @@ abstract class Load extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'port_id', 'consignee_id'], 'required'],
-            [['customer_id', 'port_id', 'consignee_id'], 'default', 'value' => null],
-            [['customer_id', 'port_id', 'consignee_id'], 'integer'],
-            [['load_type', 'route_type', 'order'], 'string', 'max' => 32],
+            [['customer_id', 'port_id', 'consignee_id', 'load_status'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id', 'load_status'], 'integer'],
+            [['vessel_eta'], 'safe'],
+            [['broker_name'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['port_id' => 'id']],
-            [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['consignee_id' => 'id']]
+            [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['consignee_id' => 'id']],
+            [['load_status'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadStatus::className(), 'targetAttribute' => ['load_status' => 'id']]
         ];
     }
 
@@ -61,12 +66,12 @@ abstract class Load extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'load_type' => 'Load Type',
             'customer_id' => 'Customer ID',
             'port_id' => 'Port ID',
             'consignee_id' => 'Consignee ID',
-            'route_type' => 'Route Type',
-            'order' => 'Order',
+            'vessel_eta' => 'Vessel Eta',
+            'broker_name' => 'Broker Name',
+            'load_status' => 'Load Status',
         ];
     }
 
@@ -84,6 +89,30 @@ abstract class Load extends \yii\db\ActiveRecord
     public function getCustomer()
     {
         return $this->hasOne(\common\models\Company::className(), ['id' => 'customer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadBs()
+    {
+        return $this->hasMany(\common\models\LoadBid::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadDocuments()
+    {
+        return $this->hasMany(\common\models\LoadDocuments::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadStatus()
+    {
+        return $this->hasOne(\common\models\LoadStatus::className(), ['id' => 'load_status']);
     }
 
     /**
