@@ -17,6 +17,10 @@ use yii\web\NotFoundHttpException;
 
 class LoadBidController extends BaseController
 {
+    const now_created = 0;
+    const one_time = 1;
+    const two_times = 2;
+
     /**
      * @OA\Get(
      *     path="/load/{load_id}/bids",
@@ -134,10 +138,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -165,7 +165,12 @@ class LoadBidController extends BaseController
     public function actionGetLoadBid($load_id, $id)
     {
         $model = $this->findLoadBid($load_id, $id);
-        return $this->success($model->getAsArray(Small::class));
+        if ($model) {
+            return $this->success($model->getAsArray(Small::class));
+        } else {
+            throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
+        }
+
     }
 
     private function findLoadBid($load_id, $id)
@@ -175,7 +180,7 @@ class LoadBidController extends BaseController
             $condition = ['id' => $id];
             $model = LoadBidDetails::findOne($condition);
         } else {
-            throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
+            throw new HttpException(404, \Yii::t('app', 'Load Id не найден!'));
         }
         return $model;
 
@@ -188,14 +193,12 @@ class LoadBidController extends BaseController
         if (!$model) {
             throw new NotFoundHttpException();
         }
-
         return $model;
-
     }
 
     /**
      * @OA\Post(
-     *     path="/load{load_id}/bid",
+     *     path="/load/{load_id}/bid",
      *     tags={"load-bid"},
      *     operationId="createLoadBid",
      *     summary="createLoadBid",
@@ -221,10 +224,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -234,7 +233,7 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[notes]",
+     *              property="LoadBidDetails[note_from_carrier]",
      *              type="text",
      *              ),
      *            )
@@ -269,10 +268,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -282,7 +277,7 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[notes]",
+     *              property="LoadBidDetails[note_from_carrier]",
      *              type="text",
      *              ),
      *             ),
@@ -304,12 +299,13 @@ class LoadBidController extends BaseController
             if ($model->save()) {
                 $detail = new LoadBidDetails();
                 $detail->load_bid_id = $model->load_id;
+                $detail->edit_bid_details = self::now_created;
                 if ($detail->load($this->getAllowedPost()) && $detail->validate()) {
                     $detail->addNote(sprintf(
-                        'Load_Bid_Details load_bid_id %d. charge_code: %d. price: %d. unit_count: %d.
+                        'Load_Bid_Details load_bid_id %d. charge_code: %d. price: %d. 
                             unit_measure: %s.free_units: %d.notes: %s',
-                        $detail->load_bid_id, $detail->charge_code, $detail->price, $detail->unit_count, $detail->unit_measure,
-                        $detail->free_units, $detail->notes
+                        $detail->load_bid_id, $detail->charge_code, $detail->price, $detail->unit_measure,
+                        $detail->free_units, $detail->note_from_carrier
                     ));
                     $this->saveModel($detail);
                 } else {
@@ -368,10 +364,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -381,7 +373,7 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[notes]",
+     *              property="LoadBidDetails[note_from_carrier]",
      *              type="text",
      *              ),
      *             ),
@@ -436,10 +428,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -449,7 +437,7 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[notes]",
+     *              property="LoadBidDetails[note_from_carrier]",
      *              type="text",
      *              ),
      *            )
@@ -484,10 +472,6 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[unit_count]",
-     *              type="integer",
-     *              ),
-     *           @OA\Property(
      *              property="LoadBidDetails[unit_measure]",
      *              type="string",
      *              enum={"Perday","Perhour","Permiles","Perpounds","Fixed","Percentage"}
@@ -497,7 +481,7 @@ class LoadBidController extends BaseController
      *              type="number",
      *              ),
      *           @OA\Property(
-     *              property="LoadBidDetails[notes]",
+     *              property="LoadBidDetails[note_from_carrier]",
      *              type="text",
      *              ),
      *             ),
@@ -515,41 +499,33 @@ class LoadBidController extends BaseController
     {
         $model = $this->findModel($load_id);
         $loadId = $this->findModelLoadId($model->id);
-        $loadId->load($this->getAllowedPost(), 'LoadBidDetails');
-        $this->saveModel($loadId);
-        if ($loadId) {
-            $loadId->addNote(sprintf(
-                'Load_Bid_Details charge_code update from %d to %d.
-                 price update from %d to %d. 
-                 unit_count update from %d to %d.
-                 unit_measure update from %s to %s.
-                 free_units update from %d to %d.
-                 notes: %s to %s ',
-                $loadId->_old_charge_code,
-                $loadId->charge_code,
-                $loadId->_old_price,
-                $loadId->price,
-                $loadId->_old_unit_count,
-                $loadId->unit_count,
-                $loadId->_old_unit_measure,
-                $loadId->unit_measure,
-                $loadId->_old_free_units,
-                $loadId->free_units,
-                $loadId->_old_notes,
-                $loadId->notes
-            ));
+        if ($loadId->edit_bid_details === 0) {
+            $loadId->edit_bid_details = self::one_time;
+            $loadId->load($this->getAllowedPost(), 'LoadBidDetails');
+            $this->saveModel($loadId);
+            $loadId->upEditDetails($loadId);
+        } elseif ($loadId->edit_bid_details === 1) {
+            $loadId->edit_bid_details = self::two_times;
+            $loadId->load($this->getAllowedPost(), 'LoadBidDetails');
+            $this->saveModel($loadId);
+            $loadId->upEditDetails($loadId);
+        } else {
+            throw new HttpException(404, \Yii::t('app', 'Something has error'));
         }
-        return $this->success($model->getAsArray(Large::class));
+        return $this->success($model->getAsArray(\api\templates\loadbid\Small::class));
     }
 
     public function findModelLoadId($model)
     {
         $conditions = ['load_bid_id' => $model];
-        $models = LoadBidDetails::findOne($conditions);
-        if (!$models) {
+        $model = LoadBidDetails::findOne($conditions);
+
+        if (!$model) {
             throw new NotFoundHttpException();
+        } elseif ($model->edit_bid_details == 2) {
+            throw new HttpException(404, \Yii::t('app', 'Sorry! You edited 2 times!'));
         }
-        return $models;
+        return $model;
 
     }
 }

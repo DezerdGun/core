@@ -29,7 +29,21 @@ class LoadAdditionalInfo extends BaseLoadAdditionalInfo
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                ['hazmat_description', 'required', 'when' => function($model) {
+                    return $model->hazmat == 'yes';
+                }],
+                ['weight_in_lbs', 'required', 'when' => function($model) {
+                    return $model->overweight == 'yes';
+                }],
+                ['temp_in_f', 'required', 'when' => function($model) {
+                    return $model->reefer == 'yes';
+                }],
+                ['alcohol_description', 'required', 'when' => function($model) {
+                    return $model->alcohol == 'yes';
+                }],
+                ['urgent_description', 'required', 'when' => function($model) {
+                    return $model->urgent == 'yes';
+                }],
             ]
         );
     }

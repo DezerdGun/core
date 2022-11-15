@@ -30,14 +30,26 @@ class LoadAdditionalInfoController extends BaseController
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
+     *              property="LoadAdditionalInfo[hazmat_description]",
+     *              type="string",
+     *              ),
+     *          @OA\Property(
      *              property="LoadAdditionalInfo[overweight]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
+     *              property="LoadAdditionalInfo[weight_in_lbs]",
+     *              type="string",
+     *              ),
+     *          @OA\Property(
      *              property="LoadAdditionalInfo[reefer]",
      *              type="string",
      *              enum={"yes","no"},
+     *              ),
+     *          @OA\Property(
+     *              property="LoadAdditionalInfo[temp_in_f]",
+     *              type="string",
      *              ),
      *           @OA\Property(
      *              property="LoadAdditionalInfo[alcohol]",
@@ -45,9 +57,17 @@ class LoadAdditionalInfoController extends BaseController
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
+     *              property="LoadAdditionalInfo[alcohol_description]",
+     *              type="string",
+     *              ),
+     *          @OA\Property(
      *              property="LoadAdditionalInfo[urgent]",
      *              type="string",
      *              enum={"yes","no"},
+     *              ),
+     *          @OA\Property(
+     *              property="LoadAdditionalInfo[urgent_description]",
+     *              type="string",
      *              ),
      *          @OA\Property(
      *              property="LoadAdditionalInfo[note_from_broker]",

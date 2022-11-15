@@ -26,7 +26,7 @@ class LoadController extends BaseController
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",
-     *         required=false,
+     *         required=true,
      *         @OA\Schema(
      *             type="integer"
      *         )
@@ -228,7 +228,10 @@ class LoadController extends BaseController
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         required=true
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
      *     ),
      *       @OA\Response(
      *         response=200,
