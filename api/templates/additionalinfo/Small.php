@@ -55,10 +55,15 @@ class Small extends BaseTemplate
             'id' => $model->id,
             'load_id' => $model->load_id,
             'hazmat' => $model->hazmat,
+            'hazmat_description' => $model->hazmat_description,
             'overweight' => $model->overweight,
+            'weight_in_lbs' => $model->weight_in_lbs,
             'reefer' => $model->reefer,
+            'temp_in_f' => $model->temp_in_f,
             'alcohol' => $model->alcohol,
+            'alcohol_description' => $model->alcohol_description,
             'urgent' => $model->urgent,
+            'urgent_description' => $model->urgent_description,
             'note_from_broker' => $model->note_from_broker
         ];
     }

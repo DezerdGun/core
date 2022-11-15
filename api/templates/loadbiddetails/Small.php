@@ -56,10 +56,9 @@ class Small extends BaseTemplate
             'load_bid_id' => $model->load_bid_id,
             'charge_code' => $model->charge_code,
             'price' => $model->price,
-            'unit_count' => $model->unit_count,
             'unit_measure' => $model->unit_measure,
             'free_units' => $model->free_units,
-            'notes' => $model->notes
+            'notes' => $model->note_from_carrier
         ];
     }
 }

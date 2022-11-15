@@ -13,10 +13,10 @@ use Yii;
  * @property integer $load_bid_id
  * @property integer $charge_code
  * @property string $price
- * @property integer $unit_count
  * @property string $unit_measure
  * @property string $free_units
- * @property string $notes
+ * @property string $note_from_carrier
+ * @property integer $edit_bid_details
  *
  * @property \common\models\LoadBid $loadBid
  * @property string $aliasModel
@@ -41,10 +41,10 @@ abstract class LoadBidDetails extends \yii\db\ActiveRecord
     {
         return [
             [['load_bid_id', 'unit_measure'], 'required'],
-            [['load_bid_id', 'charge_code', 'unit_count'], 'default', 'value' => null],
-            [['load_bid_id', 'charge_code', 'unit_count'], 'integer'],
+            [['load_bid_id', 'charge_code', 'edit_bid_details'], 'default', 'value' => null],
+            [['load_bid_id', 'charge_code', 'edit_bid_details'], 'integer'],
             [['price', 'free_units'], 'number'],
-            [['notes'], 'string'],
+            [['note_from_carrier'], 'string'],
             [['unit_measure'], 'string', 'max' => 32],
             [['load_bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadBid::className(), 'targetAttribute' => ['load_bid_id' => 'id']]
         ];
@@ -60,10 +60,10 @@ abstract class LoadBidDetails extends \yii\db\ActiveRecord
             'load_bid_id' => 'Load Bid ID',
             'charge_code' => 'Charge Code',
             'price' => 'Price',
-            'unit_count' => 'Unit Count',
             'unit_measure' => 'Unit Measure',
             'free_units' => 'Free Units',
-            'notes' => 'Notes',
+            'note_from_carrier' => 'Note From Carrier',
+            'edit_bid_details' => 'Edit Bid Details',
         ];
     }
 

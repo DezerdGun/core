@@ -13,7 +13,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property integer $load_id
- * @property string $notes
+ * @property string $note_from_carrier
  * @property integer $created_by
  * @property string $created_at
  *
@@ -60,7 +60,7 @@ abstract class LoadNote extends \yii\db\ActiveRecord
             [['load_id'], 'required'],
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
-            [['notes'], 'string'],
+            [['note_from_carrier'], 'string'],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadBid::className(), 'targetAttribute' => ['load_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['created_by' => 'id']]
         ];
@@ -76,7 +76,7 @@ abstract class LoadNote extends \yii\db\ActiveRecord
             'load_id' => 'Load ID',
             'created_by' => 'Created By',
             'created_at' => 'Created At',
-            'notes' => 'Notes',
+            'note_from_carrier' => 'Note From Carrier',
         ];
     }
 

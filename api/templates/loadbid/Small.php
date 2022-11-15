@@ -9,7 +9,7 @@ use TRS\RestResponse\templates\BaseTemplate;
 /**
  *
  * @OA\Schema(
- *     schema="LoadBidLarge",
+ *     schema="LoadBidSmall",
  *         @OA\Property(
  *              property="id",
  *              type="integer"
@@ -21,7 +21,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  * )
  */
 
-class Large extends BaseTemplate
+class Small extends BaseTemplate
 {
     protected function prepareResult()
     {
@@ -31,9 +31,8 @@ class Large extends BaseTemplate
             'id' => $model->id,
             'load_id' => [
                 $model->load_id,
-                LoadBidDetails::find()
-                    ->where(['load_bid_id' => $model->load_id])
-                    ->all()
+                LoadBidDetails::findBySql('SELECT load_bid_id,charge_code,price,unit_measure,free_units,note_from_carrier FROM load_bid
+                INNER JOIN load_bid_details ON load_bid.load_id = load_bid_details.load_bid_id')->one(),
             ],
             'carrier_id' => $model->carrier_id,
             'date' => $model->date
