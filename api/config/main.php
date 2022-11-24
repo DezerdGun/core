@@ -54,16 +54,17 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.mailgun.org',
-                'port' => '587',
+                'port' => 587,
+                'encryption' => 'tls',
                 'username' => 'info@mail.therealstart.com',
-                'password' => 'cec96099decdffd4d0f2cf962240c9a8-24e2ac64-2f0b250d',
+                'password' => 'e05d4d85813416b457e5ff0c1526b5ea-8845d1b1-c2fc6dc1',
             ],
             'messageConfig' => ['from' => 'info@mail.therealstart.com']
         ],
+
         'request' => [
             'parsers' => [
                 'baseURL' => '/api',
