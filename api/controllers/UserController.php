@@ -133,6 +133,6 @@ class UserController extends BaseController
         }  else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success();
+        return $this->success('Thank For your Registration');
     }
 }

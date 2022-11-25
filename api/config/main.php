@@ -54,6 +54,7 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
+            'useFileTransport' =>false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.mailgun.org',
@@ -64,7 +65,6 @@ return [
             ],
             'messageConfig' => ['from' => 'info@mail.therealstart.com']
         ],
-
         'request' => [
             'parsers' => [
                 'baseURL' => '/api',
