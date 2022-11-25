@@ -14,6 +14,10 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         property="id",
  *         type="integer"
  *     ),
+ *     @OA\Property(
+ *         property="email",
+ *         type="string"
+ *     ),
  * )
  */
 class Small extends BaseTemplate
@@ -24,6 +28,7 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
+            'email' => $model->email,
         ];
     }
 }
