@@ -10,12 +10,12 @@ class EmailService
 
     /**
      * Sends confirmation email to user
-     * @param User $user user model to with email should be send
+     * @param User $user user model to with email should be sent
      * @return bool whether the email was sent
      */
     public function sendEmail(User $user)
     {
-        $user->confirm_code = mt_rand(1000,9999);
+        Yii::$app->cache->set($user->email, mt_rand(1000,9999), 300);
         $user->generateEmailVerificationToken();
         return Yii::$app->mailer->compose(
             ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],

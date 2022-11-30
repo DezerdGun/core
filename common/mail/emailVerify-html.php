@@ -10,6 +10,6 @@ $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'to
 ?>
 <div class="verify-email">
     <p>Hello: <h3><?= Html::encode($user->username) ?> </h3></p>
-    <p>Your Code: <h3><?= Html::encode($user->confirm_code) ?> </h3></p>
+    <p>Your Code: <h3><?= Html::encode(Yii::$app->cache->get($user->email)) ?> </h3></p>
     <p>Please Confirm Your code: <h3><?= Html::encode($user->username) ?> </h3></p>
 </div>
