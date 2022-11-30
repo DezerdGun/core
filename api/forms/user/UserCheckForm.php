@@ -9,6 +9,7 @@ use common\models\User;
 use yii\base\DynamicModel;
 use yii\base\Model;
 use yii\validators\EmailValidator;
+use Yii;
 
 /**
  * Class UserCheckForm
@@ -44,15 +45,19 @@ class UserCheckForm extends Model
             ['email_or_mobile_number', 'validateEmailOrMobilePhone'],
 
             [['email_or_mobile_number', 'confirm_code'], 'string'],
-
-            ['confirm_code', 'exist', 'targetClass' => '\common\models\User', 'message' => 'Wrong verification code.', 'when' => function ($model){
-                $user = User::findOne(['email' => $model->email]);
-                if ($user && $user->status == User::STATUS_INACTIVE)
-                    return true;
-                else
-                    return false;
+            ['confirm_code', 'validateConfirmCode', 'when' => function() {
+                return $this->mobile_number === null;
             }],
         ];
+    }
+
+    public function validateConfirmCode($attribute)
+    {
+        $confirm_code = Yii::$app->cache->get($this->email);
+        $user = User::findOne(['email' => $this->email]); // This is added cause if email doesn't exist don't show message
+        if ($confirm_code != $this->confirm_code && $this->email == $user->email) {
+            $this->addError($attribute, 'Incorrect verification code.');
+        }
     }
 
     /**
@@ -98,9 +103,8 @@ class UserCheckForm extends Model
     public function status()
     {
         if ($this->email) {
-            $user = User::findOne(['confirm_code' => $this->confirm_code]);
+            $user = User::findOne(['email' => $this->email]);
             $user->status = User::STATUS_ACTIVE;
-            $user->confirm_code = null;
             $user->save();
         } else {
             $smsRequest = new SMSRequest();
