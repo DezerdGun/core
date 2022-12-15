@@ -30,9 +30,10 @@ class Address extends BaseAddress
             parent::rules(),
             [
 
-                [['street_address', 'zip','city','country'],'required'],
+                [['street_address', 'zip','city'],'required'],
                 // the name, subject and body attributes are required
                 ['state_code', 'safe'],
+                ['state_code', 'exist', 'targetClass' => '\common\models\State', 'targetAttribute' => 'state_code', 'message' => 'State code not found.'],
             ]
         );
     }

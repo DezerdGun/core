@@ -60,6 +60,10 @@ $routes = [
 
     'POST /load-container-info' => 'load-container-info/create',
     'POST /load-additional-info' => 'load-additional-info/create',
+
+    'GET /location' => 'location/index',
+    'POST /location' => 'location/create',
+
 ];
 
 return $routes;
