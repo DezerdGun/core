@@ -40,7 +40,8 @@ abstract class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['street_address', 'city', 'state_code', 'zip', 'country', 'lat', 'long'], 'string', 'max' => 32]
+            [['street_address', 'city', 'state_code', 'zip'] , 'required'],
+            [['street_address', 'city', 'state_code', 'zip', 'lat', 'long'], 'string', 'max' => 32]
         ];
     }
 
@@ -55,7 +56,6 @@ abstract class Address extends \yii\db\ActiveRecord
             'city' => 'City',
             'state_code' => 'State Code',
             'zip' => 'Zip',
-            'country' => 'Country',
             'lat' => 'Lat',
             'long' => 'Long',
         ];

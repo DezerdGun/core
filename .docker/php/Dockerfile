@@ -15,7 +15,7 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm composer-setup.php
 RUN docker-php-ext-configure gd --with-freetype
 RUN docker-php-ext-install zip pdo_pgsql pdo_mysql gd
-RUN pecl install xdebug
+RUN pecl install xdebug-3.1.6
 RUN docker-php-ext-enable xdebug
 COPY cmd.sh .
 RUN chmod u+x cmd.sh

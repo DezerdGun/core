@@ -1,0 +1,207 @@
+<?php
+
+namespace api\controllers;
+
+use api\components\HttpException;
+use common\models\Address;
+use common\models\Location;
+use common\models\search\SearchLocation;
+use Yii;
+
+class LocationController extends BaseController
+{
+    /**
+     * @OA\Get(
+     *     path="/location",
+     *     tags={"location"},
+     *     operationId="getLocation",
+     *     summary="getLocation",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="street_address",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="state_code",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="zip",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="is_port",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"yes","no"},
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="is_warehouse",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"yes","no"},
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/LocationLarge")
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 ref="#/components/schemas/Pagination"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionIndex($page = 0, $pageSize = 25)
+    {
+        $searchLocation = new SearchLocation();
+        $params = [
+            'SearchLocation' => Yii::$app->request->queryParams
+        ];
+        if ($searchLocation->load($params) && $searchLocation->validate()) {
+            $query = $searchLocation->search($params);
+        } else {
+            throw new HttpException(400, ['SearchLocation' => $searchLocation->getErrors()]);
+        }
+
+
+        return $this->index($query, $page, $pageSize, \api\templates\location\Large::class);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/location",
+     *     tags={"location"},
+     *     operationId="createLocation",
+     *     summary="createLocation",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="Location[name]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Address[street_address]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Address[city]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Address[state_code]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Address[zip]",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="Location[location_type]",
+     *                     type="string",
+     *                     enum={"port","warehouse"}
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/LocationSmall"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionCreate()
+    {
+        $model = new Address();
+        $transaction = Yii::$app->db->beginTransaction();
+        if ($model->load($this->getAllowedPost()) && $model->save()) {
+            $location = new Location();
+            $location->address_id = $model->id;
+            if ($location->load(\Yii::$app->request->post()) && $location->validate()) {
+                $location->save();
+            } else {
+                throw new HttpException(400, [$location->formName() => $location->getErrors()]);
+            }
+            $transaction->commit();
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+        return $this->success();
+    }
+}
