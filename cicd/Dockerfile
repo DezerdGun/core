@@ -31,7 +31,7 @@ RUN a2ensite backend-$APP_ENV
 RUN a2ensite frontend-$APP_ENV
 RUN pecl install memcached
 RUN pecl install imagick
-RUN pecl install xdebug
+RUN pecl install xdebug-3.1.2
 RUN pecl install apcu_bc
 RUN docker-php-ext-enable memcached imagick xdebug
 COPY cicd/php-$APP_ENV.ini $PHP_INI_DIR/conf.d/tms2.ini
