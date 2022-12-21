@@ -29,6 +29,8 @@ $routes = [
     'GET /lists/equipment' => 'equipment/index',
     'GET /lists/load-modes' => 'load-modes/index',
     'GET /lists/stop-types' => 'stop-types/index',
+    'GET /lists/doc-types' => 'doc-types/index',
+
 
     'POST /company' => 'company/create',
 
@@ -63,6 +65,9 @@ $routes = [
 
     'GET /location' => 'location/index',
     'POST /location' => 'location/create',
+
+    'POST /ordinary-load' => 'ordinary-load/create',
+    'POST /ordinary-needed' => 'ordinary-needed/create',
 
 ];
 
