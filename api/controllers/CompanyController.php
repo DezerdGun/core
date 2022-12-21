@@ -22,31 +22,33 @@ class CompanyController extends BaseController
      *             @OA\Schema(
      *                 @OA\Property(
      *                     property="Company[company_name]",
-     *                     type="string"
+     *                     type="string",
+     *                     example="Omega Global",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[street_address]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="319 Ridge Rd",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[city]",
-     *                     type="string"
+     *                     type="string",
+     *                      example=" South San Francisco",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[state_code]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="CA",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[zip]",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="Address[country]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="202",
      *                 ),
      *                 @OA\Property(
      *                     property="Company[business_phone]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="505 555 666",
      *                 ),
      *                 @OA\Property(
      *                     property="Company[w9_file]",
@@ -61,22 +63,26 @@ class CompanyController extends BaseController
      *                 @OA\Property(
      *                     property="Company[is_customer]",
      *                     type="boolean",
-     *                      format="binary"
+     *                      format="binary",
+     *                      example="1",
      *                 ),
      *                  @OA\Property(
      *                     property="Company[is_port]",
      *                     type="boolean",
-     *                      format="binary"
+     *                      format="binary",
+     *                      example="1",
      *                 ),
      *                   @OA\Property(
      *                     property="Company[is_consignee]",
      *                     type="boolean",
-     *                      format="binary"
+     *                      format="binary",
+     *                      example="1",
      *                 ),
      *                    @OA\Property(
      *                     property="Company[is_chassis]",
      *                     type="boolean",
-     *                      format="binary"
+     *                      format="binary",
+     *                      example="1",
      *                 ),
      *             )
      *         )

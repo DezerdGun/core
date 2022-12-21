@@ -14,11 +14,12 @@ use Yii;
  * @property string $city
  * @property string $state_code
  * @property string $zip
- * @property string $country
  * @property string $lat
  * @property string $long
  *
  * @property \common\models\Company[] $companies
+ * @property \common\models\Location[] $locations
+ * @property \common\models\State $stateCode
  * @property string $aliasModel
  */
 abstract class Address extends \yii\db\ActiveRecord
@@ -40,8 +41,8 @@ abstract class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['street_address', 'city', 'state_code', 'zip'] , 'required'],
-            [['street_address', 'city', 'state_code', 'zip', 'lat', 'long'], 'string', 'max' => 32]
+            [['street_address', 'city', 'state_code', 'zip', 'lat', 'long'], 'string', 'max' => 32],
+            [['state_code'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\State::className(), 'targetAttribute' => ['state_code' => 'state_code']]
         ];
     }
 
@@ -67,6 +68,22 @@ abstract class Address extends \yii\db\ActiveRecord
     public function getCompanies()
     {
         return $this->hasMany(\common\models\Company::className(), ['address_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocations()
+    {
+        return $this->hasMany(\common\models\Location::className(), ['address_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStateCode()
+    {
+        return $this->hasOne(\common\models\State::className(), ['state_code' => 'state_code']);
     }
 
 

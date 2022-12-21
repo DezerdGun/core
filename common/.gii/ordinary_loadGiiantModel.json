@@ -1,6 +1,6 @@
 {
     "tablename": {
-        "value": "equipment",
+        "value": "ordinary_load",
         "name": "tableName"
     },
     "tableprefix": {
@@ -8,7 +8,7 @@
         "name": "tablePrefix"
     },
     "modelclass": {
-        "value": "EquipmentLoad",
+        "value": "OrdinaryLoad",
         "name": "modelClass"
     },
     "ns": {

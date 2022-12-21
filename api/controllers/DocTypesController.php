@@ -8,7 +8,7 @@ class DocTypesController extends BaseController
 {
     /**
      * @OA\Get(
-     *     path="/lists/load-doc-types",
+     *     path="/lists/doc-types",
      *     tags={"lists"},
      *     operationId="getDocTypes",
      *     summary="getDocTypes",
