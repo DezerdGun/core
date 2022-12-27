@@ -324,7 +324,6 @@ class LoadController extends BaseController
      *     security={
      *         {"main":{}},
      *      {"ClientCredentials":{}}
-     *
      *     }
      * )
      */

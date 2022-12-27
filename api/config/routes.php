@@ -69,6 +69,8 @@ $routes = [
     'POST /ordinary-load' => 'ordinary-load/create',
     'POST /ordinary-needed' => 'ordinary-needed/create',
 
+    'PATCH /location/<id:\d+>' => 'location/update',
+    'DELETE /location/<id:\d+>' => 'location/delete',
 ];
 
 return $routes;

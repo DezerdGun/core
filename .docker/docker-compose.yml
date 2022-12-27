@@ -15,6 +15,7 @@ services:
   php:
     build:
       context: ./php
+    image: tms2_php:latest
     container_name: tmp_php
     volumes:
       - ../:/var/www/html

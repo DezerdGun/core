@@ -29,7 +29,7 @@ class SearchLocation extends Model
     public function search($params)
     {
         $query = Location::find()
-        ->from(['load' => Location::tableName()])
+        ->from(['location' => Location::tableName()])
         ->joinWith([
                 'address' => function (\Yii\db\ActiveQuery $query) {
                     $query->from(['address' => Address::tableName()]);
@@ -37,7 +37,7 @@ class SearchLocation extends Model
             ]);
 
         if ($this->id) {
-            $query->andfilterWhere(['LIKE', 'CAST(id AS VARCHAR)', $this->id . '%', false]);
+            $query->andfilterWhere(['LIKE', 'CAST(location.id AS VARCHAR)', $this->id . '%', false]);
         }
 
         if ($this->name) {
