@@ -51,9 +51,9 @@ class Large extends BaseTemplate
             'user_id' => $model->user_id,
             'mc' => $model->mc,
             'dot' => $model->dot,
-            'ein' => $model->ein,
-            'w9' => $model->w9,
-            'ic' => $model->ic,
+//            'ein' => $model->ein,
+//            'w9' => $model->w9_file,
+//            'ic' => $model->ic_file,
         ];
     }
 }

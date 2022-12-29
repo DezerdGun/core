@@ -3,6 +3,7 @@
 namespace api\forms\carrier;
 
 use common\models\Carrier;
+use common\models\traits\Template;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
@@ -15,6 +16,7 @@ use yii\helpers\ArrayHelper;
  */
 class CarrierCreateForm extends Model
 {
+    use Template;
     /**
      * @OA\Property(
      *     type="integer"
@@ -39,7 +41,8 @@ class CarrierCreateForm extends Model
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['user_id', 'mc', 'dot'], 'required'],
+                [['mc', 'dot'], 'safe'],
+                [['user_id'], 'required'],
                 ['user_id', 'integer'],
                 ['user_id', 'unique', 'targetClass' => '\common\models\Carrier', 'message' => 'Carrier already exists'],
                 [['mc', 'dot'] , 'string'],

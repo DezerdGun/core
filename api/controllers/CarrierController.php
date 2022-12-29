@@ -6,7 +6,9 @@ use api\components\HttpException;
 use api\forms\carrier\CarrierCreateForm;
 use api\templates\carrier\Large;
 use api\templates\carrier\Small;
+use common\models\Carrier;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class CarrierController extends BaseController
 {
@@ -56,7 +58,7 @@ class CarrierController extends BaseController
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success();
+        return $this->success($model->getAsArray(Small::class));
     }
 
     /**
@@ -132,6 +134,16 @@ class CarrierController extends BaseController
     public function actionDelete($id) {
         $model = $this->findModel($id);
         $model->delete();
-        return $this->success();
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    private function findModel($id)
+    {
+        $condition = ['id' => $id];
+        $model = Carrier::findOne($condition);
+        if (!$model){
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 }
