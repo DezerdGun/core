@@ -14,11 +14,17 @@ use yii\validators\EmailValidator;
  * Class UserCreateForm
  *
  * @OA\Schema(
- *     required={"email_or_mobile_number", "password"}
+ *     required={"username","email_or_mobile_number", "password"}
  * )
  */
 class UserCreateForm extends Model
 {
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $username;
     /**
      * @OA\Property(
      *     type="string"
@@ -44,11 +50,13 @@ class UserCreateForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            [['username', 'email'], 'string', 'max' => 255],
         ];
     }
 
     public function signup(User $user)
     {
+        $user->username = $this->username;
         $user->email = $this->email;
         $user->mobile_number = $this->mobile_number;
         if ($this->email) {

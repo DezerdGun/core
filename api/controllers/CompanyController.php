@@ -4,6 +4,8 @@ namespace api\controllers;
 
 
 use api\components\HttpException;
+use api\templates\address\Small;
+use api\templates\carrier\Large;
 use common\models\Address;
 use common\models\Company;
 
@@ -126,7 +128,7 @@ class CompanyController extends BaseController
                     throw new HttpException(400, [$detail->formName() => $detail->getErrors()]);
                 }
                 return $this->success([
-                    $model->getAsArray(\api\templates\address\Small::class)
+                    $model->getAsArray(Small::class)
                 ]);
 
             }

@@ -14,6 +14,14 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         property="id",
  *         type="integer"
  *     ),
+ *     @OA\Property(
+ *         property="mc",
+ *         type="integer"
+ *     ),
+ *      @OA\Property(
+ *         property="dot",
+ *         type="integer"
+ *     ),
  * )
  */
 class Small extends BaseTemplate
@@ -23,7 +31,9 @@ class Small extends BaseTemplate
         /** @var Carrier $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
+            'user_id' => $model->user_id,
+            'mc' => $model->mc,
+            'dot' => $model->dot,
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\behaviors\UploadBehavior;
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\Company as BaseCompany;
 use yii\helpers\ArrayHelper;
@@ -12,6 +13,7 @@ use yii\helpers\ArrayHelper;
  */
 class Company extends BaseCompany
 {
+    use Template;
     const SCENARIO_INSERT = 'insert';
 
     public function behaviors()
@@ -65,4 +67,5 @@ class Company extends BaseCompany
             ]
         );
     }
+
 }

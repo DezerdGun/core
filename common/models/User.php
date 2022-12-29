@@ -281,10 +281,10 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         //Add filtering conditions
-        $query->andFilterWhere(['id' => $this->id])
-            ->andFilterWhere(['page' => $this->page])
-            ->andFilterWhere(['block' => $this->block])
-            ->andFilterWhere(['text' => $this->text]);
+        $query->andFilterWhere(['id' => $this->id]);
+//            ->andFilterWhere(['page' => $this->page])
+//            ->andFilterWhere(['block' => $this->block])
+//            ->andFilterWhere(['text' => $this->text]);
 
         return $provider;
     }
