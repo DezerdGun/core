@@ -26,7 +26,7 @@ class SearchLocation extends Model
         ];
     }
 
-    public function search($params)
+    public function search(): \yii\db\ActiveQuery
     {
         $query = Location::find()
         ->from(['location' => Location::tableName()])

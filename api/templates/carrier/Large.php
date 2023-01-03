@@ -49,11 +49,8 @@ class Large extends BaseTemplate
         $this->result = [
             'id' => $model->id,
             'user_id' => $model->user_id,
-            'mc' => $model->mc,
-            'dot' => $model->dot,
-//            'ein' => $model->ein,
-//            'w9' => $model->w9_file,
-//            'ic' => $model->ic_file,
+            'w9_file' => $model->w9_file,
+            'ic_file' => $model->ic_file,
         ];
     }
 }

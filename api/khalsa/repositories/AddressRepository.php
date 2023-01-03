@@ -22,4 +22,11 @@ class AddressRepository implements RepositoryInterface
             throw new \RuntimeException('Removing error.');
         }
     }
+
+    public function create(Address $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Removing error.');
+        }
+    }
 }

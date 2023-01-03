@@ -13,10 +13,7 @@ use Yii;
  * @property string $company_name
  * @property string $business_phone
  * @property string $ein
- * @property string $w9_file
- * @property string $w9_mime_type
- * @property string $ic_file
- * @property string $ic_mime_type
+ * @property string $dot
  * @property integer $address_id
  * @property string $mc_number
  * @property string $email
@@ -25,10 +22,6 @@ use Yii;
  * @property string $quickbooks_email
  * @property string $credit_limit
  * @property string $payment_terms
- * @property boolean $is_customer
- * @property boolean $is_port
- * @property boolean $is_consignee
- * @property boolean $is_chassis
  *
  * @property \common\models\Address $address
  * @property \common\models\Carrier $carrier
@@ -59,8 +52,7 @@ abstract class Company extends \yii\db\ActiveRecord
             [['address_id'], 'required'],
             [['address_id'], 'default', 'value' => null],
             [['address_id'], 'integer'],
-            [['is_customer', 'is_port', 'is_consignee', 'is_chassis'], 'boolean'],
-            [['company_name', 'business_phone', 'ein', 'w9_mime_type', 'ic_mime_type', 'mc_number', 'email', 'receiver_email', 'billing_email', 'quickbooks_email', 'credit_limit', 'payment_terms'], 'string', 'max' => 32],
+            [['company_name', 'business_phone', 'ein',  'mc_number', 'email', 'receiver_email', 'billing_email', 'quickbooks_email', 'credit_limit', 'payment_terms'], 'string', 'max' => 32],
 //            [['w9_file', 'ic_file'], 'string', 'max' => 55],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Address::className(), 'targetAttribute' => ['address_id' => 'id']]
         ];
@@ -88,10 +80,6 @@ abstract class Company extends \yii\db\ActiveRecord
             'quickbooks_email' => 'Quickbooks Email',
             'credit_limit' => 'Credit Limit',
             'payment_terms' => 'Payment Terms',
-            'is_customer' => 'Is Customer',
-            'is_port' => 'Is Port',
-            'is_consignee' => 'Is Consignee',
-            'is_chassis' => 'Is Chassis',
         ];
     }
 
