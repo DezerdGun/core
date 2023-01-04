@@ -126,7 +126,6 @@ class Small extends BaseTemplate
                 $model->customer_id,
                 Company::find()
                     ->where(['id' => $model->customer_id])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')->all()
-
             ],
             'port_id' => [
                 $model->port_id,
@@ -141,8 +140,6 @@ class Small extends BaseTemplate
                     ])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')
                     ->all()
             ],
-            'load_status' => $model->load_status,
-            'broker_name' => $model->broker_name,
             'vessel_eta' => $model->vessel_eta,
         ];
     }

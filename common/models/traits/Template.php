@@ -11,7 +11,7 @@ trait Template
      * @param string $template
      * @return array
     */
-    public function getAsArray( $template, array $config = [])
+    public function getAsArray($template, array $config = [])
     {
         if (
             !class_exists($template)
