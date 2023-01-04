@@ -12,9 +12,6 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $mc
- * @property string $dot
- * @property string $ein
  * @property string $w9_file
  * @property string $w9_mime_type
  * @property string $ic_file
@@ -22,6 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $aliasModel
+ * @property integer $company_id
  */
 abstract class Carrier extends \yii\db\ActiveRecord
 {
@@ -52,11 +50,10 @@ abstract class Carrier extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
-            ['user_id', 'integer'],
+            [['user_id', 'company_id'], 'required'],
+            [['user_id', 'company_id'], 'integer'],
             [['user_id'], 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => ['user_id' => 'id'], 'skipOnEmpty' => true],
             ['user_id', 'unique', 'targetClass' => '\common\models\Carrier', 'message' => 'Carrier already exists'],
-            [['mc', 'dot', 'ein'], 'string', 'max' => 32]
         ];
     }
 

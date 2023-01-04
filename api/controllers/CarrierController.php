@@ -4,6 +4,9 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\forms\carrier\CarrierCreateForm;
+use api\khalsa\services\AddressService;
+use api\khalsa\services\CarrierService;
+use api\khalsa\services\CompanyService;
 use api\templates\carrier\Large;
 use api\templates\carrier\Small;
 use common\models\Carrier;
@@ -12,6 +15,25 @@ use yii\web\NotFoundHttpException;
 
 class CarrierController extends BaseController
 {
+    private $addressService;
+    private $carrierService;
+    private $companyService;
+
+    public function __construct(
+        $id,
+        $module,
+        $config = [],
+        AddressService $addressService,
+        CarrierService $carrierService,
+        CompanyService $companyService
+    )
+    {
+        parent::__construct($id, $module, $config);
+        $this->addressService = $addressService;
+        $this->carrierService = $carrierService;
+        $this->companyService = $companyService;
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
@@ -49,12 +71,15 @@ class CarrierController extends BaseController
      * )
      */
 
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $model = new CarrierCreateForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
-            $model->create();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            $address = $this->addressService->create();
+            $company = $this->companyService->create($address, $model);
+            $carrier = $this->carrierService->create($company, $model);
+            $transaction->commit();
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }

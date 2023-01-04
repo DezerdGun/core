@@ -142,7 +142,7 @@ class LocationController extends BaseController
             'SearchLocation' => Yii::$app->request->queryParams
         ];
         if ($searchLocation->load($params) && $searchLocation->validate()) {
-            $query = $searchLocation->search($params);
+            $query = $searchLocation->search();
         } else {
             throw new HttpException(400, ['SearchLocation' => $searchLocation->getErrors()]);
         }

@@ -2,9 +2,13 @@
 
 namespace api\khalsa\services;
 
+use api\components\HttpException;
 use api\khalsa\repositories\AddressRepository;
+use common\models\Address;
+use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
 use \api\khalsa\interfaces\ServiceInterface;
+use Yii;
 
 class AddressService implements ServiceInterface
 {
@@ -15,9 +19,19 @@ class AddressService implements ServiceInterface
         $this->addressRepository = $repository;
     }
 
-    public function create()
+    /**
+     * @throws InvalidConfigException
+     * @throws HttpException
+     */
+    public function create(): Address
     {
-        // TODO: Implement create() method.
+        $model = new Address();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $this->addressRepository->create($model);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+        return $model;
     }
 
     /**
