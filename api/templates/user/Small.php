@@ -15,7 +15,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="integer"
  *     ),
  *     @OA\Property(
- *         property="username",
+ *         property="name",
  *         type="string"
  *     ),
  *     @OA\Property(
@@ -32,7 +32,7 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'username' => $model->username,
+            'name' => $model->name,
             'email' => $model->email,
         ];
     }
