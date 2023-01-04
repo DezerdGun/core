@@ -26,6 +26,7 @@ class CompanyService
         $model->mc_number = $form->mc_number;
         $model->dot = $form->dot;
         $model->company_name = $form->company_name;
+        $model->business_phone = $form->business_phone;
 
         if ($model->validate()) {
             $this->companyRepository->create($model);

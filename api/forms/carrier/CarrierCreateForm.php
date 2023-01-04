@@ -48,13 +48,19 @@ class CarrierCreateForm extends Model
      * )
      */
     public $company_name;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $business_phone;
     use Template;
 
     public function rules(): array
     {
         return ArrayHelper::merge(
             parent::rules(), [
-            [['is_dot', 'company_name', 'user_id'], 'required'],
+            [['is_dot', 'company_name', 'user_id', 'business_phone'], 'required'],
             ['mc_number', 'required', 'when' => function ($model) {
                 return $model->is_dot === "false";
             }],
@@ -62,7 +68,7 @@ class CarrierCreateForm extends Model
                 return $model->is_dot === "true";
             }],
             [['mc_number', 'dot'], 'default', 'value' => null],
-            [['mc_number', 'dot', 'is_dot'], 'string'],
+            [['mc_number', 'dot', 'is_dot', 'business_phone'], 'string'],
             ['mc_number', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This MC number has already been taken.'],
             ['dot', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This DOT has already been taken.'],
             ['company_name', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This company name has already been taken.'],
@@ -134,6 +140,11 @@ class CarrierCreateForm extends Model
  *                  property="Address[zip]",
  *                  type="string",
  *                  example="35210",
+ *               ),
+ *              @OA\Property(
+ *                  property="CarrierCreateForm[business_phone]",
+ *                  type="string",
+ *                  example="+13026893120",
  *               ),
  *              @OA\Property(
  *                  property="Carrier[w9_file]",

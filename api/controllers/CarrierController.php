@@ -83,7 +83,7 @@ class CarrierController extends BaseController
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success($model->getAsArray(Small::class));
+        return $this->success($carrier->getAsArray(Small::class));
     }
 
     /**

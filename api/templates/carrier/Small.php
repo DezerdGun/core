@@ -31,9 +31,8 @@ class Small extends BaseTemplate
         /** @var Carrier $model */
         $model = $this->model;
         $this->result = [
-            'user_id' => $model->user_id,
-            'mc' => $model->mc,
-            'dot' => $model->dot,
+            'carrier_id' => $model->id,
+            'user_id' => $model->user_id
         ];
     }
 }
