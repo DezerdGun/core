@@ -12,7 +12,7 @@ class LoadAdditionalInfoController extends BaseController
     /**
      * @OA\Post(
      *     path="/load-additional-info",
-     *     tags={"load"},
+     *     tags={"container-load"},
      *     operationId="LoadAdditionalInfo",
      *     summary="createLoadAdditionalInfo",
      *     @OA\RequestBody(

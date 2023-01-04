@@ -15,6 +15,7 @@ $routes = [
     'POST /user' => 'user/create',
     'POST /user/resend' => 'user/resend',
     'POST /user/check' => 'user/check',
+    'GET /user/<id:\d+>' => 'user/get',
 
     'POST /user/recovery' => 'user/recovery',
     'POST /user/password' => 'user/password',
@@ -34,10 +35,10 @@ $routes = [
 
     'POST /company' => 'company/create',
 
-    'POST /load' => 'load/create',
-    'GET /load' => 'load/index',
-    'GET /load/<id:\d+>' => 'load/show',
-    'DELETE /load/<id:\d+>' => 'load/delete',
+    'POST /container-load' => 'container-load/create',
+    'GET /container-load' => 'container-load/index',
+    'GET /container-load/<id:\d+>' => 'container-load/show',
+    'DELETE /container-load/<id:\d+>' => 'container-load/delete',
 
     'GET /load/<id:\d+>/documents' => 'load/get-documents',
     'POST /load/<id:>/document' => 'load/create-upload-document',

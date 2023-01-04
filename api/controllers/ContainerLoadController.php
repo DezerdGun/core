@@ -6,27 +6,26 @@ use api\components\HttpException;
 use api\templates\load\Large;
 use api\templates\loaddocuments\Small;
 use common\models\Load;
-use common\models\LoadAdditionalInfo;
-use common\models\LoadContainerInfo;
 use common\models\LoadDocuments;
 use common\models\LoadStop;
 use Yii;
-use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 
-class LoadController extends BaseController
+class ContainerLoadController extends BaseController
 {
 
     /**
      * @OA\Get(
-     *     path="/load",
-     *     tags={"load"},
-     *     operationId="getLoads",
-     *     summary="getLoads",
+     *     path="/container-load",
+     *     tags={"container-load"},
+     *     operationId="getContainerLoads",
+     *     summary="getContainerLoads",
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",
      *         required=true,
+     *         description="{Fk} From Company[id] Endpoint ",
+     *         example="1",
      *         @OA\Schema(
      *             type="integer"
      *         )
@@ -35,6 +34,8 @@ class LoadController extends BaseController
      *         name="port_id",
      *         in="query",
      *         required=false,
+     *         description="{Fk} From Company[id] Endpoint ",
+     *         example="1",
      *         @OA\Schema(
      *             type="integer"
      *         )
@@ -43,6 +44,8 @@ class LoadController extends BaseController
      *         name="consignee_id",
      *         in="query",
      *         required=false,
+     *         description="{Fk} From Company[id] Endpoint ",
+     *         example="1",
      *         @OA\Schema(
      *             type="integer"
      *         )
@@ -51,6 +54,8 @@ class LoadController extends BaseController
      *         name="load_status",
      *         in="query",
      *         required=false,
+     *         description="{Fk} From Company[id] Endpoint ",
+     *         example="1",
      *         @OA\Schema(
      *             type="integer"
      *         )
@@ -60,14 +65,7 @@ class LoadController extends BaseController
      *         in="query",
      *         required=false,
      *         description="2022-07-17 08:16:06",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="broker_name",
-     *         in="query",
-     *         required=false,
+     *         example="2022-07-17 08:16:06",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -118,7 +116,7 @@ class LoadController extends BaseController
      * )
      */
 
-    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,$load_status = 0, $vessel_eta =0, $broker_name = 0,
+    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,$load_status = 0, $vessel_eta =0,
                                 $from = 0, $to = 0,  $page = 0, $pageSize = 25)
     {
         $query = Load::find();
@@ -132,9 +130,7 @@ class LoadController extends BaseController
             $query->andWhere(['load_status' => $load_status]);
         }elseif ($vessel_eta) {
             $query->andWhere(['vessel_eta' => $vessel_eta]);
-        } elseif ($broker_name) {
-            $query->andWhere(['broker_name' => $broker_name]);
-        } elseif ($from) {
+        }elseif ($from) {
             $query = LoadStop::find();
             $query->andWhere(['from' => $from]);
         } elseif ($to) {
@@ -146,10 +142,10 @@ class LoadController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/load",
-     *     tags={"load"},
-     *     operationId="Load",
-     *     summary="createLoad",
+     *     path="/container-load",
+     *     tags={"container-load"},
+     *     operationId="ContainerLoad",
+     *     summary="createContainerLoad",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -158,18 +154,20 @@ class LoadController extends BaseController
      *         @OA\Property(
      *              property="Load[customer_id]",
      *              type="integer",
+     *              description="{Fk} From Company[id] Endpoint ",
+     *              example="1",
      *              ),
      *         @OA\Property(
      *              property="Load[port_id]",
      *              type="integer",
+     *              description="{Fk} From Company[id] Endpoint ",
+     *              example="1",
      *              ),
      *         @OA\Property(
      *              property="Load[consignee_id]",
      *              type="integer",
-     *              ),
-     *          @OA\Property(
-     *              property="Load[load_status]",
-     *              type="integer",
+     *              description="{Fk} From Company[id] Endpoint ",
+     *              example="1",
      *              ),
      *          @OA\Property(
      *              property="Load[vessel_eta]",
@@ -178,10 +176,6 @@ class LoadController extends BaseController
      *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
      *              example="2021-12-12 14:05:22",
      *              description="2021-12-12T19:05:33Z"
-     *              ),
-     *         @OA\Property(
-     *              property="Load[broker_name]",
-     *              type="string",
      *              ),
      *            )
      *         )
@@ -221,10 +215,10 @@ class LoadController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/load/{id}",
-     *     tags={"load"},
-     *     operationId="getLoadId",
-     *     summary="getLoad",
+     *     path="/container-load/{id}",
+     *     tags={"container-load"},
+     *     operationId="getContainerLoadId",
+     *     summary="getContainerLoad",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -265,10 +259,10 @@ class LoadController extends BaseController
 
     /**
      * @OA\Delete(
-     *     path="/load/{id}",
-     *     tags={"load"},
-     *     operationId="deleteLoad",
-     *     summary="deleteLoad",
+     *     path="/container-load/{id}",
+     *     tags={"container-load"},
+     *     operationId="deleteContainerLoad",
+     *     summary="deleteContainerLoad",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

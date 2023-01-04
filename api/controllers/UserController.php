@@ -10,9 +10,11 @@ use api\forms\user\UserNewPasswordForm;
 use api\forms\user\UserRecoveryForm;
 use api\forms\user\UserResendForm;
 use api\forms\user\UserCreateForm;
+use api\templates\user\Large;
 use api\templates\user\Small;
 use common\models\User;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class UserController extends BaseController
 {
@@ -211,5 +213,57 @@ class UserController extends BaseController
         }
         return $this->success('Success');
 
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/user/{id}",
+     *     tags={"user"},
+     *     operationId="getUser",
+     *     summary="getUser",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/CarrierLarge"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+
+    public function actionGet($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    private function findModel($id)
+    {
+        $condition = ['id' => $id];
+        $model = User::findOne($condition);
+        if (!$model){
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 }
