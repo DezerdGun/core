@@ -130,7 +130,7 @@ class UserController extends BaseController
      * )
      */
 
-    public function actionCheck()
+    public function actionCheck(): array
     {
         $model = new UserCheckForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -167,7 +167,7 @@ class UserController extends BaseController
      * )
      */
 
-    public function actionRecovery()
+    public function actionRecovery(): array
     {
         $model = new UserRecoveryForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -203,7 +203,7 @@ class UserController extends BaseController
      * )
      */
 
-    public function actionPassword()
+    public function actionPassword(): array
     {
         $model = new UserNewPasswordForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
