@@ -22,6 +22,10 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         property="email",
  *         type="string"
  *     ),
+ *     @OA\Property(
+ *         property="role",
+ *         type="string"
+ *     ),
  * )
  */
 class Small extends BaseTemplate
@@ -34,6 +38,7 @@ class Small extends BaseTemplate
             'id' => $model->id,
             'name' => $model->name,
             'email' => $model->email,
+            'role' => $model->role
         ];
     }
 }

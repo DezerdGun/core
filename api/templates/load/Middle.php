@@ -62,9 +62,7 @@ class Middle extends BaseTemplate
             'customer_id' => $model->customer_id,
             'port_id' => $model->port_id,
             'consignee_id' => $model->consignee_id,
-            'load_status' => $model->load_status,
             'vessel_eta' => $model->vessel_eta,
-            'broker_name' => $model->broker_name,
         ];
     }
 }

@@ -16,6 +16,7 @@ $routes = [
     'POST /user/resend' => 'user/resend',
     'POST /user/check' => 'user/check',
     'GET /user/<id:\d+>' => 'user/get',
+    'GET /user' => 'user/get-all',
 
     'POST /user/recovery' => 'user/recovery',
     'POST /user/password' => 'user/password',
@@ -44,7 +45,7 @@ $routes = [
     'POST /load/<id:>/document' => 'load/create-upload-document',
     'DELETE /load/<load_id:\d+>/document/<id:\d+>' => 'load/delete-document',
 
-    'POST /tracking<load_id:>' => 'load-tracking/create',
+    'POST /tracking/<load_id:>' => 'load-tracking/create',
     'GET /tracking/<load_id:\d+>/list' => 'load-tracking/index',
 
     'POST /load-stop' => 'load-stop/create',
@@ -72,6 +73,9 @@ $routes = [
 
     'PATCH /location/<id:\d+>' => 'location/update',
     'DELETE /location/<id:\d+>' => 'location/delete',
+
+    'POST /invite-broker/<email:>' => 'invite-broker/invite',
+
 ];
 
 return $routes;

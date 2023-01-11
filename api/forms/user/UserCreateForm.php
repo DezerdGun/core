@@ -3,12 +3,10 @@
 namespace api\forms\user;
 
 use api\components\email\EmailService;
-use api\components\sms\SMSRequest;
 use common\models\User;
-use yii\base\DynamicModel;
 use yii\base\Model;
 use yii;
-use yii\validators\EmailValidator;
+
 
 /**
  * Class UserCreateForm
@@ -64,6 +62,16 @@ class UserCreateForm extends Model
         $user->generateAuthKey();
         $user->save();
     }
+
+    public function brokerEmail(User $user)
+    {
+        $email = new EmailService();
+        $email->SubEmail($user);
+        $user->generateAuthKey();
+        $user->status = 1;
+
+    }
+
 
 }
 

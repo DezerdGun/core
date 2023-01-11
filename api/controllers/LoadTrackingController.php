@@ -11,7 +11,7 @@ class LoadTrackingController extends BaseController
 {
     /**
      * @OA\Post(
-     *     path="/tracking{load_id}",
+     *     path="/tracking/{load_id}",
      *     tags={"load-tracking"},
      *     operationId="createLoadtracking",
      *     summary="createLoadtracking",
