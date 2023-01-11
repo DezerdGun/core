@@ -38,9 +38,8 @@
         "kartik-v/yii2-bootstrap5-dropdown": "@dev",
         "kartik-v/yii2-grid": "@dev",
         "kartik-v/yii2-editable": "@dev",
-        "stripe/stripe-php": "^9.1"
-
-
+        "stripe/stripe-php": "^9.1",
+        "ext-openssl": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

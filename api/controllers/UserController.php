@@ -3,9 +3,7 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\components\sms\SMSRequest;
 use api\forms\user\UserCheckForm;
-use api\forms\user\UserConfirmEmailForm;
 use api\forms\user\UserNewPasswordForm;
 use api\forms\user\UserRecoveryForm;
 use api\forms\user\UserResendForm;
@@ -51,6 +49,7 @@ class UserController extends BaseController
     {
        $model = new UserCreateForm();
        $user = new User();
+       $user->role = "Carrier";
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
            $model->signup($user);
        } else {
@@ -219,8 +218,9 @@ class UserController extends BaseController
      * @OA\Get(
      *     path="/user/{id}",
      *     tags={"user"},
-     *     operationId="getUser",
-     *     summary="getUser",
+     *     operationId="getUserById",
+     *     summary="getUserById",
+     *     description="This endpoint can be used to get by ID some of information users",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -238,7 +238,7 @@ class UserController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 ref="#/components/schemas/CarrierLarge"
+     *                 ref="#/components/schemas/UserLarge"
      *             )
      *         )
      *     ),
@@ -253,8 +253,46 @@ class UserController extends BaseController
     public function actionGet($id)
     {
         $model = $this->findModel($id);
-
         return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/user",
+     *     tags={"user"},
+     *     operationId="getUserAll",
+     *     summary="getUserAll",
+     *     description="This endpoint can be used to get some of information users",
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/UserLarge"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+
+    public function actionGetAll()
+    {
+        $model = User::find()
+            ->select('id,username,name,email,role')
+            ->all();
+        return $this->success($model);
     }
 
     private function findModel($id)
