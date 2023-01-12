@@ -38,6 +38,9 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
     const STATUS_EMPTY = '';
+    /**
+     * @var mixed|null
+     */
 
     use Template;
 
@@ -65,7 +68,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED,self::STATUS_EMPTY]],
             // the name, email, subject and body attributes are required
-            [['username', 'email'], 'safe'],
+            [['username','name', 'email','mobile_number'], 'safe'],
 
             // the email attribute should be a valid email address
             ['email', 'email'],

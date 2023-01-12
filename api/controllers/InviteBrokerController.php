@@ -8,6 +8,7 @@ use common\models\Broker;
 use common\models\User;
 use OpenApi\Annotations as OA;
 
+
 class InviteBrokerController extends BaseController
 {
     /**
@@ -64,4 +65,6 @@ class InviteBrokerController extends BaseController
             throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
         }
     }
+
+
 }
