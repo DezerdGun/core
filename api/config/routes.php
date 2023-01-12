@@ -2,6 +2,7 @@
 
 $routes = [
     'POST oauth2/<action:\w+>' => 'rest/<action>',
+    'GET /rest/<refresh_token:>' => 'rest/me',
 
     'GET /doc' => '/doc',
     'GET /' => '/',
@@ -75,7 +76,7 @@ $routes = [
     'DELETE /location/<id:\d+>' => 'location/delete',
 
     'POST /invite-broker/<email:>' => 'invite-broker/invite',
-
+    'PATCH /profile/<verification_token:>' => 'profile/update',
 ];
 
 return $routes;
