@@ -256,44 +256,7 @@ class UserController extends BaseController
         return $this->success($model->getAsArray(Large::class));
     }
 
-    /**
-     * @OA\Get(
-     *     path="/user",
-     *     tags={"user"},
-     *     operationId="getUserAll",
-     *     summary="getUserAll",
-     *     description="This endpoint can be used to get some of information users",
-     *     @OA\Response(
-     *         response=200,
-     *         description="successfull operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 ref="#/components/schemas/UserLarge"
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *         {"main":{}},
-     *      {"ClientCredentials":{}}
-     *
-     *     }
-     * )
-     */
 
-    public function actionGetAll()
-    {
-        $model = User::find()
-            ->select('id,username,name,email,role')
-            ->all();
-        return $this->success($model);
-    }
 
     private function findModel($id)
     {
@@ -304,6 +267,52 @@ class UserController extends BaseController
         }
         return $model;
     }
+
+
+    /**
+     * @OA\Get(
+     *     path="/user",
+     *     tags={"user"},
+     *     operationId="refreshAccessTokenGetMe",
+     *     summary="/GetMe",
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *          @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+
+    function actionMe()
+    {
+        $models = yii::$app->user->getId();
+        $model = User::findOne(['id' => $models]);
+        $rows = (new \yii\db\Query())
+            ->select(['id','username','name','email','role'])
+            ->from('user')
+            ->where(['id' => $model->id])
+            ->all();
+        if (!$rows) {
+            throw new NotFoundHttpException('User didnt find!');
+        }
+        return $this->success($rows);
+    }
+
 
 
 }

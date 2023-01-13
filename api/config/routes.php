@@ -2,7 +2,6 @@
 
 $routes = [
     'POST oauth2/<action:\w+>' => 'rest/<action>',
-    'GET /rest/<refresh_token:>' => 'rest/me',
 
     'GET /doc' => '/doc',
     'GET /' => '/',
@@ -17,7 +16,7 @@ $routes = [
     'POST /user/resend' => 'user/resend',
     'POST /user/check' => 'user/check',
     'GET /user/<id:\d+>' => 'user/get',
-    'GET /user' => 'user/get-all',
+    'GET /user' => 'user/me',
 
     'POST /user/recovery' => 'user/recovery',
     'POST /user/password' => 'user/password',
