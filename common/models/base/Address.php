@@ -81,7 +81,7 @@ abstract class Address extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStateCode()
+    public function getState()
     {
         return $this->hasOne(\common\models\State::className(), ['state_code' => 'state_code']);
     }

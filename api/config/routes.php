@@ -76,6 +76,12 @@ $routes = [
 
     'POST /invite-broker/<email:>' => 'invite-broker/invite',
     'PATCH /profile/<verification_token:>' => 'profile/update',
+
+    'POST /customer' => 'customer/create',
+    'DELETE /customer/<id:\d+>' => 'customer/delete',
+    'GET /customer' => 'customer/index',
+    'GET /customer/<id:\d+>' => 'customer/show',
+    'PATCH /customer/<id:\d+>' => 'customer/update',
 ];
 
 return $routes;

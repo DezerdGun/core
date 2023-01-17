@@ -2,25 +2,32 @@
 
 namespace api\khalsa\services;
 
-use api\forms\carrier\CarrierCreateForm;
 use api\forms\company\CompanyCreateForm;
 use common\models\Address;
 use api\khalsa\repositories\CompanyRepository;
 use common\models\Company;
 use Yii;
 use api\components\HttpException;
+use yii\db\StaleObjectException;
 
 class CompanyService
 {
     private $companyRepository;
+    private $addressService;
 
-    public function __construct(CompanyRepository $repository)
+    public function __construct
+    (
+        CompanyRepository $companyRepository,
+        AddressService $addressService
+    )
     {
-        $this->companyRepository = $repository;
+        $this->companyRepository = $companyRepository;
+        $this->addressService = $addressService;
     }
 
-    public function create(Address $address, CarrierCreateForm $form): Company
+    public function create(CompanyCreateForm $form): Company
     {
+        $address = $this->addressService->create();
         $model = new Company();
         $model->address_id = $address->id;
         $model->mc_number = $form->mc_number;
@@ -41,8 +48,20 @@ class CompanyService
         // TODO: Implement delete() method.
     }
 
+    /**
+     * @throws StaleObjectException
+     */
     public function update($id)
     {
-        // TODO: Implement update() method.
+        $model = $this->companyRepository->getById($id);
+
+        $this->addressService->update($model->address_id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $this->companyRepository->update($model);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+
     }
 }

@@ -39,12 +39,22 @@ class AddressService implements ServiceInterface
      */
     public function delete($id)
     {
-        $address = $this->addressRepository->getById($id);
-        $this->addressRepository->delete($address);
+        $model = $this->addressRepository->getById($id);
+        $this->addressRepository->delete($model);
     }
 
+    /**
+     * @throws StaleObjectException
+     */
     public function update($id)
     {
-        // TODO: Implement update() method.
+       $model = $this->addressRepository->getById($id);
+
+       if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+           $this->addressRepository->update($model);
+       } else {
+           throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+       }
+
     }
 }

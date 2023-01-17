@@ -2,8 +2,6 @@
 
 namespace common\models;
 
-use common\behaviors\UploadBehavior;
-use Yii;
 use \common\models\base\Company as BaseCompany;
 use yii\helpers\ArrayHelper;
 
@@ -28,7 +26,9 @@ class Company extends BaseCompany
         return ArrayHelper::merge(
             parent::rules(),
             [
-
+                ['mc_number', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This MC number has already been taken.'],
+                ['dot', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This DOT has already been taken.'],
+                ['company_name', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This company name has already been taken.'],
             ]
         );
     }

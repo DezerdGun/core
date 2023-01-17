@@ -16,16 +16,89 @@ class CustomerCreateForm extends Model
 {
     /**
      * @OA\Property(
-     *     type="integer"
+     *     type="string"
      * )
      */
-    public $user_id;
+    public $customer_type;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $company_name;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $ein;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $street_address;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $city;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $state_code;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $zip;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $contact_name;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $job_title;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $main_phone_number;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $additional_phone_number;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $main_email;
+    /**
+     * @OA\Property(
+     *     type="string"
+     * )
+     */
+    public $additional_email;
+
+
     public function rules()
     {
         return [
-            ['user_id', 'required'],
-            ['user_id', 'integer'],
-            ['user_id', 'unique', 'targetClass' => '\common\models\Customer', 'message' => 'Customer already exists'],
+            ['customer_type', 'required'],
+            ['customer_type', 'string'],
         ];
     }
 }

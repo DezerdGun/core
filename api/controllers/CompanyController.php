@@ -20,7 +20,6 @@ class CompanyController extends BaseController
             if ($model->save()) {
                 $detail = new Company();
                 $detail->address_id = $model->id;
-                $detail->setScenario(Company::SCENARIO_INSERT);
                 if ($detail->load($this->getAllowedPost()) && $detail->validate()) {
                     $this->saveModel($detail);
                 } else {

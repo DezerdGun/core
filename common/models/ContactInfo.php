@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use \common\models\base\ContactInfo as BaseContactInfo;
 use yii\helpers\ArrayHelper;
 
@@ -11,6 +10,7 @@ use yii\helpers\ArrayHelper;
  */
 class ContactInfo extends BaseContactInfo
 {
+    const SCENARIO_CUSTOMER = 'customer';
 
     public function behaviors()
     {
@@ -27,7 +27,7 @@ class ContactInfo extends BaseContactInfo
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['main_email', 'main_phone_number'], 'required', 'on' => self::SCENARIO_CUSTOMER]
             ]
         );
     }

@@ -2,10 +2,12 @@
 
 namespace api\khalsa\services;
 
+use api\components\HttpException;
 use api\khalsa\repositories\ContactInfoRepository;
+use common\models\ContactInfo;
 use yii\db\StaleObjectException;
-
-class ContactInfoService implements \api\khalsa\interfaces\ServiceInterface
+use Yii;
+class ContactInfoService
 {
 
     private $contactInfoRepository;
@@ -15,9 +17,14 @@ class ContactInfoService implements \api\khalsa\interfaces\ServiceInterface
         $this->contactInfoRepository = $repository;
     }
 
-    public function create()
+    public function create(ContactInfo $model)
     {
-        // TODO: Implement create() method.
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $this->contactInfoRepository->create($model);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+        return $model;
     }
 
     /**
@@ -29,8 +36,13 @@ class ContactInfoService implements \api\khalsa\interfaces\ServiceInterface
         $this->contactInfoRepository->delete($contactInfo);
     }
 
-    public function update()
+    public function update(ContactInfo $model)
     {
-        // TODO: Implement update() method.
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $this->contactInfoRepository->update($model);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
     }
 }

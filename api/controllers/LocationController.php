@@ -135,7 +135,7 @@ class LocationController extends BaseController
      *     }
      * )
      */
-    public function actionIndex($page = 0, $pageSize = 25)
+    public function actionIndex($page = 0, $pageSize = 25): array
     {
         $searchLocation = new SearchLocation();
         $params = [
@@ -146,7 +146,6 @@ class LocationController extends BaseController
         } else {
             throw new HttpException(400, ['SearchLocation' => $searchLocation->getErrors()]);
         }
-
 
         return $this->index($query, $page, $pageSize, \api\templates\location\Large::class);
     }
@@ -212,7 +211,7 @@ class LocationController extends BaseController
      *     }
      * )
      */
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $model = new Address();
         $transaction = Yii::$app->db->beginTransaction();
@@ -318,14 +317,13 @@ class LocationController extends BaseController
      *  )
      */
 
-    public function actionUpdate($id)
+    public function actionUpdate($id): array
     {
         try {
             $this->locationService->update($id);
         } catch (Exception $exception) {
 
         }
-
 
         return $this->success();
     }
