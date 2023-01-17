@@ -3,16 +3,25 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use common\models\Broker;
 use common\models\User;
 use OpenApi\Annotations as OA;
 use yii\web\NotFoundHttpException;
 
 class ProfileController extends BaseController
 {
+    const STATUS_ACTIVE = 1;
+
+    const STATUS_INACTIVE = 2;
+    const STATUS_DELETED = 0;
+    const STATUS_EMPTY = '';
+    const SUB_BROKER = 'Sub broker';
+    const MASTER_BROKER = 'Master broker';
+
     /**
      * @OA\PATCH (
      *     path="/profile/{verification_token}",
-     *     tags={"profile"},
+     *     tags={"profile-information"},
      *     operationId="patchCreateProfileInformation",
      *     summary="patchCreateProfileInformation",
      *     @OA\Parameter(
@@ -79,8 +88,8 @@ class ProfileController extends BaseController
             $profil->setPassword($this->new_password);
             $profil->generateAuthKey();
             $profil->verification_token = null;
-            $profil->role = 'Sub broker';
-            $profil->status = 1;
+            $profil->role = self::SUB_BROKER;
+            $profil->status = self::STATUS_ACTIVE;
             $this->saveModel($profil);
         }else{
             throw new HttpException(404, \Yii::t('app', 'else working'));
@@ -97,5 +106,67 @@ class ProfileController extends BaseController
         }
         return $model;
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/profile/{user_id}/and/{master_id}",
+     *     tags={"profile-information"},
+     *     operationId="deleteSubBrokerDelete",
+     *     summary="deleteSubBrokerDelete",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="master_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *          @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *          @OA\Property(
+     *              property="Broker[user_id]",
+     *              type="integer",
+     *              ),
+     *          @OA\Property(
+     *              property="Broker[master_id]",
+     *              type="integer",
+     *              ),
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionBrokerDelete($user_id, $master_id)
+    {
+        $model = Broker::findOne(['user_id' => $user_id]);
+        $con = Broker::findOne(['master_id' => $master_id]);
+        if (!$con && !$model || !$con && $model || $con && !$model ) {
+            throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
+        } else {
+            $user = User::findOne(['id' => $model->id]);
+            $user->status = self::STATUS_INACTIVE;
+            $user->role = self::STATUS_EMPTY;
+            $user->update();
+            throw new HttpException(200, \Yii::t('app', "User was Disactived"));
+        }
+    }
+
 
 }
