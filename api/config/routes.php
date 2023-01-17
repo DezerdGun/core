@@ -21,8 +21,6 @@ $routes = [
     'POST /user/recovery' => 'user/recovery',
     'POST /user/password' => 'user/password',
 
-    'POST /customer' => 'customer/create',
-
     'GET /lists/state' => 'state/index',
     'GET /lists/load' => 'load/index',
     'GET /lists/container' => 'container/index',
@@ -82,6 +80,13 @@ $routes = [
     'GET /customer' => 'customer/index',
     'GET /customer/<id:\d+>' => 'customer/show',
     'PATCH /customer/<id:\d+>' => 'customer/update',
-];
+
+    'GET /invite-broker/active' => 'invite-broker/index',
+    'GET /invite-broker/pending' => 'invite-broker/pending',
+    'GET /invite-broker/disabled' => 'invite-broker/disabled',
+    'GET /invite-broker/<name:>/or/<email:>' => 'invite-broker/show',
+
+    'DELETE /profile/<user_id:\d+>/and/<master_id:\d+>' => 'profile/broker-delete',
+    ];
 
 return $routes;
