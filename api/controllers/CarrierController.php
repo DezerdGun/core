@@ -3,10 +3,8 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\forms\carrier\CarrierCreateForm;
-use api\khalsa\services\AddressService;
+use api\forms\company\CompanyCreateForm;
 use api\khalsa\services\CarrierService;
-use api\khalsa\services\CompanyService;
 use api\templates\carrier\Large;
 use api\templates\carrier\Small;
 use common\models\Carrier;
@@ -15,23 +13,17 @@ use yii\web\NotFoundHttpException;
 
 class CarrierController extends BaseController
 {
-    private $addressService;
     private $carrierService;
-    private $companyService;
 
     public function __construct(
         $id,
         $module,
         $config = [],
-        AddressService $addressService,
-        CarrierService $carrierService,
-        CompanyService $companyService
+        CarrierService $carrierService
     )
     {
         parent::__construct($id, $module, $config);
-        $this->addressService = $addressService;
         $this->carrierService = $carrierService;
-        $this->companyService = $companyService;
     }
 
     public function actionIndex()
@@ -45,10 +37,77 @@ class CarrierController extends BaseController
      *     tags={"carrier"},
      *     operationId="createCarrier",
      *     summary="createCarrier",
-     *     requestBody={
-     *          "$ref":"#/components/requestBodies/CarrierCreateForm",
-     *     },
-     *     @OA\Response(
+     *
+     * @OA\RequestBody(
+     *     request="CarrierCreateForm",
+     *     required=true,
+     *      @OA\MediaType(
+     *      mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[user_id]",
+     *                  type="integer",
+     *                  example="1",
+     *               ),
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[mc_number]",
+     *                  type="string",
+     *                  example="64858",
+     *               ),
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[dot]",
+     *                  type="string",
+     *                  example="875682",
+     *               ),
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[is_dot]",
+     *                  type="boolean",
+     *                  default=true
+     *               ),
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[company_name]",
+     *                  type="string",
+     *                  example="Omega Global",
+     *               ),
+     *              @OA\Property(
+     *                  property="Address[street_address]",
+     *                  type="string",
+     *                  example="319 Ridge Rd",
+     *               ),
+     *              @OA\Property(
+     *                  property="Address[city]",
+     *                  type="string",
+     *                   example="South San Francisco",
+     *               ),
+     *              @OA\Property(
+     *                  property="Address[state_code]",
+     *                  type="string",
+     *                  example="CA",
+     *               ),
+     *              @OA\Property(
+     *                  property="Address[zip]",
+     *                  type="string",
+     *                  example="35210",
+     *               ),
+     *              @OA\Property(
+     *                  property="CompanyCreateForm[business_phone]",
+     *                  type="string",
+     *                  example="+13026893120",
+     *               ),
+     *              @OA\Property(
+     *                  property="Carrier[w9_file]",
+     *                  type="string",
+     *                  format="binary"
+     *              ),
+     *              @OA\Property(
+     *                  property="Carrier[ic_file]",
+     *                  type="string",
+     *                  format="binary"
+     *              ),
+     *          )
+     *     )
+     * ),
+     *         @OA\Response(
      *         response=200,
      *         description="successfull operation",
      *         @OA\JsonContent(
@@ -73,12 +132,11 @@ class CarrierController extends BaseController
 
     public function actionCreate(): array
     {
-        $model = new CarrierCreateForm();
+        $model = new CompanyCreateForm();
+        $model->scenario = CompanyCreateForm::SCENARIO_CARRIER_CREATE;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
-            $address = $this->addressService->create();
-            $company = $this->companyService->create($address, $model);
-            $carrier = $this->carrierService->create($company, $model);
+            $carrier = $this->carrierService->create($model);
             $transaction->commit();
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);

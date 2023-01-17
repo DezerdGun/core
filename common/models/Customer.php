@@ -3,7 +3,6 @@
 namespace common\models;
 
 use common\models\traits\Template;
-use Yii;
 use \common\models\base\Customer as BaseCustomer;
 use yii\helpers\ArrayHelper;
 

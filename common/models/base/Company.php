@@ -5,6 +5,7 @@
 namespace common\models\base;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the base-model class for table "company".
@@ -50,11 +51,23 @@ abstract class Company extends \yii\db\ActiveRecord
     {
         return [
             [['address_id'], 'required'],
-            [['address_id'], 'default', 'value' => null],
+            [['address_id', 'mc_number', 'ein', 'dot'], 'default', 'value' => null],
             [['address_id'], 'integer'],
-            [['company_name', 'business_phone', 'ein',  'mc_number', 'email', 'receiver_email', 'billing_email', 'quickbooks_email', 'credit_limit', 'payment_terms'], 'string', 'max' => 32],
+            [['company_name', 'business_phone', 'ein',  'mc_number', 'email', 'receiver_email', 'billing_email', 'quickbooks_email', 'credit_limit', 'payment_terms', 'dot'], 'string', 'max' => 32],
 //            [['w9_file', 'ic_file'], 'string', 'max' => 55],
-            [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Address::className(), 'targetAttribute' => ['address_id' => 'id']]
+            [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Address::className(), 'targetAttribute' => ['address_id' => 'id']],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+            ],
         ];
     }
 
@@ -68,6 +81,7 @@ abstract class Company extends \yii\db\ActiveRecord
             'company_name' => 'Company Name',
             'business_phone' => 'Business Phone',
             'ein' => 'Ein',
+            'dot' => 'Dot',
             'w9_file' => 'W 9 File',
             'w9_mime_type' => 'W 9 Mime Type',
             'ic_file' => 'Ic File',

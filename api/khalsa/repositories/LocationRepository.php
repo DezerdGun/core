@@ -6,6 +6,7 @@ use api\khalsa\interfaces\RepositoryInterface;
 use common\models\ContactInfo;
 use common\models\Location;
 use yii\db\StaleObjectException;
+use api\khalsa\NotFoundException;
 
 class LocationRepository implements RepositoryInterface
 {

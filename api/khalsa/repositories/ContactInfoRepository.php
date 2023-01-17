@@ -26,4 +26,18 @@ class ContactInfoRepository implements RepositoryInterface
             throw new \RuntimeException('Removing error.');
         }
     }
+
+    public function create(ContactInfo $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Saving error.');
+        }
+    }
+
+    public function update(ContactInfo $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Updating error.');
+        }
+    }
 }

@@ -8,9 +8,12 @@ use yii\db\StaleObjectException;
 
 class AddressRepository implements RepositoryInterface
 {
-    public function getById($id)
+    public function getById($id): Address
     {
-        // TODO: Implement getById() method.
+        if (!$model = Address::findOne(['id' => $id])) {
+            throw new NotFoundException('Address is not found.');
+        }
+        return $model;
     }
 
     /**
@@ -26,7 +29,17 @@ class AddressRepository implements RepositoryInterface
     public function create(Address $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Removing error.');
+            throw new \RuntimeException('Saving error.');
+        }
+    }
+
+    /**
+     * @throws StaleObjectException
+     */
+    public function update(Address $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Updating error.');
         }
     }
 }

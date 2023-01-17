@@ -4,22 +4,36 @@
 
 namespace common\models\base;
 
-use common\models\User;
-use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the base-model class for table "customer".
  *
  * @property integer $id
- * @property integer $user_id
+ * @property integer $company_id
+ * @property integer $contact_info_id
+ * @property string $type
+ * @property string $contact_name
+ * @property string $job_title
  *
- * @property User $User
+ * @property \common\models\Company $company
+ * @property \common\models\ContactInfo $contactInfo
  * @property string $aliasModel
  */
 abstract class Customer extends \yii\db\ActiveRecord
 {
 
-
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+            ],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -35,11 +49,9 @@ abstract class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['user_id'], 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => ['user_id' => 'id'], 'skipOnEmpty' => true],
-            ['user_id', 'unique', 'targetClass' => '\common\models\Customer', 'message' => 'Customer already exists'],
-            [['user_id'], 'default', 'value' => null],
+            [['type','company_id', 'contact_name','contact_info_id'], 'required'],
+            [['company_id', 'contact_info_id'], 'integer'],
+            [['type', 'contact_name', 'job_title'], 'string'],
         ];
     }
 
@@ -50,19 +62,23 @@ abstract class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getCompany(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(\common\models\Company::className(), ['id' => 'company_id']);
     }
 
-
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContactInfo(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(\common\models\ContactInfo::className(), ['id' => 'contact_info_id']);
+    }
 
 }
