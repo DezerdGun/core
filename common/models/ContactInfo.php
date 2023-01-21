@@ -27,7 +27,8 @@ class ContactInfo extends BaseContactInfo
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['main_email', 'main_phone_number'], 'required', 'on' => self::SCENARIO_CUSTOMER]
+                [['main_email', 'main_phone_number'], 'required', 'on' => self::SCENARIO_CUSTOMER],
+                [['main_email', 'main_phone_number', 'additional_phone_number', 'additional_email'], 'default', 'value' => null]
             ]
         );
     }

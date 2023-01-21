@@ -3,7 +3,6 @@
 namespace api\khalsa\repositories;
 
 use api\khalsa\interfaces\RepositoryInterface;
-use common\models\ContactInfo;
 use common\models\Location;
 use yii\db\StaleObjectException;
 use api\khalsa\NotFoundException;
@@ -19,6 +18,20 @@ class LocationRepository implements RepositoryInterface
         return $location;
     }
 
+    public function create(Location $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Saving error.');
+        }
+    }
+
+    public function update(Location $model)
+    {
+        if (!$model->save()) {
+            throw new \RuntimeException('Updating error.');
+        }
+    }
+
     /**
      * @throws StaleObjectException
      */
@@ -28,4 +41,5 @@ class LocationRepository implements RepositoryInterface
             throw new \RuntimeException('Removing error.');
         }
     }
+
 }

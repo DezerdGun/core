@@ -8,10 +8,8 @@ use yii\base\Model;
 
 class SearchLocation extends Model
 {
-    public $id;
+    public $type;
     public $name;
-    public $is_port;
-    public $is_warehouse;
     public $street_address;
     public $city;
     public $state_code;
@@ -20,9 +18,7 @@ class SearchLocation extends Model
     public function rules()
     {
         return [
-            ['id', 'integer'],
-            [['is_port', 'is_warehouse'], 'required'],
-            [['name', 'street_address', 'city', 'state_code', 'zip', 'is_port', 'is_warehouse'], 'string'],
+            [['type', 'name', 'street_address', 'city', 'state_code', 'zip'], 'string'],
         ];
     }
 
@@ -36,8 +32,8 @@ class SearchLocation extends Model
                 }
             ]);
 
-        if ($this->id) {
-            $query->andfilterWhere(['LIKE', 'CAST(location.id AS VARCHAR)', $this->id . '%', false]);
+        if ($this->type) {
+            $query->andFilterWhere(['type' => $this->type]);
         }
 
         if ($this->name) {
@@ -60,25 +56,8 @@ class SearchLocation extends Model
             $query->andFilterWhere(['address.zip' => $this->zip]);
         }
 
-        if ($this->is_port === 'yes' && $this->is_warehouse === 'yes') {
-            $query->andFilterWhere(['or', ['location_type' => 'port'], ['location_type' => 'warehouse']]);
-        }
-
-        if ($this->is_port === 'yes' && $this->is_warehouse === 'no') {
-            $query->andFilterWhere(['location_type' => 'port']);
-        }
-
-        if ($this->is_port === 'no' && $this->is_warehouse === 'yes') {
-            $query->andFilterWhere(['location_type' => 'warehouse']);
-        }
-
-        if ($this->is_port === 'no' && $this->is_warehouse === 'no') {
-            $query->andFilterWhere(['<>', 'location_type', 'port'])
-            ->andFilterWhere(['<>', 'location_type', 'warehouse']);
-        }
         $query->orderBy([
-            'id' => SORT_ASC,
-            'name' => SORT_DESC
+            'id' => 'SORT_ASC'
         ]);
 
         return $query;

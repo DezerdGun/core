@@ -28,12 +28,14 @@ class CompanyService
     public function create(CompanyCreateForm $form): Company
     {
         $address = $this->addressService->create();
+
         $model = new Company();
         $model->address_id = $address->id;
         $model->mc_number = $form->mc_number;
         $model->dot = $form->dot;
         $model->company_name = $form->company_name;
         $model->business_phone = $form->business_phone;
+        $model->ein = $form->ein;
 
         if ($model->validate()) {
             $this->companyRepository->create($model);

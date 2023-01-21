@@ -32,4 +32,13 @@ class Customer extends BaseCustomer
             ]
         );
     }
+
+    public static function countTypes(): array
+    {
+        return self::find()
+            ->select(['type','COUNT(type) as number'])
+            ->groupBy(['type'])
+            ->asArray()
+            ->all();
+    }
 }
