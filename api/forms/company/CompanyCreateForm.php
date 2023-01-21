@@ -76,9 +76,6 @@ class CompanyCreateForm extends Model
             }, 'on' => 'carrier_create'],
             [['mc_number', 'dot', 'ein'], 'default', 'value' => null],
             [['mc_number', 'dot', 'is_dot', 'business_phone'], 'string'],
-            ['mc_number', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This MC number has already been taken.'],
-            ['dot', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This DOT has already been taken.'],
-            ['company_name', 'unique', 'targetClass' => '\common\models\Company', 'message' => 'This company name has already been taken.'],
             ['user_id', 'exist', 'targetClass' => '\common\models\User', 'message' => 'User ID not found.', 'targetAttribute' => 'id'],
             ['user_id', 'unique', 'targetClass' => '\common\models\Carrier', 'message' => 'Carrier already exists.'],
         ]);

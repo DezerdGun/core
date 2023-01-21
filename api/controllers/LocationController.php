@@ -3,51 +3,44 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\khalsa\services\AddressService;
 use api\khalsa\services\LocationService;
-use common\models\Address;
-use common\models\ContactInfo;
+use api\templates\location\Small;
+use api\templates\location\Large;
 use common\models\Location;
 use common\models\search\SearchLocation;
-use PHPUnit\Exception;
 use Yii;
 use yii\db\StaleObjectException;
-use yii\web\NotFoundHttpException;
+
 
 class LocationController extends BaseController
 {
 
     private $locationService;
-    private $addressService;
-    private $contactInfoService;
 
     public function __construct(
         $id,
         $module,
         $config = [],
-        LocationService $locationService,
-        AddressService $addressService,
-        ContactInfo $contactInfoService
+        LocationService $locationService
     )
     {
         parent::__construct($id, $module, $config);
         $this->locationService = $locationService;
-        $this->addressService = $addressService;
-        $this->contactInfoService = $contactInfoService;
     }
 
     /**
      * @OA\Get(
      *     path="/location",
      *     tags={"location"},
-     *     operationId="getLocation",
-     *     summary="getLocation",
+     *     operationId="getLocations",
+     *     summary="getLocations",
      *     @OA\Parameter(
-     *         name="id",
+     *         name="location_type",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *             type="integer"
+     *             type="string",
+     *             enum={"Port","Warehouse"}
      *         )
      *     ),
      *     @OA\Parameter(
@@ -91,21 +84,21 @@ class LocationController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="is_port",
+     *         name="page",
      *         in="query",
-     *         required=false,
+     *         required=true,
      *         @OA\Schema(
-     *             type="string",
-     *             enum={"yes","no"},
+     *             type="integer",
+     *             default=0
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="is_warehouse",
+     *         name="page_size",
      *         in="query",
-     *         required=false,
+     *         required=true,
      *         @OA\Schema(
-     *             type="string",
-     *             enum={"yes","no"},
+     *             type="integer",
+     *             default=10
      *         )
      *     ),
      *     @OA\Response(
@@ -135,7 +128,7 @@ class LocationController extends BaseController
      *     }
      * )
      */
-    public function actionIndex($page = 0, $pageSize = 25): array
+    public function actionIndex($page = 0, $page_size = 10): array
     {
         $searchLocation = new SearchLocation();
         $params = [
@@ -147,7 +140,7 @@ class LocationController extends BaseController
             throw new HttpException(400, ['SearchLocation' => $searchLocation->getErrors()]);
         }
 
-        return $this->index($query, $page, $pageSize, \api\templates\location\Large::class);
+        return $this->index($query, $page, $page_size, \api\templates\location\Small::class);
     }
 
     /**
@@ -184,8 +177,16 @@ class LocationController extends BaseController
      *                 @OA\Property(
      *                     property="Location[location_type]",
      *                     type="string",
-     *                     enum={"port","warehouse"}
+     *                     enum={"Port","Warehouse"}
      *                 ),
+     *                  required={
+     *                     "Location[location_type]",
+     *                     "Location[name]",
+     *                     "Address[street_address]",
+     *                     "Address[city]",
+     *                     "Address[state_code]",
+     *                     "Address[zip]",
+     *              }
      *             )
      *         )
      *     ),
@@ -213,21 +214,11 @@ class LocationController extends BaseController
      */
     public function actionCreate(): array
     {
-        $model = new Address();
         $transaction = Yii::$app->db->beginTransaction();
-        if ($model->load($this->getAllowedPost()) && $model->save()) {
-            $location = new Location();
-            $location->address_id = $model->id;
-            if ($location->load(\Yii::$app->request->post()) && $location->validate()) {
-                $location->save();
-            } else {
-                throw new HttpException(400, [$location->formName() => $location->getErrors()]);
-            }
-            $transaction->commit();
-        } else {
-            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-        }
-        return $this->success();
+        $model = $this->locationService->create();
+        $transaction->commit();
+
+        return $this->success($model->getAsArray(Small::class));
 
     }
 
@@ -250,6 +241,11 @@ class LocationController extends BaseController
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="Location[location_type]",
+     *                     type="string",
+     *                     enum={"Port","Warehouse"}
+     *                 ),
      *                  @OA\Property(
      *                      property="Location[name]",
      *                      type="string",
@@ -286,11 +282,14 @@ class LocationController extends BaseController
      *                      property="ContactInfo[additional_email]",
      *                      type="stirng",
      *                  ),
-     *                 @OA\Property(
-     *                     property="Location[location_type]",
-     *                     type="string",
-     *                     enum={"port","warehouse"}
-     *                 ),
+     *                  required={
+     *                  "Location[location_type]",
+     *                  "Location[name]",
+     *                  "Address[street_address]",
+     *                  "Address[city]",
+     *                  "Address[state_code]",
+     *                  "Address[zip]",
+     *              }
      *            )
      *         )
      *     ),
@@ -315,16 +314,14 @@ class LocationController extends BaseController
      *          {"ClientCredentials":{}}
      *      }
      *  )
+     * @throws HttpException
      */
 
     public function actionUpdate($id): array
     {
-        try {
-            $this->locationService->update($id);
-        } catch (Exception $exception) {
-
-        }
-
+        $transaction = Yii::$app->db->beginTransaction();
+        $this->locationService->update($id);
+        $transaction->commit();
         return $this->success();
     }
 
@@ -355,18 +352,96 @@ class LocationController extends BaseController
      *         {"ClientCredentials":{}}
      *     }
      * )
+     * @throws StaleObjectException
      */
 
 
     public function actionDelete($id): array
     {
-        try {
-            $this->locationService->delete($id);
-        } catch (\Exception $exception) {
-
-        }
-
+        $this->locationService->delete($id);
         return $this->success();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/location/{id}",
+     *     tags={"location"},
+     *     operationId="getLocation",
+     *     summary="getLocation",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/LocationLarge"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+    public function actionShow($id): array
+    {
+        $model = $this->locationService->show($id);
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/location/count",
+     *     tags={"location"},
+     *     operationId="countLocationTypes",
+     *     summary="countLocationTypes",
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                      @OA\Property(
+     *                          property="location_type",
+     *                          type="string"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="number",
+     *                          type="integer"
+     *                      ),
+     *                 )
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionCount(): array
+    {
+       $count = Location::countTypes();
+        return $this->success($count);
+    }
 }

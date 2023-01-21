@@ -65,12 +65,13 @@ $routes = [
 
     'GET /location' => 'location/index',
     'POST /location' => 'location/create',
+    'GET /location/<id:\d+>' => 'location/show',
+    'GET /location/count' => 'location/count',
+    'PATCH /location/<id:\d+>' => 'location/update',
+    'DELETE /location/<id:\d+>' => 'location/delete',
 
     'POST /ordinary-load' => 'ordinary-load/create',
     'POST /ordinary-needed' => 'ordinary-needed/create',
-
-    'PATCH /location/<id:\d+>' => 'location/update',
-    'DELETE /location/<id:\d+>' => 'location/delete',
 
     'POST /invite-broker/<email:>' => 'invite-broker/invite',
     'PATCH /profile/<verification_token:>' => 'profile/update',
@@ -80,6 +81,7 @@ $routes = [
     'GET /customer' => 'customer/index',
     'GET /customer/<id:\d+>' => 'customer/show',
     'PATCH /customer/<id:\d+>' => 'customer/update',
+    'GET /customer/count' => 'customer/count',
 
     'GET /invite-broker/active' => 'invite-broker/index',
     'GET /invite-broker/pending' => 'invite-broker/pending',

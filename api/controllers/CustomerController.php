@@ -10,7 +10,7 @@ use api\templates\customer\Small;
 use api\templates\customer\Large;
 use common\models\search\SearchCustomer;
 use Yii;
-use yii\db\Exception;
+use common\models\Customer;
 
 class CustomerController extends BaseController
 {
@@ -451,5 +451,48 @@ class CustomerController extends BaseController
         $model = $this->customerService->update($id);
         $transaction->commit();
         return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/customer/count",
+     *     tags={"customer"},
+     *     operationId="countCustomerTypes",
+     *     summary="countCustomerTypes",
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                      @OA\Property(
+     *                          property="type",
+     *                          type="string"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="number",
+     *                          type="integer"
+     *                      ),
+     *                 )
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionCount(): array
+    {
+       $data = Customer::countTypes();
+        return $this->success($data);
     }
 }

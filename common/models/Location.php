@@ -34,4 +34,14 @@ class Location extends BaseLocation
             ]
         );
     }
+
+    public static function countTypes(): array
+    {
+        return self::find()
+            ->select(['location_type','COUNT(location_type) as number'])
+            ->groupBy(['location_type'])
+            ->asArray()
+            ->all();
+    }
+
 }
