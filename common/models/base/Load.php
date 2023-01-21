@@ -10,13 +10,14 @@ use Yii;
  * This is the base-model class for table "load".
  *
  * @property integer $id
+ * @property string $vessel_eta
  * @property integer $customer_id
  * @property integer $port_id
  * @property integer $consignee_id
- * @property string $vessel_eta
+ * @property integer $user_id
  *
- * @property \common\models\Company $consignee
- * @property \common\models\Company $customer
+ * @property \common\models\Location $consignee
+ * @property \common\models\Customer $customer
  * @property \common\models\LoadAdditionalInfo[] $loadAdditionalInfos
  * @property \common\models\LoadBid[] $loadBs
  * @property \common\models\LoadContainerInfo[] $loadContainerInfos
@@ -24,7 +25,8 @@ use Yii;
  * @property \common\models\LoadStop[] $loadStops
  * @property \common\models\LoadStop[] $loadStops0
  * @property \common\models\LoadTracking[] $loadTrackings
- * @property \common\models\Company $port
+ * @property \common\models\Location $port
+ * @property \common\models\User $user
  * @property string $aliasModel
  */
 abstract class Load extends \yii\db\ActiveRecord
@@ -46,13 +48,13 @@ abstract class Load extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'port_id', 'consignee_id'], 'required'],
-            [['customer_id', 'port_id', 'consignee_id'], 'default', 'value' => null],
-            [['customer_id', 'port_id', 'consignee_id'], 'integer'],
             [['vessel_eta'], 'safe'],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['port_id' => 'id']],
-            [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['consignee_id' => 'id']]
+            [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'integer'],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
+            [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
+            [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['consignee_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
     }
 
@@ -63,10 +65,11 @@ abstract class Load extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'vessel_eta' => 'Vessel Eta',
             'customer_id' => 'Customer ID',
             'port_id' => 'Port ID',
             'consignee_id' => 'Consignee ID',
-            'vessel_eta' => 'Vessel Eta',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -75,7 +78,7 @@ abstract class Load extends \yii\db\ActiveRecord
      */
     public function getConsignee()
     {
-        return $this->hasOne(\common\models\Company::className(), ['id' => 'consignee_id']);
+        return $this->hasOne(\common\models\Location::className(), ['id' => 'consignee_id']);
     }
 
     /**
@@ -83,7 +86,7 @@ abstract class Load extends \yii\db\ActiveRecord
      */
     public function getCustomer()
     {
-        return $this->hasOne(\common\models\Company::className(), ['id' => 'customer_id']);
+        return $this->hasOne(\common\models\Customer::className(), ['id' => 'customer_id']);
     }
 
     /**
@@ -147,7 +150,15 @@ abstract class Load extends \yii\db\ActiveRecord
      */
     public function getPort()
     {
-        return $this->hasOne(\common\models\Company::className(), ['id' => 'port_id']);
+        return $this->hasOne(\common\models\Location::className(), ['id' => 'port_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
     }
 
 

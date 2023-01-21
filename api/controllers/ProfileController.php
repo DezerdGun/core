@@ -10,13 +10,7 @@ use yii\web\NotFoundHttpException;
 
 class ProfileController extends BaseController
 {
-    const STATUS_ACTIVE = 1;
 
-    const STATUS_INACTIVE = 2;
-    const STATUS_DELETED = 0;
-    const STATUS_EMPTY = '';
-    const SUB_BROKER = 'Sub broker';
-    const MASTER_BROKER = 'Master broker';
 
     /**
      * @OA\PATCH (
@@ -88,8 +82,8 @@ class ProfileController extends BaseController
             $profil->setPassword($this->new_password);
             $profil->generateAuthKey();
             $profil->verification_token = null;
-            $profil->role = self::SUB_BROKER;
-            $profil->status = self::STATUS_ACTIVE;
+            $profil->role = $profil::SUB_BROKER;
+            $profil->status = $profil::STATUS_ACTIVE;
             $this->saveModel($profil);
         }else{
             throw new HttpException(404, \Yii::t('app', 'else working'));
@@ -161,8 +155,8 @@ class ProfileController extends BaseController
             throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
         } else {
             $user = User::findOne(['id' => $model->id]);
-            $user->status = self::STATUS_INACTIVE;
-            $user->role = self::STATUS_EMPTY;
+            $user->status = $user::STATUS_INACTIVE;
+            $user->role = $user::STATUS_EMPTY;
             $user->update();
             throw new HttpException(200, \Yii::t('app', "User was Disactived"));
         }

@@ -8,6 +8,7 @@ use api\templates\loaddocuments\Small;
 use common\models\Load;
 use common\models\LoadDocuments;
 use common\models\LoadStop;
+use common\models\User;
 use Yii;
 use yii\web\NotFoundHttpException;
 
@@ -24,7 +25,7 @@ class ContainerLoadController extends BaseController
      *         name="customer_id",
      *         in="query",
      *         required=true,
-     *         description="{Fk} From Company[id] Endpoint ",
+     *         description="{Fk} From Customer[id] Endpoint ",
      *         example="1",
      *         @OA\Schema(
      *             type="integer"
@@ -34,7 +35,7 @@ class ContainerLoadController extends BaseController
      *         name="port_id",
      *         in="query",
      *         required=false,
-     *         description="{Fk} From Company[id] Endpoint ",
+     *         description="{Fk} From Location[id] Endpoint ",
      *         example="1",
      *         @OA\Schema(
      *             type="integer"
@@ -44,17 +45,7 @@ class ContainerLoadController extends BaseController
      *         name="consignee_id",
      *         in="query",
      *         required=false,
-     *         description="{Fk} From Company[id] Endpoint ",
-     *         example="1",
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="load_status",
-     *         in="query",
-     *         required=false,
-     *         description="{Fk} From Company[id] Endpoint ",
+     *         description="{Fk} From Location[id] Endpoint ",
      *         example="1",
      *         @OA\Schema(
      *             type="integer"
@@ -116,7 +107,7 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,$load_status = 0, $vessel_eta =0,
+    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0, $vessel_eta =0,
                                 $from = 0, $to = 0,  $page = 0, $pageSize = 25)
     {
         $query = Load::find();
@@ -126,8 +117,6 @@ class ContainerLoadController extends BaseController
             $query->andWhere(['port_id' => $port_id]);
         } elseif ($consignee_id) {
             $query->andWhere(['consignee_id' => $consignee_id]);
-        }  elseif ($load_status) {
-            $query->andWhere(['load_status' => $load_status]);
         }elseif ($vessel_eta) {
             $query->andWhere(['vessel_eta' => $vessel_eta]);
         }elseif ($from) {
@@ -154,19 +143,19 @@ class ContainerLoadController extends BaseController
      *         @OA\Property(
      *              property="Load[customer_id]",
      *              type="integer",
-     *              description="{Fk} From Company[id] Endpoint ",
+     *              description="{Fk} From Customer[id] Endpoint ",
      *              example="1",
      *              ),
      *         @OA\Property(
      *              property="Load[port_id]",
      *              type="integer",
-     *              description="{Fk} From Company[id] Endpoint ",
+     *              description="{Fk} From Location[id] Endpoint ",
      *              example="1",
      *              ),
      *         @OA\Property(
      *              property="Load[consignee_id]",
      *              type="integer",
-     *              description="{Fk} From Company[id] Endpoint ",
+     *              description="{Fk} From Location[id] Endpoint ",
      *              example="1",
      *              ),
      *          @OA\Property(
@@ -205,13 +194,25 @@ class ContainerLoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
-        if ($model->load(\Yii::$app->request->post())  && $model->save()) {
+        $role = \Yii::$app->user->id;
+        $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
+        $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
+        $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
+        $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
+        if ($masterBroker && !$subbroker && !$carrier && !$empty){
+            $model->user_id = $role;
+            $this->feedUp($model);
             return $this->success($model->getAsArray(Large::class));
-        } else {
-            throw new HttpException(400,
-                [$model->formName() => $model->getErrors()]);
+        }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
+            $model->user_id = $role;
+            $this->feedUp($model);
+            return $this->success($model->getAsArray(Large::class));
+        }else{
+            throw new HttpException(400,'You are not Broker');
         }
     }
+
+
 
     /**
      * @OA\Get(
@@ -461,6 +462,16 @@ class ContainerLoadController extends BaseController
         }
 
         return $model;
+    }
+
+    private function feedUp($model)
+    {
+        if ($model->load(\Yii::$app->request->post())) {
+            $model->save();
+        } else {
+            throw new HttpException(400,
+                [$model->formName() => $model->getErrors()]);
+        }
     }
 
 }
