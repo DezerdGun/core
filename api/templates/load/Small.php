@@ -3,10 +3,13 @@
 namespace api\templates\load;
 
 use common\models\Company;
+use common\models\Customer;
 use common\models\Load;
 use common\models\LoadAdditionalInfo;
 use common\models\LoadContainerInfo;
 use common\models\LoadStop;
+use common\models\Location;
+use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -19,84 +22,21 @@ use TRS\RestResponse\templates\BaseTemplate;
  *          type="object",
  *          description="Object",
  *             @OA\Property(
+ *                 property="customer_id",
+ *                 type="integer"
+ *         ),
+ *             @OA\Property(
  *                 property="port_id",
  *                 type="integer"
  *         ),
- *             @OA\Property(
- *                 property="stop_type",
- *                 type="string"
- *         ),
- *            @OA\Property(
- *                 property="company",
- *                 type="object",
- *            @OA\Property(
- *                 property="company_name",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="business_phone",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="ein",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="w9_file",
- *                 type="string"
- *              ),
- *             @OA\Property(
- *                 property="ic_file",
- *                 type="string"
- *              ),
- *             @OA\Property(
- *                 property="address_id",
+ *              @OA\Property(
+ *                 property="consignee_id",
  *                 type="integer"
- *              ),
- *              @OA\Property(
- *                 property="mc_number",
- *                 type="string"
- *              ),
- *              @OA\Property(
- *                 property="email",
- *                 type="string"
- *              ),
- *              @OA\Property(
- *                 property="receiver_email",
- *                 type="string"
- *              ),
- *             @OA\Property(
- *                 property="billing_email",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="quickbooks_email",
- *                 type="string"
- *              ),
- *           @OA\Property(
- *                 property="credit_limit",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="payment_terms",
- *                 type="string"
- *              ),
- *            @OA\Property(
- *                 property="ic_customer",
- *                 type="boolean"
- *              ),
- *             @OA\Property(
- *                 property="ic_port",
- *                 type="boolean"
- *              ),
- *             @OA\Property(
- *                 property="ic_consignee",
- *                 type="string"
- *              ),
- *             @OA\Property(
- *                 property="ic_chassis",
- *                 type="string"
- *              ),
+ *         ),
+ *               @OA\Property(
+ *                 property="vessel_eta",
+ *                 type="integer"
+ *         ),
  *         ),
  *            @OA\Property(
  *                 property="from",
@@ -118,29 +58,42 @@ class Small extends BaseTemplate
         $this->result = [
             'id' => [
                 $model->id,
-                LoadContainerInfo::find()->where(['load_id' => $model->id])->all(),
+                LoadContainerInfo::find()->where(['load_id' => $model->id])->asArray()->all(),
                 LoadAdditionalInfo::find()
-                    ->where(['load_id' => $model->id])->all(),
+                    ->where(['load_id' => $model->id])->asArray()->all(),
             ],
             'customer_id' => [
                 $model->customer_id,
-                Company::find()
-                    ->where(['id' => $model->customer_id])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')->all()
+                Customer::find()
+                    ->where(['id' => $model->customer_id])
+                    ->select('id,type,contact_name,job_title,company_id,contact_info_id')
+                    ->asArray()
+                    ->all()
             ],
             'port_id' => [
                 $model->port_id,
-                LoadStop::find()
-                    ->where(['id' => $model->port_id])->all()
+                Location::find()
+                    ->where(['id' => $model->port_id])
+                    ->select('id,name,address_id,location_type,contact_info_id')
+                    ->asArray()
+                    ->all()
             ],
             'consignee_id' => [
                 $model->consignee_id,
-                Company::find()
+                Location::find()
                     ->where([
                         'id' => $model->consignee_id
-                    ])->select('id,company_name,business_phone,w9_file,w9_mime_type,ic_file,ic_mime_type')
+                    ])->select('id,name,address_id,location_type,contact_info_id')
+                    ->asArray()
                     ->all()
             ],
             'vessel_eta' => $model->vessel_eta,
+            'user_id' => [
+                $model->user_id,
+                User::find()
+                    ->select('id,username,name,email,mobile_number,role')
+                    ->asArray()->one()
+            ],
         ];
     }
 }

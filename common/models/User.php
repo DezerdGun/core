@@ -38,9 +38,10 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
     const STATUS_EMPTY = '';
-    /**
-     * @var mixed|null
-     */
+    const SUB_BROKER = 'Sub broker';
+    const MASTER_BROKER = 'Master broker';
+    const CARRIER = 'Carrier';
+
 
     use Template;
 
@@ -103,6 +104,27 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
+
+    public static function findByRoleMaster($role)
+    {
+        return static::findOne(['id' => $role, 'role' => self::MASTER_BROKER ]);
+    }
+
+    public static function findByRoleBroker($role)
+    {
+        return static::findOne(['id' => $role, 'role' => self::SUB_BROKER]);
+    }
+
+    public static function findByRoleCarrier($role)
+    {
+        return static::findOne(['id' => $role, 'role' => self::CARRIER ]);
+    }
+
+    public static function findByRoleEmpty($role)
+    {
+        return static::findOne(['id' => $role, 'role' => self::STATUS_EMPTY ]);
+    }
+
 
     /**
      * Finds user by email
