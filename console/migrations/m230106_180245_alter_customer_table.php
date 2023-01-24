@@ -21,10 +21,10 @@ class m230106_180245_alter_customer_table extends Migration
         $this->addColumn('customer', 'type', $this->string());
         $this->addColumn('customer', 'contact_name', $this->string());
         $this->addColumn('customer', 'job_title', $this->string());
-        $this->addColumn('customer', 'company_id', $this->integer()->notNull()->unique());
+        $this->addColumn('customer', 'company_id', $this->integer());
         $this->addColumn('customer', 'created_at', $this->integer());
         $this->addColumn('customer', 'updated_at', $this->integer());
-        $this->addColumn('customer', 'contact_info_id', $this->integer()->notNull()->unique());
+        $this->addColumn('customer', 'contact_info_id', $this->integer());
 
         // add foreign key for table 'customer'
         $this->addForeignKey(
@@ -62,7 +62,7 @@ class m230106_180245_alter_customer_table extends Migration
             'fk-customer-contact_info_id',
             'customer'
         );
-        $this->addColumn('customer', 'user_id', $this->integer()->notNull()->unique());
+        $this->addColumn('customer', 'user_id', $this->integer());
         $this->dropColumn('customer', 'customer_type');
         $this->dropColumn('customer', 'contact_name');
         $this->dropColumn('customer', 'job_title');

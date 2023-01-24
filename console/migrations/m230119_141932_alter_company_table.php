@@ -23,9 +23,9 @@ class m230119_141932_alter_company_table extends Migration
      */
     public function safeDown()
     {
-        $this->alterColumn('{{%company}}', 'mc_number', $this->string(32)->unique());
-        $this->alterColumn('{{%company}}', 'dot', $this->string(32)->unique());
-        $this->alterColumn('{{%company}}', 'company_name', $this->string(32)->unique());
+        $this->alterColumn('{{%company}}', 'mc_number');
+        $this->alterColumn('{{%company}}', 'dot');
+        $this->alterColumn('{{%company}}', 'company_name');
     }
 
     /*

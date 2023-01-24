@@ -8,7 +8,7 @@ use yii\base\Model;
 
 class SearchLocation extends Model
 {
-    public $type;
+    public $location_type;
     public $name;
     public $street_address;
     public $city;
@@ -18,7 +18,7 @@ class SearchLocation extends Model
     public function rules()
     {
         return [
-            [['type', 'name', 'street_address', 'city', 'state_code', 'zip'], 'string'],
+            [['location_type', 'name', 'street_address', 'city', 'state_code', 'zip'], 'string'],
         ];
     }
 
@@ -32,8 +32,8 @@ class SearchLocation extends Model
                 }
             ]);
 
-        if ($this->type) {
-            $query->andFilterWhere(['type' => $this->type]);
+        if ($this->location_type) {
+            $query->andFilterWhere(['location_type' => $this->location_type]);
         }
 
         if ($this->name) {
