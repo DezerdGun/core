@@ -62,6 +62,7 @@ class Small extends BaseTemplate
                 LoadAdditionalInfo::find()
                     ->where(['load_id' => $model->id])->asArray()->all(),
             ],
+            'status' => $model->status,
             'customer_id' => [
                 $model->customer_id,
                 Customer::find()
@@ -92,6 +93,7 @@ class Small extends BaseTemplate
                 $model->user_id,
                 User::find()
                     ->select('id,username,name,email,mobile_number,role')
+                    ->where(['id' => $model->user_id])
                     ->asArray()->one()
             ],
         ];

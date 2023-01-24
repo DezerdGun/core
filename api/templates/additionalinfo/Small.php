@@ -2,7 +2,9 @@
 
 namespace api\templates\additionalinfo;
 
+use common\models\Load;
 use common\models\LoadAdditionalInfo;
+use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -53,7 +55,13 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'load_id' => $model->load_id,
+            'load_id' => [
+                $model->load_id,
+                Load::find()
+                    ->select('id,user_id,consignee_id,port_id,customer_id,status,vessel_eta')
+                    ->where(['id' => $model->load_id])
+                    ->asArray()->one(),
+            ],
             'hazmat' => $model->hazmat,
             'hazmat_description' => $model->hazmat_description,
             'overweight' => $model->overweight,

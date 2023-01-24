@@ -83,8 +83,26 @@ class LoadContainerInfoController extends BaseController
     public function actionCreate()
     {
         $model = new LoadContainerInfo();
-        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
+        $role = \Yii::$app->user->id;
+        $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
+        $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
+        $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
+        $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
+        if ($masterBroker && !$subbroker && !$carrier && !$empty){
+            $this->feedUp($model);
             return $this->success($model->getAsArray(Small::class));
+        }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
+            $this->feedUp($model);
+            return $this->success($model->getAsArray(Small::class));
+        }else {
+            throw new HttpException(400, 'You are not Broker');
+        }
+    }
+
+    private function feedUp($model)
+    {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
         } else {
             throw new HttpException(400,
                 [$model->formName() => $model->getErrors()]);

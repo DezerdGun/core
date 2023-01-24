@@ -2,7 +2,10 @@
 
 namespace api\templates\containerinfo;
 
+use common\models\Load;
 use common\models\LoadContainerInfo;
+use common\models\Owner;
+use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -57,14 +60,25 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'load_id' => $model->load_id,
+            'load_id' => [
+                $model->load_id,
+                Load::find()
+                    ->select('id,user_id,consignee_id,port_id,customer_id,status,vessel_eta')
+                    ->where(['id' => $model->load_id ])
+                    ->asArray()->one(),
+            ],
             'number' => $model->number,
             'size' => $model->size,
             'type' => $model->type,
-            'owner' => $model->owner,
+            'owner' => Owner::find()
+                        ->select('name')
+                        ->where(['id' => $model->owner])
+                        ->asArray()->one(),
+
             'vessel_name' => $model->vessel_name,
             'mbl' => $model->mbl,
             'hbl' => $model->hbl,
+
         ];
     }
 }

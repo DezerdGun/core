@@ -14,6 +14,10 @@ class Load extends BaseLoad
 {
     use Template;
 
+    const PENDING = 'Pending';
+    const IN_PROGRESS = 'In progress';
+    const COMPLETED = 'Completed';
+    const CANCELLED = 'Cancelled';
 
     public function behaviors()
     {
