@@ -51,12 +51,8 @@ class Large extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' => [
-                $model->id,
-                LoadContainerInfo::find()->asArray()->all(),
-                LoadAdditionalInfo::find()
-                    ->asArray()->all(),
-                ],
+            'id' => $model->id,
+            'status' => $model->status,
             'customer_id' => [
                 Customer::find()
                     ->select('id,type,contact_name,job_title,company_id,contact_info_id')
@@ -74,11 +70,11 @@ class Large extends BaseTemplate
                     ->select('id,name,address_id,location_type,contact_info_id')
                     ->asArray()->one()
                 ],
-            'vessel_eta' => $model->vessel_eta,
             'user_id' => [
                 $model->user_id,
                 User::find()
                     ->select('id,username,name,email,mobile_number,role')
+                    ->where(['id' => $model->user_id])
                     ->asArray()->one()
             ],
         ];

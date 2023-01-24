@@ -4,11 +4,11 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\templates\load\Large;
+use api\templates\load\Middle;
 use api\templates\loaddocuments\Small;
 use common\models\Load;
 use common\models\LoadDocuments;
 use common\models\LoadStop;
-use common\models\User;
 use Yii;
 use yii\web\NotFoundHttpException;
 
@@ -194,24 +194,24 @@ class ContainerLoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
+        $model->status = $model::PENDING;
         $role = \Yii::$app->user->id;
         $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
         $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
         $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
         $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
         if ($masterBroker && !$subbroker && !$carrier && !$empty){
-            $model->user_id = $role;
+            $model->user_id = $masterBroker->id;
             $this->feedUp($model);
-            return $this->success($model->getAsArray(Large::class));
+            return $this->success($model->getAsArray(Middle::class));
         }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
-            $model->user_id = $role;
+            $model->user_id = $subbroker->id;
             $this->feedUp($model);
-            return $this->success($model->getAsArray(Large::class));
+            return $this->success($model->getAsArray(Middle::class));
         }else{
             throw new HttpException(400,'You are not Broker');
         }
     }
-
 
 
     /**
@@ -291,7 +291,7 @@ class ContainerLoadController extends BaseController
     {
         $model = $this->findModel($id);
         $model->delete();
-        return $this->success($model->getAsArray(\api\templates\load\Large::class));
+        return $this->success($model->getAsArray(Large::class));
     }
 
     /**

@@ -3,9 +3,8 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\templates\containerinfo\Small;
+use api\templates\additionalinfo\Small;
 use common\models\LoadAdditionalInfo;
-use common\models\LoadContainerInfo;
 
 class LoadAdditionalInfoController extends BaseController
 {
@@ -96,8 +95,26 @@ class LoadAdditionalInfoController extends BaseController
     public function actionCreate()
     {
         $model = new LoadAdditionalInfo();
-            if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
-            return $this->success($model->getAsArray(\api\templates\additionalinfo\Small::class));
+        $role = \Yii::$app->user->id;
+        $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
+        $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
+        $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
+        $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
+        if ($masterBroker && !$subbroker && !$carrier && !$empty){
+            $this->feedUp($model);
+            return $this->success($model->getAsArray(Small::class));
+        }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
+            $this->feedUp($model);
+            return $this->success($model->getAsArray(Small::class));
+        }else {
+            throw new HttpException(400, 'You are not Broker');
+        }
+    }
+
+    private function feedUp($model)
+    {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
         } else {
             throw new HttpException(400,
                 [$model->formName() => $model->getErrors()]);

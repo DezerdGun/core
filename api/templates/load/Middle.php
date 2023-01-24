@@ -2,9 +2,12 @@
 
 namespace api\templates\load;
 
+use common\models\Customer;
 use common\models\Load;
 use common\models\LoadAdditionalInfo;
 use common\models\LoadContainerInfo;
+use common\models\Location;
+use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
 
 /**
@@ -54,15 +57,33 @@ class Middle extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' =>
-                $model->id,
-            LoadContainerInfo::find()->where(['load_id' => $model->id])->all(),
-            LoadAdditionalInfo::find()
-                ->where(['load_id' => $model->id])->all(),
-            'customer_id' => $model->customer_id,
-            'port_id' => $model->port_id,
-            'consignee_id' => $model->consignee_id,
+            'id' =>  $model->id,
+            'status' => $model->status,
+            'customer_id' => [
+                Customer::find()
+                    ->select('id,type,contact_name,job_title,company_id,contact_info_id')
+                    ->asArray()->one()
+            ],
+            'port_id' => [
+                $model->port_id,
+                Location::find()
+                    ->select('id,name,address_id,location_type,contact_info_id')
+                    ->asArray()->one()
+            ],
+            'consignee_id' => [
+                $model->consignee_id,
+                Location::find()
+                    ->select('id,name,address_id,location_type,contact_info_id')
+                    ->asArray()->one()
+            ],
             'vessel_eta' => $model->vessel_eta,
+            'user_id' => [
+                $model->user_id,
+                User::find()
+                    ->select('id,username,name,email,mobile_number,role')
+                    ->where(['id' => $model->user_id])
+                    ->asArray()->one()
+            ],
         ];
     }
 }

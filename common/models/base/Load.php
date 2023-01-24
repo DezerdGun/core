@@ -15,6 +15,7 @@ use Yii;
  * @property integer $port_id
  * @property integer $consignee_id
  * @property integer $user_id
+ * @property string $status
  *
  * @property \common\models\Location $consignee
  * @property \common\models\Customer $customer
@@ -51,6 +52,7 @@ abstract class Load extends \yii\db\ActiveRecord
             [['vessel_eta'], 'safe'],
             [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'default', 'value' => null],
             [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'integer'],
+            [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
             [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['consignee_id' => 'id']],
@@ -70,6 +72,7 @@ abstract class Load extends \yii\db\ActiveRecord
             'port_id' => 'Port ID',
             'consignee_id' => 'Consignee ID',
             'user_id' => 'User ID',
+            'status' => 'Status',
         ];
     }
 

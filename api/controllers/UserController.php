@@ -49,7 +49,7 @@ class UserController extends BaseController
     {
        $model = new UserCreateForm();
        $user = new User();
-       $user->role = "Carrier";
+       $user->role = $user::CARRIER;
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
            $model->signup($user);
        } else {
