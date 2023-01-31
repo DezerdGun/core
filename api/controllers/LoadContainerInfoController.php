@@ -24,10 +24,14 @@ class LoadContainerInfoController extends BaseController
      *         @OA\Property(
      *              property="LoadContainerInfo[load_id]",
      *              type="integer",
+     *              example="1",
+     *              description="1",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[number]",
      *              type="integer",
+     *              example="100741",
+     *              description="100741",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[size]",
@@ -37,23 +41,32 @@ class LoadContainerInfoController extends BaseController
      *         @OA\Property(
      *              property="LoadContainerInfo[type]",
      *              type="string",
-     *              enum={"Import","Export","Road","Bill Only"}
+     *              example="20GP",
+     *              description="20GP",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[owner]",
      *              type="integer",
+     *              example="1",
+     *              description="1 => NSA",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[vessel_name]",
      *              type="string",
+     *              example="Omega",
+     *              description="Omega",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[mbl]",
      *              type="string",
+     *              example="235",
+     *              description="235",
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[hbl]",
      *              type="string",
+     *              example="523",
+     *              description="523",
      *              ),
      *            )
      *         )
@@ -75,6 +88,7 @@ class LoadContainerInfoController extends BaseController
      *         )
      *     ),
      *     security={
+     *     {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )

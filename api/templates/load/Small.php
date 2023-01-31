@@ -2,12 +2,11 @@
 
 namespace api\templates\load;
 
-use common\models\Company;
 use common\models\Customer;
+use common\models\Date;
 use common\models\Load;
 use common\models\LoadAdditionalInfo;
 use common\models\LoadContainerInfo;
-use common\models\LoadStop;
 use common\models\Location;
 use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
@@ -33,18 +32,14 @@ use TRS\RestResponse\templates\BaseTemplate;
  *                 property="consignee_id",
  *                 type="integer"
  *         ),
+ *              @OA\Property(
+ *                 property="load_id",
+ *                 type="integer"
+ *         ),
  *               @OA\Property(
  *                 property="vessel_eta",
  *                 type="integer"
  *         ),
- *         ),
- *            @OA\Property(
- *                 property="from",
- *                 type="string"
- *         ),
- *            @OA\Property(
- *                 property="to",
- *                 type="string"
  *         ),
  *     ),
  * )
@@ -88,7 +83,11 @@ class Small extends BaseTemplate
                     ->asArray()
                     ->all()
             ],
-            'vessel_eta' => $model->vessel_eta,
+            'vessel_eta' => [
+                Date::find()
+                    ->select('vessel_eta')
+                    ->asArray()->one()
+            ],
             'user_id' => [
                 $model->user_id,
                 User::find()

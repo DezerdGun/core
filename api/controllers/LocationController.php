@@ -47,6 +47,7 @@ class LocationController extends BaseController
      *         name="name",
      *         in="query",
      *         required=false,
+     *         example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -55,6 +56,7 @@ class LocationController extends BaseController
      *         name="street_address",
      *         in="query",
      *         required=false,
+     *     example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -63,6 +65,7 @@ class LocationController extends BaseController
      *         name="city",
      *         in="query",
      *         required=false,
+     *     example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -156,23 +159,33 @@ class LocationController extends BaseController
      *             @OA\Schema(
      *                 @OA\Property(
      *                     property="Location[name]",
-     *                     type="string"
+     *                     type="string",
+     *                     example="Tokio",
+     *                     description="Tokio",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[street_address]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="Los Angeles",
+     *                      description="Los Angeles",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[city]",
-     *                     type="string"
+     *                     type="string",
+     *                      example="Vice city",
+     *                      description="Vice city",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[state_code]",
-     *                     type="string"
+     *                     type="string",
+     *                     example="AL",
+     *                      description="AL",
      *                 ),
      *                 @OA\Property(
      *                     property="Address[zip]",
-     *                     type="string"
+     *                     type="string",
+     *                     example="100741",
+     *                     description="100741",
      *                 ),
      *                 @OA\Property(
      *                     property="Location[location_type]",

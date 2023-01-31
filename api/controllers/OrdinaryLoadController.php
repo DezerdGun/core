@@ -78,6 +78,7 @@ class OrdinaryLoadController extends BaseController
      *         )
      *     ),
      *     security={
+     *     {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )
@@ -97,11 +98,6 @@ class OrdinaryLoadController extends BaseController
             throw new HttpException(400,
                 [$model->formName() => $model->getErrors()]);
         }
-
-
-
-
-
     }
 
 }

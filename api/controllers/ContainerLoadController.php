@@ -6,10 +6,11 @@ use api\components\HttpException;
 use api\templates\load\Large;
 use api\templates\load\Middle;
 use api\templates\loaddocuments\Small;
+use common\models\Date;
 use common\models\Load;
 use common\models\LoadDocuments;
-use common\models\LoadStop;
 use Yii;
+use yii\db\Query;
 use yii\web\NotFoundHttpException;
 
 class ContainerLoadController extends BaseController
@@ -24,7 +25,7 @@ class ContainerLoadController extends BaseController
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="{Fk} From Customer[id] Endpoint ",
      *         example="1",
      *         @OA\Schema(
@@ -52,31 +53,13 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *      @OA\Parameter(
-     *         name="vessel_eta",
+     *         name="load_id",
      *         in="query",
      *         required=false,
-     *         description="2022-07-17 08:16:06",
-     *         example="2022-07-17 08:16:06",
+     *         description="{Fk} From load_additional_info[id] Endpoint ",
+     *         example="1",
      *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="from",
-     *         in="query",
-     *         required=false,
-     *         description="2022-07-17 08:16:06",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="to",
-     *         in="query",
-     *         required=false,
-     *         description="2022-07-17",
-     *         @OA\Schema(
-     *             type="string"
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Response(
@@ -107,8 +90,8 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0, $vessel_eta =0,
-                                $from = 0, $to = 0,  $page = 0, $pageSize = 25)
+    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,
+                                $page = 0, $load_id = 0, $pageSize = 25)
     {
         $query = Load::find();
         if ($customer_id) {
@@ -117,16 +100,10 @@ class ContainerLoadController extends BaseController
             $query->andWhere(['port_id' => $port_id]);
         } elseif ($consignee_id) {
             $query->andWhere(['consignee_id' => $consignee_id]);
-        }elseif ($vessel_eta) {
-            $query->andWhere(['vessel_eta' => $vessel_eta]);
-        }elseif ($from) {
-            $query = LoadStop::find();
-            $query->andWhere(['from' => $from]);
-        } elseif ($to) {
-            $query = LoadStop::find();
-            $query->andWhere(['to' => $to]);
+        } elseif ($load_id) {
+            $query->andWhere(['id' => $load_id]);
         }
-        return $this->index($query,$page, $pageSize, Large::class);
+        return $this->index($query, $page, $pageSize, \api\templates\load\Small::class);
     }
 
     /**
@@ -159,12 +136,12 @@ class ContainerLoadController extends BaseController
      *              example="1",
      *              ),
      *          @OA\Property(
-     *              property="Load[vessel_eta]",
+     *              property="Date[vessel_eta]",
      *              type="date",
      *              format="date-time",
      *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
-     *              example="2021-12-12 14:05:22",
-     *              description="2021-12-12T19:05:33Z"
+     *              example="12-12-2021",
+     *              description="12-12-2021"
      *              ),
      *            )
      *         )
@@ -186,6 +163,7 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *     security={
+     *      {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )
@@ -194,25 +172,37 @@ class ContainerLoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
-        $model->status = $model::PENDING;
-        $role = \Yii::$app->user->id;
-        $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
-        $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
-        $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
-        $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
-        if ($masterBroker && !$subbroker && !$carrier && !$empty){
-            $model->user_id = $masterBroker->id;
-            $this->feedUp($model);
-            return $this->success($model->getAsArray(Middle::class));
-        }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
-            $model->user_id = $subbroker->id;
-            $this->feedUp($model);
-            return $this->success($model->getAsArray(Middle::class));
-        }else{
-            throw new HttpException(400,'You are not Broker');
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $model->status = $model::PENDING;
+            $role = \Yii::$app->user->id;
+            $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
+            $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
+            $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
+            $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
+            $date = new Date();
+            if ($date->load(\Yii::$app->request->post()) && $date->validate()) {
+                $date->save();
+                if ($masterBroker && !$subbroker && !$carrier && !$empty) {
+                    $model->user_id = $masterBroker->id;
+                    $model->vessel_eta = $date->id;
+                    $model->save();
+                    return $this->success($model->getAsArray(Middle::class));
+                } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
+                    $model->user_id = $subbroker->id;
+                    $model->vessel_eta = $date->id;
+                    $model->save();
+                    return $this->success($model->getAsArray(Middle::class));
+                } else {
+                    throw new HttpException(400, 'You are not Broker');
+                }
+            } else {
+                throw new HttpException(404, [$date->formName() => $date->getErrors()]);
+            }
+        } else {
+            throw new HttpException(400,
+                [$model->formName() => $model->getErrors()]);
         }
     }
-
 
     /**
      * @OA\Get(
@@ -373,6 +363,7 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *     security={
+     *      {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )
@@ -381,7 +372,7 @@ class ContainerLoadController extends BaseController
     public function actionCreateUploadDocument()
     {
         $model = new LoadDocuments();
-        $model->upload_by =Yii::$app->user->id;
+        $model->upload_by = Yii::$app->user->id;
         $model->setScenario(LoadDocuments::SCENARIO_INSERT);
         if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
             return $this->success($model->getAsArray(Small::class));
@@ -425,19 +416,19 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionDeleteDocument($id,$load_id)
+    public function actionDeleteDocument($id, $load_id)
     {
-        $docdel = $this->findModelDoc($id,$load_id);
+        $docdel = $this->findModelDoc($id, $load_id);
         $docdel->delete();
         return $this->success();
     }
 
-    private function findModelDoc($id,$load_id)
+    private function findModelDoc($id, $load_id)
     {
-        $condition = ['id' => $id,'load_id' => $load_id];
+        $condition = ['id' => $id, 'load_id' => $load_id];
         $model = LoadDocuments::findOne($condition);
-        if (!$model){
-            throw new HttpException(404,\Yii::t('app', 'ID не найден!'));
+        if (!$model) {
+            throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
         }
         return $model;
 
@@ -447,7 +438,13 @@ class ContainerLoadController extends BaseController
     {
         $condition = ['id' => $id];
         $model = Load::findOne($condition);
-        if (!$model){
+        $date = Date::findOne(['id' => $id]);
+        if ($date){
+            $date->delete();
+        }else{
+            throw new NotFoundHttpException();
+        }
+        if (!$model  && !$date) {
             throw new NotFoundHttpException();
         }
         return $model;
@@ -464,14 +461,5 @@ class ContainerLoadController extends BaseController
         return $model;
     }
 
-    private function feedUp($model)
-    {
-        if ($model->load(\Yii::$app->request->post())) {
-            $model->save();
-        } else {
-            throw new HttpException(400,
-                [$model->formName() => $model->getErrors()]);
-        }
-    }
 
 }
