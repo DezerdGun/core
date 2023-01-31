@@ -10,12 +10,16 @@ use Yii;
  * This is the base-model class for table "load".
  *
  * @property integer $id
- * @property string $vessel_eta
  * @property integer $customer_id
  * @property integer $port_id
  * @property integer $consignee_id
  * @property integer $user_id
  * @property string $status
+ * @property integer $vessel_eta
+ * @property string $pick_up_from
+ * @property string $pick_up_to
+ * @property string $delivery_from
+ * @property string $delivery_to
  *
  * @property \common\models\Location $consignee
  * @property \common\models\Customer $customer
@@ -28,6 +32,7 @@ use Yii;
  * @property \common\models\LoadTracking[] $loadTrackings
  * @property \common\models\Location $port
  * @property \common\models\User $user
+ * @property \common\models\Date $vesselEta
  * @property string $aliasModel
  */
 abstract class Load extends \yii\db\ActiveRecord
@@ -49,11 +54,12 @@ abstract class Load extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vessel_eta'], 'safe'],
-            [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'default', 'value' => null],
-            [['customer_id', 'port_id', 'consignee_id', 'user_id'], 'integer'],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'vessel_eta'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'vessel_eta'], 'integer'],
+            [['pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to'], 'safe'],
             [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
+            [['vessel_eta'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Date::className(), 'targetAttribute' => ['vessel_eta' => 'id']],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
             [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['consignee_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
@@ -67,12 +73,16 @@ abstract class Load extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'vessel_eta' => 'Vessel Eta',
             'customer_id' => 'Customer ID',
             'port_id' => 'Port ID',
             'consignee_id' => 'Consignee ID',
             'user_id' => 'User ID',
             'status' => 'Status',
+            'vessel_eta' => 'Vessel Eta',
+            'pick_up_from' => 'Pick Up From',
+            'pick_up_to' => 'Pick Up To',
+            'delivery_from' => 'Delivery From',
+            'delivery_to' => 'Delivery To',
         ];
     }
 
@@ -162,6 +172,14 @@ abstract class Load extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVesselEta()
+    {
+        return $this->hasOne(\common\models\Date::className(), ['id' => 'vessel_eta']);
     }
 
 

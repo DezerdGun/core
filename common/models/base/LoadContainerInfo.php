@@ -13,14 +13,15 @@ use Yii;
  * @property integer $load_id
  * @property integer $number
  * @property string $size
- * @property string $type
  * @property integer $owner
  * @property string $vessel_name
  * @property string $mbl
  * @property string $hbl
+ * @property string $type
  *
  * @property \common\models\Load $load
  * @property \common\models\Owner $owner0
+ * @property \common\models\Container $type0
  * @property string $aliasModel
  */
 abstract class LoadContainerInfo extends \yii\db\ActiveRecord
@@ -44,7 +45,8 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
         return [
             [['load_id', 'number', 'owner'], 'default', 'value' => null],
             [['load_id', 'number', 'owner'], 'integer'],
-            [['size', 'type', 'vessel_name', 'mbl', 'hbl'], 'string', 'max' => 32],
+            [['size', 'vessel_name', 'mbl', 'hbl', 'type'], 'string', 'max' => 32],
+            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
             [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner' => 'id']]
         ];
@@ -60,11 +62,11 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
             'load_id' => 'Load ID',
             'number' => 'Number',
             'size' => 'Size',
-            'type' => 'Type',
             'owner' => 'Owner',
             'vessel_name' => 'Vessel Name',
             'mbl' => 'Mbl',
             'hbl' => 'Hbl',
+            'type' => 'Type',
         ];
     }
 
@@ -82,6 +84,14 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
     public function getOwner0()
     {
         return $this->hasOne(\common\models\Owner::className(), ['id' => 'owner']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType0()
+    {
+        return $this->hasOne(\common\models\Container::className(), ['code' => 'type']);
     }
 
 

@@ -3,6 +3,7 @@
 namespace api\templates\load;
 
 use common\models\Customer;
+use common\models\Date;
 use common\models\Load;
 use common\models\LoadAdditionalInfo;
 use common\models\LoadContainerInfo;
@@ -76,7 +77,11 @@ class Middle extends BaseTemplate
                     ->select('id,name,address_id,location_type,contact_info_id')
                     ->asArray()->one()
             ],
-            'vessel_eta' => $model->vessel_eta,
+            'vessel_eta' => [
+               Date::find()
+                    ->select('vessel_eta')
+                    ->asArray()->one()
+            ],
             'user_id' => [
                 $model->user_id,
                 User::find()
