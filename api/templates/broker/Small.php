@@ -10,7 +10,7 @@ use TRS\RestResponse\templates\BaseTemplate;
 /**
  *
  * @OA\Schema(
- *     schema="BrokerLarge",
+ *     schema="BrokerSmall",
  *         @OA\Property(
  *              property="id",
  *              type="integer"
@@ -22,7 +22,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  * )
  */
 
-class Large extends BaseTemplate
+class Small extends BaseTemplate
 {
     protected function prepareResult()
     {
@@ -30,7 +30,7 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'master_id' => $model->master_id,
+            'master_Id' => $model->master_id,
             'user_id' => [
                 $model->user_id,
                 User::find()

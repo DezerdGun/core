@@ -28,7 +28,7 @@ class LoadContainerInfoController extends BaseController
      *              description="1",
      *              ),
      *         @OA\Property(
-     *              property="LoadContainerInfo[number]",
+     *              property="LoadContainerInfo[container_number]",
      *              type="integer",
      *              example="100741",
      *              description="100741",
@@ -68,6 +68,12 @@ class LoadContainerInfoController extends BaseController
      *              example="523",
      *              description="523",
      *              ),
+     *          required={
+     *                     "LoadContainerInfo[size]",
+     *                     "LoadContainerInfo[container_number]",
+     *                     "LoadContainerInfo[owner]",
+     *                     "LoadContainerInfo[mbl]",
+     *              }
      *            )
      *         )
      *     ),
@@ -97,6 +103,7 @@ class LoadContainerInfoController extends BaseController
     public function actionCreate()
     {
         $model = new LoadContainerInfo();
+        $model->load_reference_number = rand(10000,9999999);
         $role = \Yii::$app->user->id;
         $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
         $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);

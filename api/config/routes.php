@@ -37,6 +37,7 @@ $routes = [
 
     'POST /container-load' => 'container-load/create',
     'GET /container-load' => 'container-load/index',
+    'GET /container-load/status' => 'container-load/status',
     'GET /container-load/<id:\d+>' => 'container-load/show',
     'DELETE /container-load/<id:\d+>' => 'container-load/delete',
 
@@ -74,9 +75,6 @@ $routes = [
     'POST /ordinary-load' => 'ordinary-load/create',
     'POST /ordinary-needed' => 'ordinary-needed/create',
 
-    'POST /invite-broker/<email:>' => 'invite-broker/invite',
-    'PATCH /profile/<verification_token:>' => 'profile/update',
-
     'POST /customer' => 'customer/create',
     'DELETE /customer/<id:\d+>' => 'customer/delete',
     'GET /customer' => 'customer/index',
@@ -84,12 +82,19 @@ $routes = [
     'PATCH /customer/<id:\d+>' => 'customer/update',
     'GET /customer/count' => 'customer/count',
 
+    'GET /count-broker/count' => 'count-broker/active',
     'GET /invite-broker/active' => 'invite-broker/index',
     'GET /invite-broker/pending' => 'invite-broker/pending',
     'GET /invite-broker/disabled' => 'invite-broker/disabled',
     'GET /invite-broker/<name:>/or/<email:>' => 'invite-broker/show',
+    'PATCH /invite-broker/<email:>' => 'invite-broker/restore',
+    'POST /invite-broker/<email:>' => 'invite-broker/invite',
+    'PATCH /invite-broker/<user_id:\d+>/and/<master_id:\d+>' => 'invite-broker/update',
 
+    'PATCH /profile/<verification_token:>' => 'profile/update',
     'DELETE /profile/<user_id:\d+>/and/<master_id:\d+>' => 'profile/broker-delete',
+
+
     ];
 
 return $routes;

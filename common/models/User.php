@@ -41,6 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
     const SUB_BROKER = 'Sub broker';
     const MASTER_BROKER = 'Master broker';
     const CARRIER = 'Carrier';
+    const DISABLED = 'Disabled';
 
 
     use Template;
@@ -49,6 +50,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return '{{%user}}';
     }
+
+
 
     /**
      * {@inheritdoc}
@@ -69,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED,self::STATUS_EMPTY]],
             // the name, email, subject and body attributes are required
-            [['username','name', 'email','mobile_number'], 'safe'],
+            [['username','name', 'email','mobile_number','role'], 'safe'],
 
             // the email attribute should be a valid email address
             ['email', 'email'],

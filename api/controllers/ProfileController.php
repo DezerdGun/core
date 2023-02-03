@@ -3,6 +3,8 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use api\templates\user\Large;
+use api\templates\user\Small;
 use common\models\Broker;
 use common\models\User;
 use OpenApi\Annotations as OA;
@@ -15,9 +17,9 @@ class ProfileController extends BaseController
     /**
      * @OA\PATCH (
      *     path="/profile/{verification_token}",
-     *     tags={"profile-information"},
+     *     tags={"invite-broker"},
      *     operationId="patchCreateProfileInformation",
-     *     summary="patchCreateProfileInformation",
+     *     summary="patchCreateProfileInformation -> Broker sign up ",
      *     @OA\Parameter(
      *         in="path",
      *         name="verification_token",
@@ -84,11 +86,11 @@ class ProfileController extends BaseController
             $profil->verification_token = null;
             $profil->role = $profil::SUB_BROKER;
             $profil->status = $profil::STATUS_ACTIVE;
-            $this->saveModel($profil);
+            $profil->update();
         }else{
-            throw new HttpException(404, \Yii::t('app', 'else working'));
+            throw new HttpException(404, \Yii::t('app', 'You Missed Something'));
         }
-        return $this->success();
+        return $this->success($profil->getAsArray(Large::class));
     }
 
     private function findModel($verification_token)
@@ -104,18 +106,20 @@ class ProfileController extends BaseController
     /**
      * @OA\Delete(
      *     path="/profile/{user_id}/and/{master_id}",
-     *     tags={"profile-information"},
+     *     tags={"invite-broker"},
      *     operationId="deleteSubBrokerDelete",
-     *     summary="deleteSubBrokerDelete",
+     *     summary="deleteSubBroker Delete -> soft delete SubBroker",
      *     @OA\Parameter(
      *         name="user_id",
      *         in="path",
      *         required=true,
+     *         description="user_id -> это id SubBroker"
      *     ),
      *     @OA\Parameter(
      *         name="master_id",
      *         in="path",
      *         required=true,
+     *         description="master_id -> это создатель SubBroker"
      *     ),
      *       @OA\Response(
      *         response=200,
@@ -154,7 +158,7 @@ class ProfileController extends BaseController
         if (!$con && !$model || !$con && $model || $con && !$model ) {
             throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
         } else {
-            $user = User::findOne(['id' => $model->id]);
+            $user = User::findOne(['id' => $model->user_id]);
             $user->status = $user::STATUS_INACTIVE;
             $user->role = $user::STATUS_EMPTY;
             $user->update();

@@ -62,23 +62,27 @@ class Middle extends BaseTemplate
             'status' => $model->status,
             'customer_id' => [
                 Customer::find()
+                    ->where(['id'=>$model->customer_id])
                     ->select('id,type,contact_name,job_title,company_id,contact_info_id')
                     ->asArray()->one()
             ],
             'port_id' => [
                 $model->port_id,
                 Location::find()
+                    ->where(['id'=>$model->port_id])
                     ->select('id,name,address_id,location_type,contact_info_id')
                     ->asArray()->one()
             ],
             'consignee_id' => [
                 $model->consignee_id,
                 Location::find()
+                    ->where(['id'=>$model->consignee_id])
                     ->select('id,name,address_id,location_type,contact_info_id')
                     ->asArray()->one()
             ],
             'vessel_eta' => [
                Date::find()
+                    ->where(['id'=>$model->vessel_eta])
                     ->select('vessel_eta')
                     ->asArray()->one()
             ],
