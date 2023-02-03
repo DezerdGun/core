@@ -11,13 +11,14 @@ use Yii;
  *
  * @property integer $id
  * @property integer $load_id
- * @property integer $number
  * @property string $size
  * @property integer $owner
  * @property string $vessel_name
  * @property string $mbl
  * @property string $hbl
  * @property string $type
+ * @property integer $container_number
+ * @property integer $load_reference_number
  *
  * @property \common\models\Load $load
  * @property \common\models\Owner $owner0
@@ -43,8 +44,8 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['load_id', 'number', 'owner'], 'default', 'value' => null],
-            [['load_id', 'number', 'owner'], 'integer'],
+            [['load_id', 'owner', 'container_number', 'load_reference_number'], 'default', 'value' => null],
+            [['load_id', 'owner', 'container_number', 'load_reference_number'], 'integer'],
             [['size', 'vessel_name', 'mbl', 'hbl', 'type'], 'string', 'max' => 32],
             [['type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
@@ -60,13 +61,14 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'load_id' => 'Load ID',
-            'number' => 'Number',
             'size' => 'Size',
             'owner' => 'Owner',
             'vessel_name' => 'Vessel Name',
             'mbl' => 'Mbl',
             'hbl' => 'Hbl',
             'type' => 'Type',
+            'container_number' => 'Container Number',
+            'load_reference_number' => 'Load Reference Number',
         ];
     }
 

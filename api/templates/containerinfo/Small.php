@@ -60,6 +60,7 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
+            'LoadReferenceNumber' => $model->load_reference_number,
             'load_id' => [
                 $model->load_id,
                 Load::find()
@@ -67,7 +68,7 @@ class Small extends BaseTemplate
                     ->where(['id' => $model->load_id ])
                     ->asArray()->one(),
             ],
-            'number' => $model->number,
+            'container_number' => $model->container_number,
             'size' => $model->size,
             'type' => $model->type,
             'owner' => Owner::find()

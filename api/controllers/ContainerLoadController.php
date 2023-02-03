@@ -8,6 +8,7 @@ use api\templates\load\Middle;
 use api\templates\loaddocuments\Small;
 use common\models\Date;
 use common\models\Load;
+use common\models\LoadContainerInfo;
 use common\models\LoadDocuments;
 use Yii;
 use yii\db\Query;
@@ -15,6 +16,59 @@ use yii\web\NotFoundHttpException;
 
 class ContainerLoadController extends BaseController
 {
+    /**
+     * @OA\Get(
+     *     path="/container-load/status",
+     *     tags={"container-load"},
+     *     operationId="getContainerLoadsStatus",
+     *     summary="getContainerLoadsStatus",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         required=false,
+     *         description="Pending,in_Progress,Completed,Cancelled",
+     *         example="Pending",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/LoadLarge")
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 ref="#/components/schemas/Pagination"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionStatus($status = 0,$page = 0,  $pageSize = 10)
+    {
+        $query = Load::find();
+        if ($status) {
+            $query->andWhere(['status' => $status]);
+        }
+        return $this->index($query, $page, $pageSize, Large::class);
+
+    }
 
     /**
      * @OA\Get(
@@ -91,7 +145,7 @@ class ContainerLoadController extends BaseController
      */
 
     public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,
-                                $page = 0, $load_id = 0, $pageSize = 25)
+                                $page = 0, $load_id = 0, $pageSize = 10)
     {
         $query = Load::find();
         if ($customer_id) {
@@ -103,7 +157,8 @@ class ContainerLoadController extends BaseController
         } elseif ($load_id) {
             $query->andWhere(['id' => $load_id]);
         }
-        return $this->index($query, $page, $pageSize, \api\templates\load\Small::class);
+        return $this->index($query, $page, $pageSize, Large::class);
+
     }
 
     /**
@@ -143,6 +198,12 @@ class ContainerLoadController extends BaseController
      *              example="12-12-2021",
      *              description="12-12-2021"
      *              ),
+     *          required={
+     *                     "Load[customer_id]",
+     *                     "Load[port_id]",
+     *                     "Load[consignee_id]",
+     *                     "Date[vessel_eta]",
+     *              }
      *            )
      *         )
      *     ),
@@ -172,15 +233,15 @@ class ContainerLoadController extends BaseController
     public function actionCreate()
     {
         $model = new Load();
-        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->status = $model::PENDING;
-            $role = \Yii::$app->user->id;
-            $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
-            $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
-            $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
-            $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
+            $role = Yii::$app->user->id;
+            $subbroker = Yii::$app->user->identity->findByRoleBroker($role);
+            $masterBroker = Yii::$app->user->identity->findByRoleMaster($role);
+            $carrier = Yii::$app->user->identity->findByRoleCarrier($role);
+            $empty = Yii::$app->user->identity->findByRoleEmpty($role);
             $date = new Date();
-            if ($date->load(\Yii::$app->request->post()) && $date->validate()) {
+            if ($date->load(Yii::$app->request->post()) && $date->validate()) {
                 $date->save();
                 if ($masterBroker && !$subbroker && !$carrier && !$empty) {
                     $model->user_id = $masterBroker->id;
@@ -244,8 +305,8 @@ class ContainerLoadController extends BaseController
 
     public function actionShow($id)
     {
-        $model = $this->findModel($id);
-        return $this->success($model->getAsArray(\api\templates\load\Small::class));
+        $model = $this->findModels($id);
+        return $this->success($model->getAsArray(Large::class));
     }
 
     /**
@@ -374,7 +435,7 @@ class ContainerLoadController extends BaseController
         $model = new LoadDocuments();
         $model->upload_by = Yii::$app->user->id;
         $model->setScenario(LoadDocuments::SCENARIO_INSERT);
-        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
             return $this->success($model->getAsArray(Small::class));
         } else {
             throw new HttpException(400,
@@ -428,7 +489,7 @@ class ContainerLoadController extends BaseController
         $condition = ['id' => $id, 'load_id' => $load_id];
         $model = LoadDocuments::findOne($condition);
         if (!$model) {
-            throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
+            throw new HttpException(404, Yii::t('app', 'ID не найден!'));
         }
         return $model;
 
@@ -458,6 +519,16 @@ class ContainerLoadController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        return $model;
+    }
+
+    private function findModels($id)
+    {
+        $con = ['id' => $id];
+        $model = Load::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
         return $model;
     }
 

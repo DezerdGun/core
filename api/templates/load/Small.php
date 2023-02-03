@@ -51,50 +51,53 @@ class Small extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'id' => [
-                $model->id,
-                LoadContainerInfo::find()->where(['load_id' => $model->id])->asArray()->all(),
-                LoadAdditionalInfo::find()
-                    ->where(['load_id' => $model->id])->asArray()->all(),
-            ],
+            'ID' => $model->id,
+            'Load Id' =>(new \yii\db\Query())
+                ->select(['load_reference_number'])
+                ->from('load_container_info')
+                ->where(['load_id' => $model->id])
+                ->all(),
             'status' => $model->status,
-            'customer_id' => [
-                $model->customer_id,
-                Customer::find()
-                    ->where(['id' => $model->customer_id])
-                    ->select('id,type,contact_name,job_title,company_id,contact_info_id')
-                    ->asArray()
-                    ->all()
-            ],
-            'port_id' => [
-                $model->port_id,
-                Location::find()
+            'Port' => [
+                (new \yii\db\Query())
+                    ->select(['city','state_code'])
+                    ->from('address')
                     ->where(['id' => $model->port_id])
-                    ->select('id,name,address_id,location_type,contact_info_id')
-                    ->asArray()
-                    ->all()
+                    ->all(),
             ],
-            'consignee_id' => [
-                $model->consignee_id,
-                Location::find()
-                    ->where([
-                        'id' => $model->consignee_id
-                    ])->select('id,name,address_id,location_type,contact_info_id')
-                    ->asArray()
-                    ->all()
+            'Destination' => [
+                (new \yii\db\Query())
+                    ->select(['city','state_code'])
+                    ->from('address')
+                    ->where(['id' => $model->consignee_id])
+                    ->all(),
             ],
-            'vessel_eta' => [
-                Date::find()
-                    ->select('vessel_eta')
-                    ->asArray()->one()
+            'Customer' => [
+                (new \yii\db\Query())
+                    ->select(['company_name'])
+                    ->from('company')
+                    ->where(['id' => $model->customer_id])
+                    ->all(),
             ],
-            'user_id' => [
-                $model->user_id,
-                User::find()
-                    ->select('id,username,name,email,mobile_number,role')
-                    ->where(['id' => $model->user_id])
-                    ->asArray()->one()
-            ],
+            'Vessel ETA' =>
+                (new \yii\db\Query())
+                    ->select(['vessel_eta'])
+                    ->from('date')
+                    ->where(['id' => $model->vessel_eta])
+                    ->all(),
+            'container_number'=>
+                (new \yii\db\Query())
+                    ->select(['container_number'])
+                    ->from('load_container_info')
+                    ->where(['load_id' => $model->id])
+                    ->all(),
+            'Size' =>
+                (new \yii\db\Query())
+                    ->select(['size'])
+                    ->from('load_container_info')
+                    ->where(['load_id' => $model->id])
+                    ->all(),
         ];
+
     }
 }

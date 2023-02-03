@@ -36,7 +36,6 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'username' => $model->username,
             'name' => $model->name,
             'email' => $model->email,
             'mobile_number' => $model->mobile_number,

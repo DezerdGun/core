@@ -11,7 +11,7 @@ $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'to
 <div class="verify-email">
     <p>Hello: <h3><?= Html::encode($user->name) ?> </h3></p>
     <p>Please Confirm Your Email to change your role to SubBroker:</p>
-    <h3>
-        <a href="http://api.tmp.loc.com">TMS2.jafton.com/<?= Html::encode($user->verification_token) ?></a>
-    </h3>
+    <p> https://web.tms2.jafton.com/sign-up/broker?token=<?= Html::encode($user->verification_token) ?></p>
+
+
 </div>

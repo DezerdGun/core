@@ -15,7 +15,7 @@ class Load extends BaseLoad
     use Template;
 
     const PENDING = 'Pending';
-    const IN_PROGRESS = 'In progress';
+    const IN_PROGRESS = 'in_Progress';
     const COMPLETED = 'Completed';
     const CANCELLED = 'Cancelled';
 

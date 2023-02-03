@@ -3,26 +3,42 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use api\forms\broker\BrokerCreate;
 use api\forms\user\UserCreateForm;
 use api\templates\broker\Large;
 use common\models\Broker;
+use common\models\Customer;
 use common\models\User;
 use OpenApi\Annotations as OA;
+use yii\db\StaleObjectException;
+use yii\web\NotFoundHttpException;
+use yii\web\ServerErrorHttpException;
 
 
 class InviteBrokerController extends BaseController
 {
+
+
     /**
      * @OA\Post(
      *     path="/invite-broker/{email}",
      *     tags={"invite-broker"},
      *     operationId="createInviteBroker",
      *     summary="createInviteBroker",
-     *     @OA\Parameter(
-     *         name="email",
-     *         in="path",
-     *         required=true
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="InviteBroker",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *             )
+     *         )
      *     ),
+
      *       @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -46,24 +62,23 @@ class InviteBrokerController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
-     * @throws \yii\db\StaleObjectException
      */
 
-    public function actionInvite($email)
+    public function actionInvite()
     {
-        $user = User::findOne(['email' => $email]);
+        $user = new User();
         $masterBroker = new Broker();
         if ($user) {
+            $user->load($this->getAllowedPost(), 'InviteBroker');
+            $user->password_hash = $user::STATUS_EMPTY;
+            $user->status = $user::STATUS_EMPTY;
             $email = new UserCreateForm();
             $email->brokerEmail($user);
-            $user->update();
+            $this->saveModel($user);
             $masterBroker->user_id = $user->id;
             $masterBroker->master_id =\Yii::$app->user->id;
             $masterBroker->save();
-            return $this->success();
-        } else {
-            throw new HttpException(404, \Yii::t('app', 'ID не найден!'));
+            return $this->success($user->getAsArray(\api\templates\user\Large::class));
         }
     }
 
@@ -107,18 +122,14 @@ class InviteBrokerController extends BaseController
     public function actionIndex()
     {
         $data = User::find()
-            ->where(['status' => 1])
+            ->where(['status' => 1,'role' => 'Sub broker'])
             ->all();
         $rows = (new \yii\db\Query())
-            ->select(['id','username','name','mobile_number','name','email','role'])
+            ->select(['id','name','mobile_number','email','role'])
             ->from('user')
             ->where(['id' => $data])
             ->all();
-        if ($rows){
-            return $this->success($rows);
-        }else{
-            throw new HttpException(400, \Yii::t('app', "Users are absented"));
-        }
+        return $this->success($rows);
     }
 
     /**
@@ -158,21 +169,17 @@ class InviteBrokerController extends BaseController
      *     }
      * )
      */
-    public function actionPending()
+    public function actionPending(): array
     {
         $data = User::find()
-            ->where(['status' => 2])
+            ->where(['status' => 2, 'role' => null])
             ->all();
         $rows = (new \yii\db\Query())
-            ->select(['id','username','name','mobile_number','name','email','role'])
+            ->select(['id','name','mobile_number','email','role'])
             ->from('user')
             ->where(['id' => $data])
             ->all();
-        if ($rows){
-            return $this->success($rows);
-        }else{
-            throw new HttpException(400, \Yii::t('app', "Users are absented"));
-        }
+        return $this->success($rows);
     }
 
     /**
@@ -181,13 +188,15 @@ class InviteBrokerController extends BaseController
      *     tags={"invite-broker"},
      *     operationId="getInviteBrokerNameAndEmail",
      *     summary="getInviteBrokerSearch",
-     *     @OA\Parameter(
+     *        @OA\Parameter(
      *         name="name",
      *         in="path",
-     *     ),
-     *     @OA\Parameter(
-     *         name="email",
-     *         in="path",
+     *         required=false,
+     *         description="{Swagger} or {swagger@jafton.com}",
+     *         example="swagger@jafton.com",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
      *     ),
      *       @OA\Response(
      *         response=200,
@@ -216,22 +225,27 @@ class InviteBrokerController extends BaseController
      * )
      */
 
-    public function actionShow($name, $email)
+    public function actionShow($name): array
     {
-        if($name){
-            $data = User::find()
-                ->where(['name' => $name])
+        $profil = $this->findName($name);
+        return $this->success($profil);
+    }
+
+    private function findName($name)
+    {
+        $condition = ['name' => $name];
+        $model = User::find()
+            ->select('id,name,mobile_number,email,role')
+            ->where($condition)
+            ->all();
+        if (!$model) {
+            $condition = ['email' => $name];
+            $model = User::find()
+                ->select('id,name,mobile_number,email,role')
+                ->where($condition)
                 ->all();
-            $rows = (new \yii\db\Query())
-                ->select(['id','username','name','email','role'])
-                ->from('user')
-                ->where(['id' => $data])
-                ->all();
-            return  $this->success($rows);
-        }else {
-            $data = User::findOne(['email' => $email]);
-            return  $this->success($data);
         }
+        return $model;
     }
 
     /**
@@ -274,19 +288,153 @@ class InviteBrokerController extends BaseController
     public function actionDisabled()
     {
         $data = User::find()
-            ->where(['status' => 2,'role' => null])
+            ->where(['status' => 2,'role' => 'Disabled'])
             ->all();
         $rows = (new \yii\db\Query())
             ->select(['id','username','name','mobile_number','name','email','role'])
             ->from('user')
             ->where(['id' => $data])
             ->all();
-        if ($rows){
-            return $this->success($rows);
-        }else{
-            throw new HttpException(400, \Yii::t('app', "Users are absented"));
-        }
-
-
+        return $this->success($rows);
     }
+
+
+    /**
+     * @OA\Patch(
+     *     path="/invite-broker/{email}",
+     *     tags={"invite-broker"},
+     *     operationId="restoreSubBroker",
+     *     summary="restoreSubBroker -> restore SubBroker",
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="path",
+     *         required=true
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *          @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *          @OA\Property(
+     *              property="InviteBroker[email]",
+     *              type="string",
+     *              ),
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     * @throws HttpException
+     * @throws \yii\db\StaleObjectException
+     */
+
+
+    public function actionRestore($email)
+    {
+        $user = User::findOne(['email' => $email]);
+        $masterBroker = new Broker();
+        if ($user) {
+            $user->role = $user::SUB_BROKER;
+            $user->status = $user::STATUS_ACTIVE;
+            $user->update();
+            $masterBroker->user_id = $user->id;
+            $masterBroker->master_id =\Yii::$app->user->id;
+            $masterBroker->save();
+            return $this->success();
+        } else {
+            throw new HttpException(404, \Yii::t('app', 'Email не найден!'));
+        }
+    }
+
+    /**
+     * @OA\PATCH (
+     *     path="/invite-broker/{user_id}/and/{master_id}",
+     *     tags={"invite-broker"},
+     *     operationId="updateChangeSubBrokerRole",
+     *     summary="update Change SubBroker And MasterBroker Role",
+     *      @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         required=true,
+     *         example="34",
+     *         description="user_id -> это id SubBroker",
+     *        @OA\Schema(
+     *          type="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *         name="master_id",
+     *         in="path",
+     *         required=true,
+     *         example="1",
+     *         description="master_id -> Master broker обновитель SubBroker",
+     *      @OA\Schema(
+     *          type="string"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *        @OA\Property(
+     *                      property="User[role]",
+     *                      type="string",
+     *                      enum={"Sub broker","Master broker"},
+     *                  ),
+     *            )
+     *         )
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *          @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *          @OA\Property(
+     *              property="InviteBroker[role]",
+     *              type="string",
+     *              ),
+     *             ),
+     *         )
+     *     ),
+     *      security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     *  )
+     * @throws StaleObjectException|HttpException
+     */
+
+    public function actionUpdate($user_id,$master_id): array
+    {
+        $model = Broker::findOne(['user_id' => $user_id]);
+        $con = Broker::findOne(['master_id' => $master_id]);
+        if (!$con && !$model || !$con && $model || $con && !$model ) {
+            throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
+        }else {
+            $user = User::findOne(['id' => $model->user_id]);
+            $user->load(\Yii::$app->getRequest()->post(), 'User');
+            $user->status = $user::STATUS_ACTIVE;
+            $user->update();
+        }
+        return $this->success($user->getAsArray(\api\templates\user\Large::class));
+    }
+
 }

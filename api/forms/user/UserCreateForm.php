@@ -68,9 +68,18 @@ class UserCreateForm extends Model
         $email = new EmailService();
         $email->SubEmail($user);
         $user->generateAuthKey();
+
+    }
+
+    public function restoreBroker(User $user)
+    {
+        $email = new EmailService();
+        $email->SubEmail($user);
+        $user->generateAuthKey();
         $user->status = 1;
 
     }
+
 
 
 }
