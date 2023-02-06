@@ -94,7 +94,13 @@ $routes = [
     'PATCH /profile/<verification_token:>' => 'profile/update',
     'DELETE /profile/<user_id:\d+>/and/<master_id:\d+>' => 'profile/broker-delete',
 
-
+    'POST /listing/container/additional-info' => '/listing-container/additional-info',
+    'POST /listing/container' => '/listing-container/create',
+    'POST /listing/container-info' => '/listing-container/container-info',
+    'GET /listing/container' => '/listing-container/index',
+    'PATCH /listing/container/reassign/<id:\d+>'  => '/listing-container/reassign',
+    'GET /listing/container/count' => '/listing-container/count',
+    'PATCH /listing/container/status' => '/listing-container/update-status'
     ];
 
 return $routes;

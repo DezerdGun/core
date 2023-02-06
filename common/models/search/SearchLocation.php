@@ -9,6 +9,7 @@ use yii\base\Model;
 class SearchLocation extends Model
 {
     public $location_type;
+    public $search;
     public $name;
     public $street_address;
     public $city;
@@ -18,7 +19,7 @@ class SearchLocation extends Model
     public function rules()
     {
         return [
-            [['location_type', 'name', 'street_address', 'city', 'state_code', 'zip'], 'string'],
+            [['search', 'location_type', 'name', 'street_address', 'city', 'state_code', 'zip'], 'string'],
         ];
     }
 
@@ -36,8 +37,13 @@ class SearchLocation extends Model
             $query->andFilterWhere(['location_type' => $this->location_type]);
         }
 
+        if ($this->search) {
+            $query->Where(['ILIKE', 'name', '%' . $this->search . '%', false]);
+            $query->orFilterWhere(['ILIKE', 'street_address', '%' . $this->search . '%', false]);
+        }
+
         if ($this->name) {
-            $query->andfilterWhere(['ILIKE', 'name', $this->name . '%', false]);
+            $query->andfilterWhere(['ILIKE', 'name', '%' . $this->name . '%', false]);
         }
 
         if ($this->street_address) {
