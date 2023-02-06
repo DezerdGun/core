@@ -90,6 +90,7 @@ $routes = [
     'PATCH /invite-broker/<email:>' => 'invite-broker/restore',
     'POST /invite-broker/<email:>' => 'invite-broker/invite',
     'PATCH /invite-broker/<user_id:\d+>/and/<master_id:\d+>' => 'invite-broker/update',
+    'GET /invite-broker/<verification_token:>' => 'invite-broker/inviter',
 
     'PATCH /profile/<verification_token:>' => 'profile/update',
     'DELETE /profile/<user_id:\d+>/and/<master_id:\d+>' => 'profile/broker-delete',
