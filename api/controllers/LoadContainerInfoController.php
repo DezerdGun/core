@@ -35,8 +35,8 @@ class LoadContainerInfoController extends BaseController
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[size]",
-     *              type="string",
-     *              enum={"53'","45'","40'","20'"}
+     *              type="integer",
+     *              enum={"53","45","40","20"}
      *              ),
      *         @OA\Property(
      *              property="LoadContainerInfo[type]",

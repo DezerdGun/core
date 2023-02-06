@@ -31,7 +31,7 @@ class SearchCustomer extends \yii\base\Model
         }
 
         if ($this->company_name) {
-            $query->andfilterWhere(['ILIKE', 'company.company_name', $this->company_name . '%', false]);
+            $query->andfilterWhere(['ILIKE', 'company.company_name', '%' . $this->company_name . '%', false]);
         }
 
         return $query;

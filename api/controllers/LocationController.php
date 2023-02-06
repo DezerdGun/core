@@ -44,6 +44,14 @@ class LocationController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
      *         name="name",
      *         in="query",
      *         required=false,
