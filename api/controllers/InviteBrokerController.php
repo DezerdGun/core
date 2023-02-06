@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\forms\broker\BrokerCreate;
 use api\forms\user\UserCreateForm;
 use api\templates\broker\Large;
+use api\templates\user\Inviter;
 use common\models\Broker;
 use common\models\Customer;
 use common\models\User;
@@ -435,6 +436,60 @@ class InviteBrokerController extends BaseController
             $user->update();
         }
         return $this->success($user->getAsArray(\api\templates\user\Large::class));
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/invite-broker/{verification_token}",
+     *     tags={"invite-broker"},
+     *     operationId="getInviterBrokerLists",
+     *     summary="getInviterBrokerLists",
+     *     @OA\Parameter(
+     *         name="verification_token",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/LoadSmall"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *
+     *     }
+     * )
+     */
+
+    public function actionInviter($verification_token)
+    {
+        $model = $this->findModels($verification_token);
+        return $this->success($model->getAsArray(Inviter::class));
+    }
+
+    private function findModels($verification_token)
+    {
+        $con = ['verification_token' => $verification_token];
+        $model = User::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 
 }
