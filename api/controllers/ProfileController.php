@@ -137,8 +137,7 @@ class ProfileController extends BaseController
             throw new HttpException(404, \Yii::t('app', 'UserId не найден!'));
         } else {
             $user = User::findOne(['id' => $model->user_id]);
-            $user->status = $user::STATUS_INACTIVE;
-            $user->role = $user::STATUS_EMPTY;
+            $user->status = $user::STATUS_DELETED;
             $user->update();
             throw new HttpException(200, \Yii::t('app', "User was Disactived"));
         }

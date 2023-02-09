@@ -50,8 +50,7 @@ class CountBrokerController extends BaseController
         $user = User::find()
             ->select(['status','COUNT(status) as number'])
             ->where([
-                'role' => [User::SUB_BROKER,User::MASTER_BROKER],
-                'status' => [1]
+                'status' => [User::STATUS_ACTIVE,User::STATUS_INACTIVE,User::STATUS_DELETED]
             ])
             ->groupBy(['status'])
             ->asArray()

@@ -124,7 +124,7 @@ class InviteBrokerController extends BaseController
     public function actionIndex()
     {
         $data = User::find()
-            ->where(['status' => 1,'role' => 'Sub broker'])
+            ->where(['status' => User::STATUS_ACTIVE])
             ->all();
         $rows = (new \yii\db\Query())
             ->select(['id','name','mobile_number','email','role'])
@@ -174,7 +174,7 @@ class InviteBrokerController extends BaseController
     public function actionPending(): array
     {
         $data = User::find()
-            ->where(['status' => 2, 'role' => null])
+            ->where(['status' => User::STATUS_INACTIVE])
             ->all();
         $rows = (new \yii\db\Query())
             ->select(['id','name','mobile_number','email','role'])
@@ -280,7 +280,7 @@ class InviteBrokerController extends BaseController
     public function actionDisabled()
     {
         $data = User::find()
-            ->where(['status' => 2,'role' => 'Disabled'])
+            ->where(['status' => User::STATUS_DELETED])
             ->all();
         $rows = (new \yii\db\Query())
             ->select(['id','username','name','mobile_number','name','email','role'])
