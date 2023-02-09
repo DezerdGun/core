@@ -34,6 +34,7 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
@@ -66,18 +67,15 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED,self::STATUS_EMPTY]],
             // the name, email, subject and body attributes are required
-            [['username','name', 'email','mobile_number','role'], 'safe'],
-
-            // the email attribute should be a valid email address
+            [['username','name', 'email','mobile_number','role','password_hash'], 'safe'],
             ['email', 'email'],
-//            [['id', 'page', 'block', 'text'], 'safe'],
-//            ['page', 'string'],
+            ['mobile_number','unique']
         ];
     }
 

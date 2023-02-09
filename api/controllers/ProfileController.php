@@ -4,15 +4,12 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\templates\user\Large;
-use api\templates\user\Small;
 use common\models\Broker;
 use common\models\User;
-use OpenApi\Annotations as OA;
-use yii\web\NotFoundHttpException;
+
 
 class ProfileController extends BaseController
 {
-
 
     /**
      * @OA\PATCH (
@@ -74,38 +71,30 @@ class ProfileController extends BaseController
      *  )
      */
 
-    public $new_password;
+
 
     public function actionUpdate($verification_token)
     {
-        $profil = $this->findModel($verification_token);
-        if( $profil){
-            $profil->load(\Yii::$app->getRequest()->post(), 'Profile');
-            $profil->setPassword($this->new_password);
-            $profil->generateAuthKey();
-            $profil->verification_token = null;
-            $profil->role = $profil::SUB_BROKER;
-            $profil->status = $profil::STATUS_ACTIVE;
-            $profil->update();
-        }else{
-            throw new HttpException(404, \Yii::t('app', 'You Missed Something'));
-        }
-        return $this->success($profil->getAsArray(Large::class));
-    }
-
-    private function findModel($verification_token)
-    {
         $condition = ['verification_token' => $verification_token];
         $model = User::findOne($condition);
-        if (!$model) {
-            throw new NotFoundHttpException('Token is expired');
+        if ($condition){
+            $model->load(\Yii::$app->getRequest()->post(), 'Profile') && $model->validate();
+            $model->setPassword($model->password_hash);
+            $model->generateAuthKey();
+            $model->verification_token = null;
+            $model->role = $model::SUB_BROKER;
+            $model->status = $model::STATUS_ACTIVE;
+            if (!$model->validate()){
+                throw new HttpException(400, \Yii::t('app', 'This email mobile_number name has already been verified.'));
+            }
+            $model->save();
         }
-        return $model;
+        return $this->success($model->getAsArray(Large::class));
     }
 
     /**
      * @OA\Delete(
-     *     path="/profile/{user_id}/and/{master_id}",
+     *     path="/profile/{user_id}",
      *     tags={"invite-broker"},
      *     operationId="deleteSubBrokerDelete",
      *     summary="deleteSubBroker Delete -> soft delete SubBroker",
@@ -114,12 +103,6 @@ class ProfileController extends BaseController
      *         in="path",
      *         required=true,
      *         description="user_id -> это id SubBroker"
-     *     ),
-     *     @OA\Parameter(
-     *         name="master_id",
-     *         in="path",
-     *         required=true,
-     *         description="master_id -> это создатель SubBroker"
      *     ),
      *       @OA\Response(
      *         response=200,
@@ -137,10 +120,6 @@ class ProfileController extends BaseController
      *              property="Broker[user_id]",
      *              type="integer",
      *              ),
-     *          @OA\Property(
-     *              property="Broker[master_id]",
-     *              type="integer",
-     *              ),
      *             ),
      *         )
      *     ),
@@ -151,12 +130,11 @@ class ProfileController extends BaseController
      * )
      */
 
-    public function actionBrokerDelete($user_id, $master_id)
+    public function actionBrokerDelete($user_id)
     {
         $model = Broker::findOne(['user_id' => $user_id]);
-        $con = Broker::findOne(['master_id' => $master_id]);
-        if (!$con && !$model || !$con && $model || $con && !$model ) {
-            throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
+        if (!$model) {
+            throw new HttpException(404, \Yii::t('app', 'UserId не найден!'));
         } else {
             $user = User::findOne(['id' => $model->user_id]);
             $user->status = $user::STATUS_INACTIVE;

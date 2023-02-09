@@ -7,6 +7,7 @@ use api\forms\broker\BrokerCreate;
 use api\forms\user\UserCreateForm;
 use api\templates\broker\Large;
 use api\templates\user\Inviter;
+use api\templates\user\Small;
 use common\models\Broker;
 use common\models\Customer;
 use common\models\User;
@@ -22,7 +23,7 @@ class InviteBrokerController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/invite-broker/{email}",
+     *     path="/invite-broker",
      *     tags={"invite-broker"},
      *     operationId="createInviteBroker",
      *     summary="createInviteBroker",
@@ -185,19 +186,19 @@ class InviteBrokerController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/invite-broker/{name}/or/{email}",
+     *     path="/invite-broker",
      *     tags={"invite-broker"},
      *     operationId="getInviteBrokerNameAndEmail",
      *     summary="getInviteBrokerSearch",
      *        @OA\Parameter(
      *         name="name",
-     *         in="path",
+     *         in="query",
      *         required=false,
      *         description="{Swagger} or {swagger@jafton.com}",
      *         example="swagger@jafton.com",
      *         @OA\Schema(
      *             type="string"
-     *         )
+     *         ),
      *     ),
      *       @OA\Response(
      *         response=200,
@@ -212,7 +213,7 @@ class InviteBrokerController extends BaseController
      *                 property="data",
      *                 type="object",
      *          @OA\Property(
-     *              property="InviteBroker[name]",
+     *              property="InviteBroker[name][email]",
      *              type="object",
      *              ),
      *             ),
@@ -228,26 +229,16 @@ class InviteBrokerController extends BaseController
 
     public function actionShow($name): array
     {
-        $profil = $this->findName($name);
-        return $this->success($profil);
+        $rows = (new \yii\db\Query())
+            ->select(['id','name', 'email','mobile_number','role'])
+            ->from('user')
+            ->where(['email' => $name])
+            ->orWhere(['name' => $name])
+            ->all();
+        return $this->success($rows);
     }
 
-    private function findName($name)
-    {
-        $condition = ['name' => $name];
-        $model = User::find()
-            ->select('id,name,mobile_number,email,role')
-            ->where($condition)
-            ->all();
-        if (!$model) {
-            $condition = ['email' => $name];
-            $model = User::find()
-                ->select('id,name,mobile_number,email,role')
-                ->where($condition)
-                ->all();
-        }
-        return $model;
-    }
+
 
     /**
      * @OA\Get(
@@ -302,12 +293,12 @@ class InviteBrokerController extends BaseController
 
     /**
      * @OA\Patch(
-     *     path="/invite-broker/{email}",
+     *     path="/invite-broker/{id}",
      *     tags={"invite-broker"},
      *     operationId="restoreSubBroker",
      *     summary="restoreSubBroker -> restore SubBroker",
      *     @OA\Parameter(
-     *         name="email",
+     *         name="id",
      *         in="path",
      *         required=true
      *     ),
@@ -324,7 +315,7 @@ class InviteBrokerController extends BaseController
      *                 property="data",
      *                 type="object",
      *          @OA\Property(
-     *              property="InviteBroker[email]",
+     *              property="InviteBroker[id]",
      *              type="string",
      *              ),
      *             ),
@@ -339,9 +330,9 @@ class InviteBrokerController extends BaseController
      */
 
 
-    public function actionRestore($email)
+    public function actionRestore($id)
     {
-        $user = User::findOne(['email' => $email]);
+        $user = User::findOne(['id' => $id]);
         $masterBroker = new Broker();
         if ($user) {
             $user->role = $user::SUB_BROKER;
@@ -357,8 +348,9 @@ class InviteBrokerController extends BaseController
     }
 
     /**
-     * @OA\PATCH (
-     *     path="/invite-broker/{user_id}/and/{master_id}",
+     * Update
+     * @OA\Put  (
+     *     path="/invite-broker/{user_id}",
      *     tags={"invite-broker"},
      *     operationId="updateChangeSubBrokerRole",
      *     summary="update Change SubBroker And MasterBroker Role",
@@ -372,22 +364,12 @@ class InviteBrokerController extends BaseController
      *          type="string"
      *          )
      *     ),
-     *     @OA\Parameter(
-     *         name="master_id",
-     *         in="path",
-     *         required=true,
-     *         example="1",
-     *         description="master_id -> Master broker обновитель SubBroker",
-     *      @OA\Schema(
-     *          type="string"
-     *          )
-     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *        @OA\Property(
+     *              @OA\Property(
      *                      property="User[role]",
      *                      type="string",
      *                      enum={"Sub broker","Master broker"},
@@ -423,11 +405,13 @@ class InviteBrokerController extends BaseController
      * @throws StaleObjectException|HttpException
      */
 
-    public function actionUpdate($user_id,$master_id): array
+
+    public function actionUpdate($user_id): array
     {
         $model = Broker::findOne(['user_id' => $user_id]);
-        $con = Broker::findOne(['master_id' => $master_id]);
-        if (!$con && !$model || !$con && $model || $con && !$model ) {
+        $role = \Yii::$app->user->id;
+        $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
+        if (!$model || !$masterBroker) {
             throw new HttpException(404, \Yii::t('app', 'MasterId или UserId не найден!'));
         }else {
             $user = User::findOne(['id' => $model->user_id]);

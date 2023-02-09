@@ -116,6 +116,16 @@ class ContainerLoadController extends BaseController
      *             type="integer"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         required=false,
+     *         description="Pending,in_Progress,Completed,Cancelled",
+     *         example="Pending",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -144,7 +154,7 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionIndex($customer_id = 0, $port_id = 0, $consignee_id = 0,
+    public function actionIndex($status = 0, $customer_id = 0, $port_id = 0, $consignee_id = 0,
                                 $page = 0, $load_id = 0, $pageSize = 10)
     {
         $query = Load::find();
@@ -156,6 +166,8 @@ class ContainerLoadController extends BaseController
             $query->andWhere(['consignee_id' => $consignee_id]);
         } elseif ($load_id) {
             $query->andWhere(['id' => $load_id]);
+        }elseif ($status) {
+            $query->andWhere(['status' => $status]);
         }
         return $this->index($query, $page, $pageSize, Large::class);
 
