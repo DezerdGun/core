@@ -42,6 +42,7 @@
                             ['label' => 'Truck types', 'url' => ['/truck-types'], 'iconStyle' => 'far'],
                             ['label' => 'Equipment', 'url' => ['/equipment'], 'iconStyle' => 'far'],
                             ['label' => 'Load modes', 'url' => ['loadmodes/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Owner list', 'url' => ['owner/index'], 'iconStyle' => 'far']
                         ],
                     ],
                     ['label' => 'Users', 'url' => ['user/index'], 'icon' => 'user'],

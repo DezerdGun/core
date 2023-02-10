@@ -1,44 +1,43 @@
 <?php
 
 namespace api\controllers;
-
 use api\components\HttpException;
-use api\khalsa\services\listing\AdditionalInfoService;
-use api\khalsa\services\listing\ContainerInfoService;
-use api\khalsa\services\listing\ContainerService;
-use api\templates\listing_container\Large;
-use common\models\ListingContainer;
+use api\khalsa\services\listing\ordinary\OrdinaryAdditionalInfo;
+use api\khalsa\services\listing\ordinary\OrdinaryInfoService;
+use api\khalsa\services\listing\ordinary\OrdinaryService;
+use api\templates\listing_ordinary\Small;
+use api\templates\listing_ordinary\Large;
+use common\models\ListingOrdinary;
+use common\models\search\SearchListingOrdinary;
 
-
-class ListingContainerController extends BaseController
+class ListingOrdinaryController extends BaseController
 {
-    public $containerService;
-    public $additionalInfoService;
-    public $containerInfoService;
+    public $ordinaryService;
+    public $ordinaryInfoService;
+    public $ordinaryAdditionalInfo;
 
-    public function __construct
-    (
+    public function __construct(
         $id,
         $module,
         $config = [],
-        ContainerService $containerService,
-        AdditionalInfoService $additionalInfoService,
-        ContainerInfoService $containerInfoService
+        OrdinaryService $ordinaryService,
+        OrdinaryInfoService $ordinaryInfoService,
+        OrdinaryAdditionalInfo $ordinaryAdditionalInfo
     )
     {
         parent::__construct($id, $module, $config);
-        $this->containerService = $containerService;
-        $this->additionalInfoService = $additionalInfoService;
-        $this->containerInfoService = $containerInfoService;
+        $this->ordinaryService = $ordinaryService;
+        $this->ordinaryInfoService = $ordinaryInfoService;
+        $this->ordinaryAdditionalInfo = $ordinaryAdditionalInfo;
     }
     /**
      * @OA\Get(
-     *     path="/listing/container",
-     *     tags={"listing-container"},
-     *     operationId="getListingContainers",
-     *     summary="getListingContainers",
+     *     path="/listing/ordinary",
+     *     tags={"listing-ordinary"},
+     *     operationId="getListingOrdinaries",
+     *     summary="getListingOrdinaeries",
      *     @OA\Parameter(
-     *         name="SearchListingContainer[id]",
+     *         name="SearchListingOrdinary[id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -46,16 +45,16 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[status]",
+     *         name="SearchListingOrdinary[status]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
      *             type="string",
-     *             enum={"active","archived", "hidden"}
+     *             enum={"active", "archived", "hidden"}
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[port_id]",
+     *         name="SearchListingOrdinary[origin_id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -63,7 +62,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[destination_id]",
+     *         name="SearchListingOrdinary[destination_id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -71,34 +70,16 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[size]",
+     *         name="SearchListingOrdinary[size]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *             type="integer"
+     *              type="string",
+     *              enum={"48x40","42x42","48x48"}
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[container_code][]",
-     *         in="query",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="array",
-     *                 @OA\Items(
-     *                     type="string"
-     *                 ),
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="SearchListingContainer[owner_id]",
-     *         in="query",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="SearchListingContainer[port_state_code][]",
+     *         name="SearchListingOrdinary[equipment_code][]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -109,18 +90,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[destination_state_code][]",
-     *         in="query",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="array",
-     *                 @OA\Items(
-     *                     type="string"
-     *                 ),
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="SearchListingContainer[vessel_eta_from]",
+     *         name="SearchListingOrdinary[pick_up_from]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -129,7 +99,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[vessel_eta_to]",
+     *         name="SearchListingOrdinary[pick_up_to]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -138,7 +108,15 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[max_weight]",
+     *         name="SearchListingOrdinary[quantity]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchListingOrdinary[max_weight]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -146,7 +124,29 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[hazmat]",
+     *         name="SearchListingOrdinary[origin_state_code][]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *                 @OA\Items(
+     *                     type="string"
+     *                 ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchListingOrdinary[destination_state_code][]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *                 @OA\Items(
+     *                     type="string"
+     *                 ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchListingOrdinary[hazmat]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -155,7 +155,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[overweight]",
+     *         name="SearchListingOrdinary[overweight]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -164,7 +164,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[reefer]",
+     *         name="SearchListingOrdinary[reefer]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -173,7 +173,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[alcohol]",
+     *         name="SearchListingOrdinary[alcohol]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -182,7 +182,7 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[urgent]",
+     *         name="SearchListingOrdinary[urgent]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -220,7 +220,7 @@ class ListingContainerController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/ListingContainerLarge")
+     *                 @OA\Items(ref="#/components/schemas/ListingOrdinaryLarge")
      *             ),
      *             @OA\Property(
      *                 property="meta",
@@ -237,41 +237,54 @@ class ListingContainerController extends BaseController
      */
     public function actionIndex($page = 0, $page_size = 10)
     {
-        $query = $this->containerService->index();
+        $query = $this->ordinaryService->index();
+
         return $this->index($query, $page, $page_size, Large::class);
     }
-
     /**
      * @OA\Post(
-     *     path="/listing/container",
-     *     tags={"listing-container"},
-     *     operationId="createListingContainer",
-     *     summary="createListingContainer",
+     *     path="/listing/ordinary",
+     *     tags={"listing-ordinary"},
+     *     operationId="createListingOrdinary",
+     *     summary="createListingOrdinary",
      *
      * @OA\RequestBody(
-     *     request="ContainerListing",
+     *     request="OrdinaryListing",
      *     required=true,
      *      @OA\MediaType(
      *      mediaType="multipart/form-data",
+     *         encoding={
+     *             "ListingOrdinaryForm[equipment_code][]": {
+     *                 "explode": true
+     *             }
+     *         },
      *          @OA\Schema(
      *              @OA\Property(
-     *                  property="port_id",
+     *                  property="ListingOrdinaryForm[origin_id]",
      *                  type="integer",
      *               ),
      *              @OA\Property(
-     *                  property="destination_id",
+     *                  property="ListingOrdinaryForm[destination_id]",
      *                  type="integer",
      *               ),
+     *              @OA\Property (
+     *              property="ListingOrdinaryForm[equipment_code][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="string"
+     *                      )
+     *                  ),
      *              @OA\Property(
-     *                  property="vessel_eta",
+     *                  property="ListingOrdinaryForm[pick_up]",
      *                  type="date",
      *                  pattern="^([0-9]{4})-(?:[0-9]{2})-([0-9]{2})$",
      *                  example="2023-10-30",
      *               ),
      *              required={
-     *                  "port_id",
-     *                  "destination_id",
-     *                  "vessel_eta"
+     *                  "ListingOrdinaryForm[origin_id]",
+     *                  "ListingOrdinaryForm[destination_id]",
+     *                  "ListingOrdinaryForm[pick_up]",
+     *                  "ListingOrdinaryForm[equipment_code][]"
      *              }
      *          )
      *     )
@@ -289,7 +302,7 @@ class ListingContainerController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 ref="#/components/schemas/ListingContainerSmall"
+     *                 ref="#/components/schemas/ListingOrdinarySmall"
      *             )
      *         )
      *     ),
@@ -300,77 +313,87 @@ class ListingContainerController extends BaseController
      * )
      * @throws HttpException
      */
-    public function actionCreate(): array
+    public function actionCreate()
     {
-        $model = $this->containerService->create();
-
-        return $this->success($model->getAsArray(\api\templates\listing_container\Small::class));
+        $model = $this->ordinaryService->create();
+        return $this->success($model->getAsArray(Small::class));
     }
+
     /**
-     * @OA\Patch (
-     *     path="/listing/container/reassign/{id}",
-     *     tags={"listing-container"},
-     *     operationId="reassignListingContainerUser",
-     *     summary="reassignListingContainerUser",
-     *     @OA\Parameter(
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *          type="integer"
-     *          )
-     *     ),
+     * @OA\Post(
+     *     path="/listing/ordinary-info",
+     *     tags={"listing-ordinary"},
+     *     operationId="createListingOrdinaryInfo",
+     *     summary="createListingOrdinaryInfo",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *              @OA\Property(
-     *                  property="user_id",
-     *                  type="integer"
-     *               ),
-     *              required={
-     *                  "user_id"
-     *              }
-     *            )
+     *                 @OA\Property(
+     *                     property="listing_ordinary_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="quantity",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="size",
+     *                     type="string",
+     *                     enum={"48x40","42x42","48x48"}
+     *                 ),
+     *                 @OA\Property(
+     *                     property="weight",
+     *                     type="integer"
+     *                 ),
+     *                  required={
+     *                     "listing_ordinary_id",
+     *                     "quantity",
+     *                     "size",
+     *                     "weight"
+     *                  }
+     *             )
      *         )
      *     ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="successfull operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="status",
-     *                  type="string",
-     *                  example="success"
-     *              ),
-     *          )
-     *      ),
-     *      security={
-     *          {"main":{}},
-     *          {"ClientCredentials":{}}
-     *      }
-     *  )
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     * @throws HttpException
      */
-    public function actionReassign($id): array
+    public function actionOrdinaryInfo(): array
     {
-        $this->containerService->update($id);
+        $this->ordinaryInfoService->create();
         return $this->success();
     }
+
     /**
      * @OA\Post(
-     *     path="/listing/container/additional-info",
-     *     tags={"listing-container"},
-     *     operationId="createContainerAdditionalInfo",
-     *     summary="createContainerAdditionalInfo",
+     *     path="/listing/ordinary/additional-info",
+     *     tags={"listing-ordinary"},
+     *     operationId="createOrdinaryAdditionalInfo",
+     *     summary="createOrdinaryAdditionalInfo",
      *      @OA\RequestBody(
-     *          request="ListingContainerAdditionalInfo",
+     *          request="ListingOrdinaryAdditionalInfo",
      *          required=true,
      *          @OA\MediaType(
      *          mediaType="multipart/form-data",
      *          @OA\Schema(
      *              @OA\Property(
-     *                  property="listing_container_id",
+     *                  property="listing_ordinary_id",
      *                  type="integer",
      *              ),
      *              @OA\Property(
@@ -423,7 +446,7 @@ class ListingContainerController extends BaseController
      *                  type="string",
      *              ),
      *              required={
-     *                  "listing_container_id",
+     *                  "listing_ordinary_id",
      *                  "hazmat",
      *                  "overweight",
      *                  "reefer",
@@ -441,11 +464,6 @@ class ListingContainerController extends BaseController
      *                 property="status",
      *                 type="string",
      *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 ref="#/components/schemas/ListingAdditionalInfoSmall"
      *             )
      *         )
      *     ),
@@ -454,97 +472,78 @@ class ListingContainerController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
+     * @throws HttpException
      */
     public function actionAdditionalInfo(): array
     {
-        $model = $this->additionalInfoService->create();
-        return $this->success($model->getAsArray(\api\templates\listing_additional_info\Small::class));
+        $this->ordinaryAdditionalInfo->create();
+        return $this->success();
     }
 
     /**
-     * @OA\Post(
-     *     path="/listing/container-info",
-     *     tags={"listing-container"},
-     *     operationId="createListingContainerInfo",
-     *     summary="createListingContainerInfo",
+     * @OA\Patch (
+     *     path="/listing/ordinary/status",
+     *     tags={"listing-ordinary"},
+     *     operationId="changeListingOrdinaryStatus",
+     *     summary="changeListingOrdinaryStatus",
      *     @OA\RequestBody(
+     *          request="UpdateStatusForm",
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="listing_container_id",
-     *                     type="integer"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="quantity",
-     *                     type="integer"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="size",
-     *                     type="integer",
-     *                     enum={"53","45","40","20"}
-     *                 ),
-     *                 @OA\Property(
-     *                     property="container_code",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="owner_id",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="weight",
-     *                     type="integer"
-     *                 ),
+     *              mediaType="multipart/form-data",
+     *         encoding={
+     *             "UpdateStatusForm[id][]": {
+     *                 "explode": true
+     *             }
+     *         },
+     *              @OA\Schema(
+     *                  @OA\Property (
+     *                      property="UpdateStatusForm[id][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="integer"
+     *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="UpdateStatusForm[status]",
+     *                      type="string",
+     *                      enum={"active","hidden", "archived"}
+     *                  ),
      *                  required={
-     *                     "listing_container_id",
-     *                     "quantity",
-     *                     "size",
-     *                     "container_code",
-     *                     "owner_id",
-     *                     "weight"
+     *                      "UpdateStatusForm[status]",
+     *                      "UpdateStatusForm[id][]"
      *                  }
-     *             )
+     *              )
      *         )
      *     ),
-     *       @OA\Response(
-     *         response=200,
-     *         description="successfull operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property (
-     *                      property="id",
-     *                      type="integer"
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *         {"main":{}},
-     *     {"ClientCredentials":{}}
-     *     }
-     * )
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
      */
-    public function actionContainerInfo(): array
+    public function actionUpdateStatus(): array
     {
-        $model = $this->containerInfoService->create();
-        return $this->success($model->getAsArray(\api\templates\listing_container_info\Small::class));
+        $this->ordinaryService->updateStatus();
+        return $this->success();
     }
-
     /**
      * @OA\Get(
-     *     path="/listing/container/count",
-     *     tags={"listing-container"},
-     *     operationId="countListingContainers",
-     *     summary="countListingContainers",
+     *     path="/listing/ordinary/count",
+     *     tags={"listing-ordinary"},
+     *     operationId="countListingOrdinary",
+     *     summary="countListingOrdinary",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -578,43 +577,36 @@ class ListingContainerController extends BaseController
      */
     public function actionCount(): array
     {
-        $data = ListingContainer::count();
+        $data = ListingOrdinary::count();
         return $this->success($data);
     }
     /**
      * @OA\Patch (
-     *     path="/listing/container/status",
-     *     tags={"listing-container"},
-     *     operationId="changeListingContainerStatus",
-     *     summary="changeListingContainerStatus",
+     *     path="/listing/ordinary/reassign/{id}",
+     *     tags={"listing-ordinary"},
+     *     operationId="reassignListingOrdinaryUser",
+     *     summary="reassignListingOrdinaryUser",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="integer"
+     *          )
+     *     ),
      *     @OA\RequestBody(
-     *          request="ListingContainerForm",
      *         required=true,
      *         @OA\MediaType(
-     *              mediaType="multipart/form-data",
-     *         encoding={
-     *             "ListingContainerForm[id][]": {
-     *                 "explode": true
-     *             }
-     *         },
-     *              @OA\Schema(
-     *                  @OA\Property (
-     *                      property="ListingContainerForm[id][]",
-     *                      type="array",
-     *                      @OA\Items(
-     *                          type="integer"
-     *                      )
-     *                  ),
-     *                  @OA\Property(
-     *                      property="ListingContainerForm[status]",
-     *                      type="string",
-     *                      enum={"active","hidden", "archived"}
-     *                  ),
-     *                  required={
-     *                      "ListingContainerForm[status]",
-     *                      "ListingContainerForm[id][]"
-     *                  }
-     *              )
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *              @OA\Property(
+     *                  property="user_id",
+     *                  type="integer"
+     *               ),
+     *              required={
+     *                  "user_id"
+     *              }
+     *            )
      *         )
      *     ),
      *      @OA\Response(
@@ -625,7 +617,7 @@ class ListingContainerController extends BaseController
      *                  property="status",
      *                  type="string",
      *                  example="success"
-     *              )
+     *              ),
      *          )
      *      ),
      *      security={
@@ -634,9 +626,9 @@ class ListingContainerController extends BaseController
      *      }
      *  )
      */
-    public function actionUpdateStatus(): array
+    public function actionReassign($id): array
     {
-        $this->containerService->updateStatus();
+        $this->ordinaryService->update($id);
         return $this->success();
     }
 }

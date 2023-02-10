@@ -1,12 +1,11 @@
 <?php
 
-namespace api\forms\listing;
+namespace api\forms\listing\ordinary;
 
 use common\enums\ListingStatus;
-use common\models\ListingContainer;
-use yii\base\Model;
+use common\models\ListingOrdinary;
 
-class ListingContainerForm extends Model
+class UpdateStatusForm extends \yii\base\Model
 {
     public $id;
     public $status;
@@ -16,9 +15,8 @@ class ListingContainerForm extends Model
         return [
             [['id', 'status'], 'required'],
             [['id'], 'each', 'rule' => ['integer']],
-            [['id'], 'each', 'rule' => ['exist', 'targetClass' => ListingContainer::className(), 'targetAttribute' => ['id' => 'id']]],
+            [['id'], 'each', 'rule' => ['exist', 'targetClass' => ListingOrdinary::className(), 'targetAttribute' => ['id' => 'id']]],
             ['status', 'in', 'range' => ListingStatus::getEnums()]
         ];
     }
-
 }

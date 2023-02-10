@@ -218,11 +218,6 @@ class CustomerController extends BaseController
      *                 property="status",
      *                 type="string",
      *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 ref="#/components/schemas/CustomerSmall"
      *             )
      *         )
      *     ),
@@ -242,7 +237,7 @@ class CustomerController extends BaseController
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success($customer->getAsArray(Large::class));
+        return $this->success();
     }
 
     /**
@@ -430,11 +425,6 @@ class CustomerController extends BaseController
      *                  property="status",
      *                  type="string",
      *                  example="success"
-     *              ),
-     *              @OA\Property(
-     *                  property="data",
-     *                  type="object",
-     *                  ref="#/components/schemas/CustomerLarge"
      *              )
      *          )
      *      ),
@@ -448,9 +438,9 @@ class CustomerController extends BaseController
     public function actionUpdate($id)
     {
         $transaction = Yii::$app->db->beginTransaction();
-        $model = $this->customerService->update($id);
+        $this->customerService->update($id);
         $transaction->commit();
-        return $this->success($model->getAsArray(Large::class));
+        return $this->success();
     }
 
     /**

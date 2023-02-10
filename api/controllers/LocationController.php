@@ -55,7 +55,6 @@ class LocationController extends BaseController
      *         name="name",
      *         in="query",
      *         required=false,
-     *         example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -64,7 +63,6 @@ class LocationController extends BaseController
      *         name="street_address",
      *         in="query",
      *         required=false,
-     *     example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -73,7 +71,6 @@ class LocationController extends BaseController
      *         name="city",
      *         in="query",
      *         required=false,
-     *     example="success",
      *         @OA\Schema(
      *             type="string"
      *         )
@@ -124,7 +121,7 @@ class LocationController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/LocationLarge")
+     *                 @OA\Items(ref="#/components/schemas/LocationSmall")
      *             ),
      *             @OA\Property(
      *                 property="meta",

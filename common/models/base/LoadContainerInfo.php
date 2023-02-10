@@ -45,8 +45,8 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
     {
         return [
             [['load_id', 'owner', 'container_number', 'load_reference_number'], 'default', 'value' => null],
-            [['load_id', 'owner', 'container_number', 'load_reference_number'], 'integer'],
-            [['size', 'vessel_name', 'mbl', 'hbl', 'type'], 'string', 'max' => 32],
+            [['load_id', 'owner', 'container_number', 'load_reference_number', 'size'], 'integer'],
+            [['vessel_name', 'mbl', 'hbl', 'type'], 'string', 'max' => 32],
             [['type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
             [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner' => 'id']]
