@@ -1,12 +1,14 @@
 <?php
 
-namespace api\templates\listing_container;
+namespace api\templates\listing_ordinary;
 
-use common\models\ListingContainer;
+use common\models\ListingOrdinary;
+use yii\helpers\ArrayHelper;
+
 /**
  *
  * @OA\Schema(
- *      schema="ListingContainerLarge",
+ *      schema="ListingOrdinaryLarge",
  *      @OA\Property(
  *          property="id",
  *          type="integer"
@@ -16,11 +18,11 @@ use common\models\ListingContainer;
  *          type="string"
  *      ),
  *      @OA\Property(
- *          property="port_city",
+ *          property="origin_city",
  *          type="string"
  *      ),
  *      @OA\Property(
- *          property="port_state_code",
+ *          property="orgin_state_code",
  *          type="string"
  *      ),
  *      @OA\Property(
@@ -32,7 +34,7 @@ use common\models\ListingContainer;
  *          type="string"
  *      ),
  *      @OA\Property(
- *          property="vessel_eta",
+ *          property="pick_up",
  *          type="string"
  *      ),
  *      @OA\Property(
@@ -44,15 +46,22 @@ use common\models\ListingContainer;
  *          type="string"
  *      ),
  *      @OA\Property(
- *          property="container_info",
+ *          property="email",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="equipment_code",
+ *          type="array",
+ *          @OA\Items(
+ *              type="string"
+ *          )
+ *      ),
+ *      @OA\Property(
+ *          property="ordinary_info",
  *          type="object",
  *          @OA\Property(
  *              property="quantity",
  *              type="integer"
- *          ),
- *          @OA\Property(
- *              property="container_code",
- *              type="string"
  *          ),
  *          @OA\Property(
  *              property="size",
@@ -61,10 +70,6 @@ use common\models\ListingContainer;
  *          @OA\Property(
  *              property="weight",
  *              type="integer"
- *          ),
- *          @OA\Property(
- *              property="owner",
- *              type="string"
  *          )
  *      ),
  *      @OA\Property (
@@ -102,24 +107,28 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
 
     protected function prepareResult()
     {
-        /** @var ListingContainer $model */
+        /** @var  ListingOrdinary $model  */
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
             'status' => $model->status,
-            'port_city' => $model->port->address->city,
-            'port_state_code' => $model->port->address->state_code,
+            'origin_city' => $model->origin->address->city,
+            'origin_state_code' => $model->origin->address->state_code,
             'destination_city' => $model->destination->address->city,
             'destination_state_code' => $model->destination->address->state_code,
-            'vessel_eta' => $model->vessel_eta,
+            'pick_up' => $model->pick_up,
             'assigned' => $model->user->name,
             'contacts' => $model->user->mobile_number,
-            'container_info' => [
-                'quantity' => $model->containerInfo->quantity,
-                'container_code' => $model->containerInfo->container_code,
-                'size' => $model->containerInfo->size,
-                'weight' => $model->containerInfo->weight,
-                'owner' => $model->containerInfo->owner->name,
+            'email' => $model->user->email,
+            'equipment_code' => ArrayHelper::getColumn(ArrayHelper::toArray($model->ordinaryEquipments, [
+                'common\models\OrdinaryEquipment' => [
+                    'equipment_code'
+                ]
+            ]), 'equipment_code'),
+            'ordinary_info' => [
+                'quantity' => $model->ordinaryInfo->quantity,
+                'size' => $model->ordinaryInfo->size,
+                'weight' => $model->ordinaryInfo->weight,
             ],
             'additional_info' => [
                 'hazmat' => $model->additionalInfo->hazmat_description,
@@ -128,8 +137,7 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
                 'alcohol' => $model->additionalInfo->alcohol_description,
                 'urgent' => $model->additionalInfo->urgent_description,
                 'note' => $model->additionalInfo->note
-            ],
-
+            ]
         ];
     }
 }

@@ -43,8 +43,8 @@ abstract class ListingContainerInfo extends \yii\db\ActiveRecord
         return [
             [['listing_container_id', 'quantity', 'size', 'container_code', 'owner_id', 'weight'], 'required'],
             [['listing_container_id', 'quantity', 'owner_id'], 'default', 'value' => null],
-            [['listing_container_id', 'quantity', 'owner_id', 'weight'], 'integer'],
-            [['size', 'container_code'], 'string', 'max' => 255],
+            [['listing_container_id', 'quantity', 'owner_id', 'weight', 'size'], 'integer'],
+            [['container_code'], 'string', 'max' => 255],
             [['container_code'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['container_code' => 'code']],
             [['listing_container_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\ListingContainer::className(), 'targetAttribute' => ['listing_container_id' => 'id']],
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner_id' => 'id']],

@@ -101,7 +101,15 @@ $routes = [
     'GET /listing/container' => '/listing-container/index',
     'PATCH /listing/container/reassign/<id:\d+>'  => '/listing-container/reassign',
     'GET /listing/container/count' => '/listing-container/count',
-    'PATCH /listing/container/status' => '/listing-container/update-status'
+    'PATCH /listing/container/status' => '/listing-container/update-status',
+
+    'POST /listing/ordinary' => 'listing-ordinary/create',
+    'POST /listing/ordinary-info' => 'listing-ordinary/ordinary-info',
+    'POST /listing/ordinary/additional-info' => 'listing-ordinary/additional-info',
+    'GET /listing/ordinary' => 'listing-ordinary/index',
+    'PATCH /listing/ordinary/status' => '/listing-ordinary/update-status',
+    'GET /listing/ordinary/count' => '/listing-ordinary/count',
+    'PATCH /listing/ordinary/reassign/<id:\d+>' => '/listing-ordinary/reassign'
     ];
 
 return $routes;

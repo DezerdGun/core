@@ -9,6 +9,10 @@ use common\models\Customer;
  * @OA\Schema(
  *     schema="CustomerLarge",
  *     @OA\Property(
+ *         property="id",
+ *         type="integer"
+ *     ),
+ *     @OA\Property(
  *         property="type",
  *         type="string"
  *     ),

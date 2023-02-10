@@ -31,7 +31,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="string"
  *     ),
  *     @OA\Property(
- *         property="state",
+ *         property="state_code",
  *         type="string"
  *     ),
  *     @OA\Property(

@@ -7,6 +7,8 @@ use api\forms\listing\ListingContainerForm;
 use api\khalsa\repositories\listing\ContainerRepository;
 use common\enums\ListingStatus;
 use common\models\ListingContainer;
+use common\models\search\SearchListingContainer;
+use Yii;
 
 class ContainerService
 {
@@ -17,6 +19,18 @@ class ContainerService
     )
     {
         $this->containerRepository = $containerRepository;
+    }
+
+    public function index()
+    {
+        $searchListingContainer = new SearchListingContainer();
+        $searchListingContainer->load(Yii::$app->request->queryParams);
+        if ($searchListingContainer->validate()) {
+            $query = $searchListingContainer->search();
+        } else {
+            throw new HttpException(400, ['SearchListingContainer' => $searchListingContainer->getErrors()]);
+        }
+        return $query;
     }
 
     public function create(): ListingContainer

@@ -76,7 +76,7 @@ class CustomerService
      * @throws InvalidConfigException
      * @throws StaleObjectException
      */
-    public function update($id): Customer
+    public function update($id)
     {
         $model = $this->customerRepository->getById($id);
 
@@ -91,6 +91,5 @@ class CustomerService
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $model;
     }
 }
