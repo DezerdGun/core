@@ -12,6 +12,7 @@ use common\enums\ListingStatus;
 use common\models\OrdinaryEquipment;
 use common\models\State;
 use yii\db\ActiveQuery;
+use common\models\User;
 
 class SearchListingOrdinary extends \yii\base\Model
 {
@@ -39,8 +40,8 @@ class SearchListingOrdinary extends \yii\base\Model
     {
         return [
             [['id', 'origin_id', 'destination_id', 'max_weight', 'quantity'], 'integer'],
-            [['status', 'hazmat', 'overweight', 'reefer', 'alcohol', 'urgent', 'size'], 'string'],
-            ['status', 'in', 'range' => ListingStatus::getEnums()],
+            [['hazmat', 'overweight', 'reefer', 'alcohol', 'urgent', 'size'], 'string'],
+            [['status'], 'each', 'rule' => ['in', 'range' => ListingStatus::getEnums()]],
             [['origin_state_code', 'destination_state_code'], 'each', 'rule' => ['string']],
             [['equipment_code'], 'each', 'rule' => ['exist', 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipment_code' => 'code']]],
             [['origin_state_code'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['origin_state_code' => 'state_code']]],
@@ -81,12 +82,17 @@ class SearchListingOrdinary extends \yii\base\Model
                 }
             ]);
         $query->distinct();
+
+        if (\Yii::$app->user->identity->role == User::SUB_BROKER) {
+            $query->filterWhere(['user_id' => \Yii::$app->user->id]);
+        }
+
         if ($this->id) {
             $query->Where(['like', 'CAST(ordinary.id AS CHAR)', $this->id. '%', false]);
         }
 
         if ($this->status) {
-            $query->andFilterWhere(['status' => $this->status]);
+            $query->andFilterWhere(['in', 'status', $this->status]);
         }
 
         if ($this->origin_id) {

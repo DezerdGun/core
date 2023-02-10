@@ -44,6 +44,10 @@ use common\models\ListingContainer;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="email",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="container_info",
  *          type="object",
  *          @OA\Property(
@@ -114,6 +118,7 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
             'vessel_eta' => $model->vessel_eta,
             'assigned' => $model->user->name,
             'contacts' => $model->user->mobile_number,
+            'email' => $model->user->email,
             'container_info' => [
                 'quantity' => $model->containerInfo->quantity,
                 'container_code' => $model->containerInfo->container_code,

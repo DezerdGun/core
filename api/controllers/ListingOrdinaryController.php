@@ -35,7 +35,7 @@ class ListingOrdinaryController extends BaseController
      *     path="/listing/ordinary",
      *     tags={"listing-ordinary"},
      *     operationId="getListingOrdinaries",
-     *     summary="getListingOrdinaeries",
+     *     summary="getListingOrdinaries",
      *     @OA\Parameter(
      *         name="SearchListingOrdinary[id]",
      *         in="query",
@@ -45,12 +45,15 @@ class ListingOrdinaryController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingOrdinary[status]",
+     *         name="SearchListingOrdinary[status][]",
      *         in="query",
      *         required=false,
+     *         description="active, archived, hidden",
      *         @OA\Schema(
-     *             type="string",
-     *             enum={"active", "archived", "hidden"}
+     *             type="array",
+     *             @OA\Items(
+     *                  type="string"
+     *             ),
      *         )
      *     ),
      *     @OA\Parameter(
