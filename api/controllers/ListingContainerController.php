@@ -46,12 +46,15 @@ class ListingContainerController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchListingContainer[status]",
+     *         name="SearchListingContainer[status][]",
      *         in="query",
      *         required=false,
+     *         description="active, archived, hidden",
      *         @OA\Schema(
-     *             type="string",
-     *             enum={"active","archived", "hidden"}
+     *             type="array",
+     *             @OA\Items(
+     *                  type="string"
+     *             ),
      *         )
      *     ),
      *     @OA\Parameter(

@@ -10,6 +10,7 @@ use common\models\ListingContainerAdditionalInfo;
 use common\models\ListingContainerInfo;
 use common\models\Location;
 use common\models\State;
+use common\models\User;
 use yii\base\Model;
 use yii\db\ActiveQuery;
 
@@ -37,8 +38,8 @@ class SearchListingContainer extends Model
     {
         return [
             [['id', 'port_id', 'destination_id', 'size', 'owner_id', 'max_weight'], 'integer'],
-            [['status', 'hazmat', 'overweight', 'reefer', 'alcohol', 'urgent'], 'string'],
-            ['status', 'in', 'range' => ListingStatus::getEnums()],
+            [['hazmat', 'overweight', 'reefer', 'alcohol', 'urgent'], 'string'],
+            [['status'], 'each', 'rule' => ['in', 'range' => ListingStatus::getEnums()]],
             [['port_state_code', 'destination_state_code', 'container_code'], 'each', 'rule' => ['string']],
             [['container_code'], 'each', 'rule' => ['exist', 'targetClass' => Container::className(), 'targetAttribute' => ['container_code' => 'code']]],
             [['port_state_code'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['port_state_code' => 'state_code']]],
@@ -76,12 +77,16 @@ class SearchListingContainer extends Model
             }
         ]);
 
+        if (\Yii::$app->user->identity->role == User::SUB_BROKER) {
+            $query->filterWhere(['user_id' => \Yii::$app->user->id]);
+        }
+
         if ($this->id) {
             $query->Where(['like', 'CAST(container.id AS CHAR)', $this->id. '%', false]);
         }
 
         if ($this->status) {
-            $query->andFilterWhere(['status' => $this->status]);
+            $query->andFilterWhere(['in', 'status', $this->status]);
         }
 
         if ($this->port_id) {
