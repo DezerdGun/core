@@ -3,74 +3,86 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\templates\additionalinfo\Small;
-use common\models\LoadAdditionalInfo;
-use OpenApi\Annotations as OA;
+use api\templates\loadOrdinaryAdditionalInfo\Large;
+use common\models\LoadOrdinaryAdditionalInfo;
+use yii\web\NotFoundHttpException;
 
-class LoadAdditionalInfoController extends BaseController
+class LoadOrdinaryAdditionalInfoController extends BaseController
 {
+
     /**
      * @OA\Post(
-     *     path="/load-additional-info",
-     *     tags={"container-load"},
-     *     operationId="LoadAdditionalInfo",
-     *     summary="createLoadAdditionalInfo",
+     *     path="/load-ordinary-additional-info/create",
+     *     tags={"ordinary-load"},
+     *     operationId="LoadOrdinaryAdditionalInfo",
+     *     summary="createLoadOrdinaryAdditionalInfo",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *         @OA\Property(
-     *              property="LoadAdditionalInfo[load_id]",
+     *              property="LoadOrdinaryAdditionalInfo[load_id]",
      *              type="integer",
+     *              description="1",
+     *              example="1"
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[hazmat]",
+     *              property="LoadOrdinaryAdditionalInfo[hazmat]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[hazmat_description]",
+     *              property="LoadOrdinaryAdditionalInfo[hazmat_description]",
      *              type="string",
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[overweight]",
+     *              property="LoadOrdinaryAdditionalInfo[overweight]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[weight_in_lbs]",
+     *              property="LoadOrdinaryAdditionalInfo[overweight_description]",
      *              type="string",
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[reefer]",
+     *              property="LoadOrdinaryAdditionalInfo[weight_in_LBs]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[temp_in_f]",
+     *              property="LoadOrdinaryAdditionalInfo[weight_in_LBs_description]",
      *              type="string",
      *              ),
-     *           @OA\Property(
-     *              property="LoadAdditionalInfo[alcohol]",
+     *          @OA\Property(
+     *              property="LoadOrdinaryAdditionalInfo[reefer]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[alcohol_description]",
+     *              property="LoadOrdinaryAdditionalInfo[reefer_description]",
      *              type="string",
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[urgent]",
+     *              property="LoadOrdinaryAdditionalInfo[alcohol]",
      *              type="string",
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[urgent_description]",
+     *              property="LoadOrdinaryAdditionalInfo[alcohol_description]",
+     *              type="string",
+     *              ),
+     *         @OA\Property(
+     *              property="LoadOrdinaryAdditionalInfo[urgent]",
+     *              type="string",
+     *              enum={"yes","no"},
+     *              ),
+     *          @OA\Property(
+     *              property="LoadOrdinaryAdditionalInfo[urgent_description]",
      *              type="string",
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[note_from_broker]",
+     *              property="LoadOrdinaryAdditionalInfo[note]",
      *              type="string",
      *              ),
      *            )
@@ -91,12 +103,11 @@ class LoadAdditionalInfoController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
      */
 
     public function actionCreate()
     {
-        $model = new LoadAdditionalInfo();
+        $model = new \common\models\LoadOrdinaryAdditionalInfo();
         $role = \Yii::$app->user->id;
         $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
         $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
@@ -104,18 +115,15 @@ class LoadAdditionalInfoController extends BaseController
         $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
         if ($masterBroker && !$subbroker && !$carrier && !$empty){
             $this->feedUp($model);
-            return $this->success($model->getAsArray(Small::class));
+            return $this->success($model);
         }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
             $this->feedUp($model);
-            return $this->success($model->getAsArray(Small::class));
+            return $this->success($model);
         }else {
             throw new HttpException(400, 'You are not Broker');
         }
     }
 
-    /**
-     * @throws HttpException
-     */
     private function feedUp($model)
     {
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {

@@ -47,44 +47,17 @@ class Large extends BaseTemplate
         /** @var Load $model */
         $model = $this->model;
         $this->result = [
-            'ID' => $model->id,
-            'Load ID' =>(new \yii\db\Query())
-                ->select(['load_reference_number'])
-                ->from('load_container_info')
-                ->where(['load_id' => $model->id])
-                ->all(),
-            'Load status' => $model->status,
-            'Port' =>
-                [
-                    $model->port->address->city,
-                    $model->port->address->state_code,
-                ],
-            'Destination' => [
-                $model->consignee->address->city,
-                $model->consignee->address->state_code,
-            ],
-            'Customer' => [
-                $model->customer->company->company_name,
-            ],
-            'Vessel ETA' => [
-                $model->vesselEta->vessel_eta,
-            ],
-            'container_number'=>
-            [
-                (new \yii\db\Query())
-                    ->select(['container_number'])
-                    ->from('load_container_info')
-                    ->where(['load_id' => $model->id])
-                    ->all(),
-            ],
-
-
-            'Size' =>
-                (new \yii\db\Query())
-                    ->select(['size'])
-                    ->from('load_container_info')
-                    ->where(['load_id' => $model->id])
-                    ->all(),
+            'Id' => $model->id,
+            'loadId' => $model->loadContainerInfos->load_reference_number,
+            'loadStatus' => $model->status,
+            'portCity' =>  $model->port->address->city,
+            'portStateCode' => $model->port->address->state_code,
+            'destinationCity' => $model->consignee->address->city,
+            'destinationStateCode' => $model->consignee->address->state_code,
+            'customer' => $model->customer->company->company_name,
+            'vesseleEta' =>$model->vesselEta->vessel_eta,
+            'size' => $model->loadContainerInfos->size,
+            'owner' => $model->loadContainerInfos->owner,
         ];
     }
 }

@@ -23,9 +23,9 @@ use Yii;
  *
  * @property \common\models\Location $consignee
  * @property \common\models\Customer $customer
- * @property \common\models\LoadAdditionalInfo[] $loadAdditionalInfos
+ * @property \common\models\LoadAdditionalInfo $loadAdditionalInfos
  * @property \common\models\LoadBid[] $loadBs
- * @property \common\models\LoadContainerInfo[] $loadContainerInfos
+ * @property \common\models\LoadContainerInfo $loadContainerInfos
  * @property \common\models\LoadDocuments[] $loadDocuments
  * @property \common\models\LoadStop[] $loadStops
  * @property \common\models\LoadStop[] $loadStops0
@@ -107,7 +107,7 @@ abstract class Load extends \yii\db\ActiveRecord
      */
     public function getLoadAdditionalInfos()
     {
-        return $this->hasMany(\common\models\LoadAdditionalInfo::className(), ['load_id' => 'id']);
+        return $this->hasOne(\common\models\LoadAdditionalInfo::className(), ['load_id' => 'id']);
     }
 
     /**
@@ -123,7 +123,7 @@ abstract class Load extends \yii\db\ActiveRecord
      */
     public function getLoadContainerInfos()
     {
-        return $this->hasMany(\common\models\LoadContainerInfo::className(), ['load_id' => 'id']);
+        return $this->hasOne(\common\models\LoadContainerInfo::className(), ['load_id' => 'id']);
     }
 
     /**
