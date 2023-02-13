@@ -11,7 +11,7 @@ use yii\base\InvalidConfigException;
 /**
  *
  * @OA\Schema(
- *     schema="ReportSmall",
+ *     schema="LoadDocumentsSmall",
  *     @OA\Property(
  *         property="id",
  *         type="integer"
@@ -32,9 +32,6 @@ use yii\base\InvalidConfigException;
 
 class Small extends BaseTemplate
 {
-    /**
-     * @throws InvalidConfigException
-     */
     protected function prepareResult()
     {
         /** @var LoadDocuments $model */
@@ -43,7 +40,9 @@ class Small extends BaseTemplate
             'id' => $model->id,
             'filename' => $model->filename,
             'mime_type' => $model->mime_type,
-            'doc_type' => $model->doc_type,
+            'doc_type' => $model->docType->name,
+            'By' => $model->uploadBy->role
+
         ];
     }
 }

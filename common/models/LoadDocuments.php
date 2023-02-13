@@ -7,7 +7,6 @@ use common\models\traits\Template;
 use Yii;
 use \common\models\base\LoadDocuments as BaseLoadDocuments;
 use yii\helpers\ArrayHelper;
-use common\helpers\Hosts;
 
 /**
  * This is the model class for table "load_documents".
