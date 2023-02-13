@@ -11,15 +11,18 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $origin
- * @property integer $destination
- * @property integer $equipment_need
+ * @property integer $origin_id
+ * @property integer $destination_id
+ * @property integer $equipment_need_id
  * @property string $pick_up_date
+ * @property integer $user_id
+ * @property string $status
  *
  * @property \common\models\Company $customer
- * @property \common\models\Location $destination0
+ * @property \common\models\Location $destination
  * @property \common\models\OrdinaryNeeded $equipmentNeed
- * @property \common\models\Location $origin0
+ * @property \common\models\Location $origin
+ * @property \common\models\User $user
  * @property string $aliasModel
  */
 abstract class OrdinaryLoad extends \yii\db\ActiveRecord
@@ -41,13 +44,16 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'origin', 'destination', 'equipment_need'], 'default', 'value' => null],
-            [['customer_id', 'origin', 'destination', 'equipment_need'], 'integer'],
+            [['customer_id', 'origin_id', 'destination_id', 'equipment_need_id', 'user_id'], 'default', 'value' => null],
+            [['customer_id', 'origin_id', 'destination_id', 'equipment_need_id', 'user_id'], 'integer'],
             [['pick_up_date'], 'safe'],
+            [['user_id'], 'required'],
+            [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['origin'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['origin' => 'id']],
-            [['destination'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['destination' => 'id']],
-            [['equipment_need'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryNeeded::className(), 'targetAttribute' => ['equipment_need' => 'id']]
+            [['origin_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['origin_id' => 'id']],
+            [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['destination_id' => 'id']],
+            [['equipment_need_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryNeeded::className(), 'targetAttribute' => ['equipment_need_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
     }
 
@@ -59,10 +65,12 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'customer_id' => 'Customer ID',
-            'origin' => 'Origin',
-            'destination' => 'Destination',
-            'equipment_need' => 'Equipment Need',
+            'origin_id' => 'Origin ID',
+            'destination_id' => 'Destination ID',
+            'equipment_need_id' => 'Equipment Need ID',
             'pick_up_date' => 'Pick Up Date',
+            'user_id' => 'User ID',
+            'status' => 'Status',
         ];
     }
 
@@ -77,9 +85,9 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDestination0()
+    public function getDestination()
     {
-        return $this->hasOne(\common\models\Location::className(), ['id' => 'destination']);
+        return $this->hasOne(\common\models\Location::className(), ['id' => 'destination_id']);
     }
 
     /**
@@ -87,15 +95,23 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
      */
     public function getEquipmentNeed()
     {
-        return $this->hasOne(\common\models\OrdinaryNeeded::className(), ['id' => 'equipment_need']);
+        return $this->hasOne(\common\models\OrdinaryNeeded::className(), ['id' => 'equipment_need_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrigin0()
+    public function getOrigin()
     {
-        return $this->hasOne(\common\models\Location::className(), ['id' => 'origin']);
+        return $this->hasOne(\common\models\Location::className(), ['id' => 'origin_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
     }
 
 

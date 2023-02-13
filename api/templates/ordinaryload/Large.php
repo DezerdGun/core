@@ -64,10 +64,9 @@ class Large extends BaseTemplate
         $this->result = [
             'id' => $model->id,
             'customer_id' => $model->customer_id,
-            'origin' => $model->origin,
+            'originId' => $model->origin,
             'destination' => $model->destination,
-            'equipment_need' => $model->equipment_need,
-
+            'equipmentNeedId' => $model->equipmentNeed->ordinary_need,
             'pick_up_date' => $model->pick_up_date,
         ];
     }

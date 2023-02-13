@@ -14,7 +14,12 @@ class OrdinaryLoad extends BaseOrdinaryLoad
 {
     use Template;
 
-    public function behaviors()
+    const PENDING = 'Pending';
+    const IN_PROGRESS = 'in_Progress';
+    const COMPLETED = 'Completed';
+    const CANCELLED = 'Cancelled';
+
+    public function behaviors(): array
     {
         return ArrayHelper::merge(
             parent::behaviors(),
@@ -24,7 +29,7 @@ class OrdinaryLoad extends BaseOrdinaryLoad
         );
     }
 
-    public function rules()
+    public function rules(): array
     {
         return ArrayHelper::merge(
             parent::rules(),

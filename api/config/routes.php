@@ -40,6 +40,11 @@ $routes = [
     'GET /container-load/status' => 'container-load/status',
     'GET /container-load/<id:\d+>' => 'container-load/show',
     'DELETE /container-load/<id:\d+>' => 'container-load/delete',
+    'POST /load-container-info' => 'load-container-info/create',
+    'GET /container-load/count' => 'container-load/active',
+    'PATCH /container-load/status/<id:\d+>' => 'container-load/reassign',
+    'POST /load-additional-info' => 'load-additional-info/create',
+
 
     'GET /load/<id:\d+>/documents' => 'load/get-documents',
     'POST /load/<id:>/document' => 'load/create-upload-document',
@@ -62,9 +67,6 @@ $routes = [
     'POST /stripe/transfer' => 'stripe-transfer/create',
     'GET /stripe/public-key' => 'stripe/public-key',
 
-    'POST /load-container-info' => 'load-container-info/create',
-    'POST /load-additional-info' => 'load-additional-info/create',
-
     'GET /location' => 'location/index',
     'POST /location' => 'location/create',
     'GET /location/<id:\d+>' => 'location/show',
@@ -74,6 +76,10 @@ $routes = [
 
     'POST /ordinary-load' => 'ordinary-load/create',
     'POST /ordinary-needed' => 'ordinary-needed/create',
+    'GET /ordinary-load' => 'ordinary-load/index',
+    'GET /ordinary-load/count' => 'ordinary-load/active',
+    'GET /ordinary-load/<id:\d+>' => 'ordinary-load/show',
+    'POST /load-ordinary-additional-info' => 'load-ordinary-additional-info/create',
 
     'POST /customer' => 'customer/create',
     'DELETE /customer/<id:\d+>' => 'customer/delete',

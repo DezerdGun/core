@@ -9,6 +9,7 @@ use api\templates\listing_ordinary\Small;
 use api\templates\listing_ordinary\Large;
 use common\models\ListingOrdinary;
 use common\models\search\SearchListingOrdinary;
+use OpenApi\Annotations as OA;
 
 class ListingOrdinaryController extends BaseController
 {

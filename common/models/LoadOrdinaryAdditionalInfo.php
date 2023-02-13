@@ -2,19 +2,19 @@
 
 namespace common\models;
 
-use api\components\HttpException;
 use common\models\traits\Template;
 use Yii;
-use \common\models\base\LoadAdditionalInfo as BaseLoadAdditionalInfo;
+use \common\models\base\LoadOrdinaryAdditionalInfo as BaseLoadOrdinaryAdditionalInfo;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "load_additional_info".
+ * This is the model class for table "load_ordinary_additional_info".
  */
-class LoadAdditionalInfo extends BaseLoadAdditionalInfo
+class LoadOrdinaryAdditionalInfo extends BaseLoadOrdinaryAdditionalInfo
 {
 
     use Template;
+
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -33,10 +33,13 @@ class LoadAdditionalInfo extends BaseLoadAdditionalInfo
                 ['hazmat_description', 'required', 'when' => function($model) {
                     return $model->hazmat == 'yes';
                 }],
-                ['weight_in_lbs', 'required', 'when' => function($model) {
+                ['overweight_description', 'required', 'when' => function($model) {
                     return $model->overweight == 'yes';
                 }],
-                ['temp_in_f', 'required', 'when' => function($model) {
+                ['weight_in_LBs_description', 'required', 'when' => function($model) {
+                    return $model->weight_in_LBs == 'yes';
+                }],
+                ['reefer_description', 'required', 'when' => function($model) {
                     return $model->reefer == 'yes';
                 }],
                 ['alcohol_description', 'required', 'when' => function($model) {

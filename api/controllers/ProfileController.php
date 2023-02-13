@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\templates\user\Large;
 use common\models\Broker;
 use common\models\User;
+use yii\db\StaleObjectException;
 
 
 class ProfileController extends BaseController
@@ -128,6 +129,7 @@ class ProfileController extends BaseController
      *      {"ClientCredentials":{}}
      *     }
      * )
+     * @throws StaleObjectException|HttpException
      */
 
     public function actionBrokerDelete($user_id)
@@ -137,8 +139,8 @@ class ProfileController extends BaseController
             throw new HttpException(404, \Yii::t('app', 'UserId не найден!'));
         } else {
             $user = User::findOne(['id' => $model->user_id]);
-            $user->status = $user::STATUS_DELETED;
-            $user->update();
+                $user->status = user::STATUS_DELETED;
+                $user->update();
             throw new HttpException(200, \Yii::t('app', "User was Disactived"));
         }
     }
