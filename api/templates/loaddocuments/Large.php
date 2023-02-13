@@ -3,6 +3,7 @@
 namespace api\templates\loaddocuments;
 
 use common\models\Load;
+use common\models\LoadDocuments;
 use common\models\LoadDocumentType;
 use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
@@ -13,7 +14,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *     schema="LoadDocumentsLarge",
  *     @OA\Property(
  *         property="id",
- *         type="string"
+ *         type="integer"
  *     ),
  *     @OA\Property(
  *         property="load_id",
@@ -54,15 +55,15 @@ class Large extends BaseTemplate
 {
     protected function prepareResult()
     {
-        /** @var \common\models\LoadDocuments $model */
+        /** @var LoadDocuments $model */
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
             'filename' => $model->filename,
             'mime_type'=>$model->mime_type,
             'created_at'=>$model->created_at,
-            'load_id' => [Load::find()->one()],
-            'doc_type' => [LoadDocumentType::find()->one()],
+            'doc_type' => $model->docType->name,
+            'By' => $model->uploadBy->role
         ];
     }
 }
