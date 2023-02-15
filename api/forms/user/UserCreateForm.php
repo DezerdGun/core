@@ -76,7 +76,7 @@ class UserCreateForm extends Model
         $email = new EmailService();
         $email->SubEmail($user);
         $user->generateAuthKey();
-        $user->status = 1;
+        $user->status = User::STATUS_ACTIVE;
 
     }
 
