@@ -2,12 +2,14 @@
 
 namespace common\models;
 
+use common\behaviors\UploadBehavior;
 use common\models\traits\Template;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 
@@ -15,6 +17,7 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $user_picture
  * @property string $username
  * @property string $name
  * @property string $mobile_number
@@ -34,7 +37,6 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
-
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
     const STATUS_DELETED = 0;
@@ -43,7 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
     const MASTER_BROKER = 'Master broker';
     const CARRIER = 'Carrier';
     const DISABLED = 'Disabled';
-
+    const SCENARIO_USER_PICTURE = 'user_picture';
 
     use Template;
 
@@ -54,14 +56,23 @@ class User extends ActiveRecord implements IdentityInterface
 
 
 
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
+    public function behaviors(): array
     {
-        return [
-            TimestampBehavior::className(),
-        ];
+        return ArrayHelper::merge(
+            parent::behaviors(),
+            [
+                TimestampBehavior::className()
+            ],
+            [
+                'user_picture' => [
+                    'class' => UploadBehavior::class,
+                    'attribute' => 'user_picture',
+                    'scenarios' => [self::SCENARIO_USER_PICTURE],
+                    'path' => '@cdn-webroot',
+                    'url' => '@cdn-webroot',
+                ]
+            ]
+        );
     }
 
     /**
@@ -75,7 +86,15 @@ class User extends ActiveRecord implements IdentityInterface
             // the name, email, subject and body attributes are required
             [['username','name', 'email','mobile_number','role','password_hash'], 'safe'],
             ['email', 'email'],
-            ['mobile_number','unique']
+            ['email', 'unique'],
+            ['mobile_number','unique'],
+            [
+                'user_picture',
+                'file',
+                'on' => [self::SCENARIO_USER_PICTURE],
+                'skipOnEmpty' => false,
+                'extensions' => 'jpeg, png, pdf, jpg'
+            ]
         ];
     }
 

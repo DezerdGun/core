@@ -50,9 +50,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         $response->setStatusCode($code);
         $response->setParameters([
             'status' => ($code >= 500) ? 'error' : 'fail',
-            'message' => $message,
-            'data' => $errorData,
-            'code' => $code
+            'data' => $errorData
         ]);
         $response->send();
     }

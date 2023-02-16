@@ -6,6 +6,8 @@ use api\components\HttpException;
 use api\forms\company\CompanyCreateForm;
 use api\khalsa\repositories\CarrierRepository;
 use common\models\Carrier;
+use common\models\Company;
+use yii\base\InvalidConfigException;
 
 class CarrierService
 {
@@ -18,17 +20,21 @@ class CarrierService
         $this->companyService = $companyService;
     }
 
-    public function create(CompanyCreateForm $form): Carrier
+    /**
+     * @throws InvalidConfigException
+     * @throws HttpException
+     */
+    public function create(): Carrier
     {
-
-        $company = $this->companyService->create($form);
+        $company = new Company();
+        $company->setScenario(Company::SCENARIO_CARRIER_CREATE);
+        $company = $this->companyService->create($company);
 
         $model = new Carrier();
         $model->setScenario(Carrier::SCENARIO_INSERT);
-        $model->user_id = $form->user_id;
         $model->company_id = $company->id;
 
-        if ($model->validate()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $this->carrierRepository->create($model);
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);

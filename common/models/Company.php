@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
  */
 class Company extends BaseCompany
 {
+    const SCENARIO_CARRIER_CREATE = 'carrier_create';
+    public $is_dot;
 
     public function behaviors(): array
     {
@@ -24,10 +26,17 @@ class Company extends BaseCompany
     public function rules()
     {
         return ArrayHelper::merge(
-            parent::rules(),
-            [
-
-            ]
-        );
+            parent::rules(), [
+            ['company_name', 'required'],
+            [['is_dot'], 'required', 'on' => self::SCENARIO_CARRIER_CREATE],
+            ['mc_number', 'required', 'when' => function ($model) {
+                return $model->is_dot === "false";
+            }, 'on' => self::SCENARIO_CARRIER_CREATE],
+            ['dot', 'required', 'when' => function ($model) {
+                return $model->is_dot === "true";
+            }, 'on' => self::SCENARIO_CARRIER_CREATE],
+            [['mc_number', 'dot', 'ein'], 'default', 'value' => null],
+            [['mc_number', 'dot', 'is_dot'], 'string'],
+        ]);
     }
 }
