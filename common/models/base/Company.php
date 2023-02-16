@@ -54,7 +54,6 @@ abstract class Company extends \yii\db\ActiveRecord
             [['address_id', 'mc_number', 'ein', 'dot'], 'default', 'value' => null],
             [['address_id'], 'integer'],
             [['company_name', 'business_phone', 'ein',  'mc_number', 'email', 'receiver_email', 'billing_email', 'quickbooks_email', 'credit_limit', 'payment_terms', 'dot'], 'string', 'max' => 32],
-//            [['w9_file', 'ic_file'], 'string', 'max' => 55],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Address::className(), 'targetAttribute' => ['address_id' => 'id']],
         ];
     }
