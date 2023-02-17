@@ -7,6 +7,7 @@ use api\templates\containerinfo\Small;
 use api\templates\load\Large;
 use common\models\LoadContainerInfo;
 use common\models\Load;
+use OpenApi\Annotations as OA;
 
 class LoadContainerInfoController extends BaseController
 {
@@ -45,7 +46,7 @@ class LoadContainerInfoController extends BaseController
      *              description="20GP",
      *              ),
      *         @OA\Property(
-     *              property="LoadContainerInfo[owner]",
+     *              property="LoadContainerInfo[owner_id]",
      *              type="integer",
      *              example="1",
      *              description="1 => NSA",
@@ -71,7 +72,7 @@ class LoadContainerInfoController extends BaseController
      *          required={
      *                     "LoadContainerInfo[size]",
      *                     "LoadContainerInfo[container_number]",
-     *                     "LoadContainerInfo[owner]",
+     *                     "LoadContainerInfo[owner_id]",
      *                     "LoadContainerInfo[mbl]",
      *              }
      *            )
@@ -100,7 +101,7 @@ class LoadContainerInfoController extends BaseController
      * )
      */
 
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $model = new LoadContainerInfo();
         $model->load_reference_number = rand(1000000,9999999);

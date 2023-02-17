@@ -60,7 +60,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *          property="container_info",
  *          type="object",
  *     @OA\Property(
- *         property="owner",
+ *         property="owner_id",
  *         type="integer"
  *     ),
  *     @OA\Property(
@@ -155,12 +155,12 @@ class Large extends BaseTemplate
             'id' => $model->id,
             'loadStatus' => $model->status,
             'consignee_id' => $model->consignee->name,
-            'portAddress' =>  $model->port->address->city,
+            'portCity' =>  $model->port->address->city,
             'portStateCode' => $model->port->address->state_code,
             'destinationCity' => $model->consignee->address->city,
             'destinationStateCode' => $model->consignee->address->state_code,
             'customer' => $model->customer->company->company_name,
-            'vesselEta' =>$model->vesselEta->vessel_eta,
+            'vessel_eta' =>$model->date->vessel_eta,
             'loadAdditionalInfo' => [
                 'hazmat' => $model->loadAdditionalInfos->hazmat,
                 'hazmatDescription' => $model->loadAdditionalInfos->hazmat_description,
@@ -175,7 +175,7 @@ class Large extends BaseTemplate
                 'noteFromBroker' => $model->loadAdditionalInfos->note_from_broker,
             ],
             'loadContainerInfo' => [
-                'owner' => $model->loadContainerInfos->owner0->name,
+                'owner_id' => $model->loadContainerInfos->owner_id,
                 'vesselName' => $model->loadContainerInfos->vessel_name,
                 'mbl' => $model->loadContainerInfos->mbl,
                 'hbl' => $model->loadContainerInfos->hbl,

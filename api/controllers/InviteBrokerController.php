@@ -235,13 +235,14 @@ class InviteBrokerController extends BaseController
 
     public function actionShow($name): array
     {
-        $rows = (new \yii\db\Query())
-            ->select(['id','name', 'email','mobile_number','role'])
-            ->from('user')
-            ->where(['email' => $name])
-            ->orWhere(['name' => $name])
-            ->all();
-        return $this->success($rows);
+            $command = User::find()
+                ->select(['id','name', 'email','mobile_number','role'])
+                ->filterWhere(['LIKE', 'username', "$name"])
+                ->orfilterWhere(['LIKE', 'email', "$name"])
+                ->orfilterWhere(['LIKE', 'name', "$name"])
+                ->all();
+        return $this->success($command);
+
     }
 
 
