@@ -7,5 +7,6 @@ services:
     volumes:
       - /home/ubuntu/tms2/api/web/uploads:/var/www/app/api/web/uploads
       - /home/ubuntu/tms2/vendor:/var/www/app/vendor
+      - /home/ubuntu/tms2/cdn/web:/var/www/app/cdn/web
     ports:
       - "100:80"

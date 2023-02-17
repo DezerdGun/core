@@ -24,10 +24,12 @@ COPY cicd/composer-setup.php /tmp
 RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 COPY cicd/api-$APP_ENV.conf /etc/apache2/sites-available/api-$APP_ENV.conf
 COPY cicd/backend-$APP_ENV.conf /etc/apache2/sites-available/backend-$APP_ENV.conf
+COPY cicd/cdn-$APP_ENV.conf /etc/apache2/sites-available/cdn-$APP_ENV.conf
 COPY cicd/frontend-$APP_ENV.conf /etc/apache2/sites-available/frontend-$APP_ENV.conf
 RUN a2enmod rewrite
 RUN a2ensite api-$APP_ENV
 RUN a2ensite backend-$APP_ENV
+RUN a2ensite cdn-$APP_ENV
 RUN a2ensite frontend-$APP_ENV
 RUN pecl install memcached
 RUN pecl install imagick
