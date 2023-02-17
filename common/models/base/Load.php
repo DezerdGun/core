@@ -32,7 +32,7 @@ use Yii;
  * @property \common\models\LoadTracking[] $loadTrackings
  * @property \common\models\Location $port
  * @property \common\models\User $user
- * @property \common\models\Date $vesselEta
+ * @property \common\models\Date $date
  * @property string $aliasModel
  */
 abstract class Load extends \yii\db\ActiveRecord
@@ -177,7 +177,7 @@ abstract class Load extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getVesselEta()
+    public function getDate()
     {
         return $this->hasOne(\common\models\Date::className(), ['id' => 'vessel_eta']);
     }

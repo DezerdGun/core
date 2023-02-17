@@ -17,6 +17,9 @@ $routes = [
     'POST /user/check' => 'user/check',
     'GET /user/<id:\d+>' => 'user/get',
     'GET /user' => 'user/me',
+    'PATCH /user/photo' => 'user/upload-photo',
+    'DELETE /user/photo' => 'user/delete-photo',
+    'PATCH /user/password/change' => 'user/change-password',
 
     'POST /user/recovery' => 'user/recovery',
     'POST /user/password' => 'user/password',
@@ -116,7 +119,10 @@ $routes = [
     'GET /listing/ordinary' => 'listing-ordinary/index',
     'PATCH /listing/ordinary/status' => '/listing-ordinary/update-status',
     'GET /listing/ordinary/count' => '/listing-ordinary/count',
-    'PATCH /listing/ordinary/reassign/<id:\d+>' => '/listing-ordinary/reassign'
+    'PATCH /listing/ordinary/reassign/<id:\d+>' => '/listing-ordinary/reassign',
+
+    'GET /broker/my-account' => '/broker/show',
+    'PATCH /broker/my-account' => '/broker/update'
     ];
 
 return $routes;

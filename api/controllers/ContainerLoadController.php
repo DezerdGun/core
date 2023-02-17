@@ -6,10 +6,12 @@ use api\components\HttpException;
 use api\templates\load\Large;
 use api\templates\load\Middle;
 use api\templates\loaddocuments\Small;
+use common\enums\LoadStatus;
 use common\models\Date;
 use common\models\Load;
 use common\models\LoadContainerInfo;
 use common\models\LoadDocuments;
+use common\models\search\SearchLoadContainer;
 use OpenApi\Annotations as OA;
 use Yii;
 use yii\db\Query;
@@ -138,7 +140,13 @@ class ContainerLoadController extends BaseController
         $user = Load::find()
             ->select(['status','COUNT(status) as number'])
             ->where([
-                'status' => [Load::CANCELLED,Load::COMPLETED,Load::IN_PROGRESS,Load::PENDING],
+                'status' => [
+                    LoadStatus::CANCELLED,
+                    LoadStatus::COMPLETED,
+                    LoadStatus::IN_PROGRESS,
+                    LoadStatus::PENDING,
+                    LoadStatus::ARCHIVED
+                ],
             ])
             ->groupBy(['status'])
             ->asArray()
@@ -155,6 +163,7 @@ class ContainerLoadController extends BaseController
      *         name="status",
      *         in="query",
      *         required=false,
+     *
      *         description="Pending,in_Progress,Completed,Cancelled",
      *         example="Pending",
      *         @OA\Schema(
@@ -205,6 +214,116 @@ class ContainerLoadController extends BaseController
      *     tags={"container-load"},
      *     operationId="getContainerLoads",
      *     summary="getContainerLoads",
+     *    @OA\Parameter(
+     *         name="SearchLoadContainer[id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *    @OA\Parameter(
+     *         name="SearchLoadContainer[customer_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *    @OA\Parameter(
+     *         name="SearchLoadContainer[status][]",
+     *         in="query",
+     *         required=false,
+     *         description="Pending, in_Progress, Completed,Cancelled,archived",
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                  type="string"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[port_state_code][]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *                 @OA\Items(
+     *                     type="string"
+     *                 ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[destination_state_code][]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *                 @OA\Items(
+     *                     type="string"
+     *                 ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[vessel_eta_from]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="date",
+     *              pattern="^([0-9]{4})-(?:[0-9]{2})-([0-9]{2})$"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[vessel_eta_to]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="date",
+     *              pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[size]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="SearchLoadContainer[type]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="string",
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[owner_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=0
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page_size",
+     *         in="query",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=10
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -217,7 +336,7 @@ class ContainerLoadController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/LoadSmall")
+     *                 @OA\Items(ref="#/components/schemas/LoadLarge")
      *             ),
      *             @OA\Property(
      *                 property="meta",
@@ -233,9 +352,15 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionIndex($page = 0, $pageSize = 10)
+    public function actionIndex($page = 0, $pageSize = 10): array
     {
-        $query = Load::find();
+        $searchLoadContainer = new SearchLoadContainer();
+        $searchLoadContainer->load(Yii::$app->request->queryParams);
+        if ( $searchLoadContainer->validate()) {
+            $query =  $searchLoadContainer->search();
+        } else {
+            throw new HttpException(400, ['SearchLoadContainer' => $searchLoadContainer->getErrors()]);
+        }
         return $this->index($query, $page, $pageSize, Large::class);
 
     }
@@ -307,9 +432,10 @@ class ContainerLoadController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
+     * @throws \yii\base\InvalidConfigException
      */
 
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $model = new Load();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -326,12 +452,12 @@ class ContainerLoadController extends BaseController
                     $model->user_id = $masterBroker->id;
                     $model->vessel_eta = $date->id;
                     $model->save();
-                    return $this->success($model->getAsArray(Middle::class));
+                    return $this->success($model->getAsArray(Large::class));
                 } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
                     $model->user_id = $subbroker->id;
                     $model->vessel_eta = $date->id;
                     $model->save();
-                    return $this->success($model->getAsArray(Middle::class));
+                    return $this->success($model->getAsArray(Large::class));
                 } else {
                     throw new HttpException(400, 'You are not Broker');
                 }
@@ -415,12 +541,15 @@ class ContainerLoadController extends BaseController
      *      {"ClientCredentials":{}}
      *     }
      * )
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
      */
 
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->delete();
+        $model = $this->findModels($id);
+        $model->status = LoadStatus::ARCHIVED;
+        $model->update();
         return $this->success($model->getAsArray(Large::class));
     }
     private function findModel($id)
@@ -439,7 +568,7 @@ class ContainerLoadController extends BaseController
         return $model;
     }
 
-    private function findModels($id)
+    private function findModels($id): Load
     {
         $con = ['id' => $id];
         $model = Load::findOne($con);

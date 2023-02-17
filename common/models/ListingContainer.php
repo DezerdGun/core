@@ -35,10 +35,13 @@ class ListingContainer extends BaseListingContainer
 
     public static function count(): array
     {
-        return self::find()
+        $query = self::find()
             ->select(['status','COUNT(status) as number'])
             ->groupBy(['status'])
-            ->asArray()
-            ->all();
+            ->asArray();
+        if (Yii::$app->user->identity->role == User::SUB_BROKER) {
+            $query->filterWhere(['user_id' => Yii::$app->user->id]);
+        }
+        return $query->all();
     }
 }

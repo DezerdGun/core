@@ -39,33 +39,33 @@ class CarrierController extends BaseController
      *     summary="createCarrier",
      *
      * @OA\RequestBody(
-     *     request="CarrierCreateForm",
+     *     request="CarrierCreate",
      *     required=true,
      *      @OA\MediaType(
      *      mediaType="multipart/form-data",
      *          @OA\Schema(
      *              @OA\Property(
-     *                  property="CompanyCreateForm[user_id]",
+     *                  property="Carrier[user_id]",
      *                  type="integer",
      *                  example="1",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[mc_number]",
+     *                  property="Company[mc_number]",
      *                  type="string",
      *                  example="64858",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[dot]",
+     *                  property="Company[dot]",
      *                  type="string",
      *                  example="875682",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[is_dot]",
-     *                  type="boolean",
-     *                  default=true
+     *                  property="Company[is_dot]",
+     *                  type="string",
+     *                  enum={"true", "false"}
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[company_name]",
+     *                  property="Company[company_name]",
      *                  type="string",
      *                  example="Omega Global",
      *               ),
@@ -90,7 +90,7 @@ class CarrierController extends BaseController
      *                  example="35210",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[business_phone]",
+     *                  property="User[mobile_number]",
      *                  type="string",
      *                  example="+13026893120",
      *               ),
@@ -104,6 +104,18 @@ class CarrierController extends BaseController
      *                  type="string",
      *                  format="binary"
      *              ),
+     *              required={
+     *                  "Company[is_dot]",
+     *                  "Carrier[user_id]",
+     *                  "Company[company_name]",
+     *                  "Address[street_address]",
+     *                  "Address[city]",
+     *                  "Address[state_code]",
+     *                  "Address[zip]",
+     *                  "User[mobile_number]",
+     *                  "Carrier[w9_file]",
+     *                  "Carrier[ic_file]"
+     *              }
      *          )
      *     )
      * ),
@@ -115,11 +127,6 @@ class CarrierController extends BaseController
      *                 property="status",
      *                 type="string",
      *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 ref="#/components/schemas/CarrierSmall"
      *             )
      *         )
      *     ),
@@ -132,16 +139,11 @@ class CarrierController extends BaseController
 
     public function actionCreate(): array
     {
-        $model = new CompanyCreateForm();
-        $model->scenario = CompanyCreateForm::SCENARIO_CARRIER_CREATE;
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            $carrier = $this->carrierService->create($model);
-            $transaction->commit();
-        } else {
-            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-        }
-        return $this->success($carrier->getAsArray(Small::class));
+        $transaction = Yii::$app->db->beginTransaction();
+        $this->carrierService->create();
+        $transaction->commit();
+
+        return $this->success();
     }
 
     /**
@@ -217,7 +219,7 @@ class CarrierController extends BaseController
     public function actionDelete($id) {
         $model = $this->findModel($id);
         $model->delete();
-        return $this->success($model->getAsArray(Large::class));
+        return $this->success();
     }
 
     private function findModel($id)

@@ -6,6 +6,7 @@ use common\models\Load;
 use common\models\LoadContainerInfo;
 use common\models\Owner;
 use common\models\User;
+use OpenApi\Annotations as OA;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -60,25 +61,14 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'LoadReferenceNumber' => $model->load_reference_number,
-            'load_id' => [
-                $model->load_id,
-                Load::find()
-                    ->select('id,user_id,consignee_id,port_id,customer_id,status,vessel_eta')
-                    ->where(['id' => $model->load_id ])
-                    ->asArray()->one(),
-            ],
-            'container_number' => $model->container_number,
-            'size' => $model->size,
-            'type' => $model->type,
-            'owner' => Owner::find()
-                        ->select('name')
-                        ->where(['id' => $model->owner])
-                        ->asArray()->one(),
-
-            'vessel_name' => $model->vessel_name,
+            'owner' => $model->owner->name,
+            'vesselName' => $model->vessel_name,
             'mbl' => $model->mbl,
             'hbl' => $model->hbl,
+            'type' => $model->type,
+            'container_number' => $model->container_number,
+            'loadReferenceNumber' => $model->load_reference_number,
+            'size' => $model->size,
 
         ];
     }

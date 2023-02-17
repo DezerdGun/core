@@ -8,6 +8,7 @@ use api\khalsa\repositories\CompanyRepository;
 use common\models\Company;
 use Yii;
 use api\components\HttpException;
+use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
 
 class CompanyService
@@ -25,19 +26,16 @@ class CompanyService
         $this->addressService = $addressService;
     }
 
-    public function create(CompanyCreateForm $form): Company
+    /**
+     * @throws HttpException
+     * @throws InvalidConfigException
+     */
+    public function create(Company $model): Company
     {
         $address = $this->addressService->create();
-
-        $model = new Company();
         $model->address_id = $address->id;
-        $model->mc_number = $form->mc_number;
-        $model->dot = $form->dot;
-        $model->company_name = $form->company_name;
-        $model->business_phone = $form->business_phone;
-        $model->ein = $form->ein;
 
-        if ($model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $this->companyRepository->create($model);
         } else {
             throw new HttpException(400, ['Company' => $model->getErrors()]);

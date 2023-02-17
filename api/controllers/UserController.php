@@ -8,6 +8,7 @@ use api\forms\user\UserNewPasswordForm;
 use api\forms\user\UserRecoveryForm;
 use api\forms\user\UserResendForm;
 use api\forms\user\UserCreateForm;
+use api\khalsa\services\UserService;
 use api\templates\user\Large;
 use api\templates\user\Small;
 use common\models\User;
@@ -16,6 +17,19 @@ use yii\web\NotFoundHttpException;
 
 class UserController extends BaseController
 {
+    public $userService;
+    public function __construct
+    (
+        $id,
+        $module,
+        $config = [],
+        UserService $userService
+    )
+    {
+        parent::__construct($id, $module, $config);
+        $this->userService = $userService;
+    }
+
     /**
      * @OA\Post(
      *     path="/user",
@@ -298,7 +312,7 @@ class UserController extends BaseController
      * )
      */
 
-    function actionMe()
+    function actionMe(): array
     {
         $models = yii::$app->user->getId();
         $model = User::findOne(['id' => $models]);
@@ -312,7 +326,128 @@ class UserController extends BaseController
         }
         return $this->success($rows);
     }
+    /**
+     * @OA\Patch (
+     *     path="/user/photo",
+     *     tags={"user"},
+     *     operationId="uploadPhoto",
+     *     summary="updatePhoto",
+     *     @OA\RequestBody(
+     *          request="ListingContainerForm",
+     *         required=true,
+     *         @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  @OA\Property (
+     *                      property="User[user_picture]",
+     *                      type="string",
+     *                      format="binary"
+     *                  ),
+     *                  required={
+     *                      "User[user_picture]",
+     *                  }
+     *              )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+    public function actionUploadPhoto()
+    {
+        $this->userService->uploadPhoto();
+        return $this->success();
+    }
+    /**
+     * @OA\Delete(
+     *     path="/user/photo",
+     *     tags={"user"},
+     *     operationId="deleteUserPhoto",
+     *     summary="deleteUserPhoto",
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionDeletePhoto(): array
+    {
+        $this->userService->deletePhoto();
+        return $this->success();
+    }
 
-
+    /**
+     * @OA\Patch (
+     *     path="/user/password/change",
+     *     tags={"user"},
+     *     operationId="changePassword",
+     *     summary="changePassword",
+     *     @OA\RequestBody(
+     *          request="UserChangePassword",
+     *         required=true,
+     *         @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  @OA\Property (
+     *                      property="old_password",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="new_password",
+     *                      type="string"
+     *                  ),
+     *                  required={
+     *                      "old_password",
+     *                      "new_password"
+     *                  }
+     *              )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+    public function actionChangePassword(): array
+    {
+        $this->userService->changePassword();
+        return $this->success();
+    }
 
 }

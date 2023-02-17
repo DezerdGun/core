@@ -29,11 +29,10 @@ class Address extends BaseAddress
         return ArrayHelper::merge(
             parent::rules(),
             [
-
-                [['street_address', 'zip','city'],'required'],
+                [['street_address', 'zip','city', 'state_code'],'required'],
                 // the name, subject and body attributes are required
                 ['state_code', 'safe'],
-                ['state_code', 'exist', 'targetClass' => '\common\models\State', 'targetAttribute' => 'state_code', 'message' => 'State code not found.'],
+                ['state_code', 'exist', 'targetClass' => '\common\models\State', 'targetAttribute' => ['state_code' => 'state_code'], 'message' => 'State code not found.'],
             ]
         );
     }
