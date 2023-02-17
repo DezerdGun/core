@@ -140,7 +140,13 @@ class ContainerLoadController extends BaseController
         $user = Load::find()
             ->select(['status','COUNT(status) as number'])
             ->where([
-                'status' => [Load::CANCELLED,Load::COMPLETED,Load::IN_PROGRESS,Load::PENDING],
+                'status' => [
+                    LoadStatus::CANCELLED,
+                    LoadStatus::COMPLETED,
+                    LoadStatus::IN_PROGRESS,
+                    LoadStatus::PENDING,
+                    LoadStatus::ARCHIVED
+                ],
             ])
             ->groupBy(['status'])
             ->asArray()
@@ -289,11 +295,11 @@ class ContainerLoadController extends BaseController
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *              type="integer",
+     *              type="string",
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchLoadContainer[owner]",
+     *         name="SearchLoadContainer[owner_id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -426,9 +432,10 @@ class ContainerLoadController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
+     * @throws \yii\base\InvalidConfigException
      */
 
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $model = new Load();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
