@@ -29,7 +29,12 @@ class UploadBehavior extends BaseUploadBehavior
             if ($name = ArrayHelper::getValue($this->fileInfoAttributes, 'mimeType')) {
                 $model->setAttribute($name, $this->file->type);
             }
+            if ($name = ArrayHelper::getValue($this->fileInfoAttributes, 'fileName')) {
+                $model->setAttribute($name, $this->file->name);
+                $this->file->name = Yii::$app->security->generateRandomString(50) . '.' . $this->file->extension;
+            }
         }
+
         parent::beforeSave();
     }
 

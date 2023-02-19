@@ -51,9 +51,8 @@ class CompanyService
     /**
      * @throws StaleObjectException
      */
-    public function update($id)
+    public function update(Company $model)
     {
-        $model = $this->companyRepository->getById($id);
 
         $this->addressService->update($model->address_id);
 

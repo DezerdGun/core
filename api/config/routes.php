@@ -5,14 +5,14 @@ $routes = [
 
     'GET /doc' => '/doc',
     'GET /' => '/',
-
     'POST /carrier' => 'carrier/create',
-    'GET /carrier' => 'carrier/index',
-    'GET /carrier/<id:\d+>' => 'carrier/show',
-    'POST /carrier/<id:\d+>/sign' => 'carrier/sign',
-    'DELETE /carrier/<id:\d+>' => 'carrier/delete',
+    'POST /carrier/company' => 'carrier/create-company',
+    'GET /carrier/my-account' => 'carrier/show',
+    'PATCH /carrier/my-account' => 'carrier/update',
+    'PATCH /carrier/document/w9' => 'carrier-document/update-w9',
+    'PATCH /carrier/document/ic' => 'carrier-document/update-ic',
+    'GET /carrier/document' => 'carrier-document/view',
 
-    'POST /user' => 'user/create',
     'POST /user/resend' => 'user/resend',
     'POST /user/check' => 'user/check',
     'GET /user/<id:\d+>' => 'user/get',

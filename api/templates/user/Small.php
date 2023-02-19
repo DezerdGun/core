@@ -15,6 +15,10 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="integer"
  *     ),
  *     @OA\Property(
+ *         property="user_picture",
+ *         type="string"
+ *     ),
+ *     @OA\Property(
  *         property="name",
  *         type="string"
  *     ),
@@ -36,6 +40,7 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
+            'user_picture' => ($model->user_picture) ? \Yii::$app->params['CDN_URL'] . $model->user_picture : null,
             'name' => $model->name,
             'email' => $model->email,
             'role' => $model->role

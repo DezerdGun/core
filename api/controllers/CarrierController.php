@@ -3,13 +3,12 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\forms\company\CompanyCreateForm;
+use api\forms\user\UserCreateForm;
 use api\khalsa\services\CarrierService;
 use api\templates\carrier\Large;
-use api\templates\carrier\Small;
-use common\models\Carrier;
+use common\models\User;
 use Yii;
-use yii\web\NotFoundHttpException;
+
 
 class CarrierController extends BaseController
 {
@@ -37,9 +36,49 @@ class CarrierController extends BaseController
      *     tags={"carrier"},
      *     operationId="createCarrier",
      *     summary="createCarrier",
+     *     requestBody={"$ref":"#/components/requestBodies/UserCreateForm"},
+     *       @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/UserSmall"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionCreate()
+    {
+        $model = new UserCreateForm();
+        $user = new User();
+        $user->role = $user::CARRIER;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->signup($user);
+        } else {
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
+        return $this->success($user->getAsArray(\api\templates\user\Small::class));
+    }
+    /**
+     * @OA\Post(
+     *     path="/carrier/company",
+     *     tags={"carrier"},
+     *     operationId="createCarrierCompany",
+     *     summary="createCarrierCompany",
      *
      * @OA\RequestBody(
-     *     request="CarrierCreate",
+     *     request="CarrierCompanyCreate",
      *     required=true,
      *      @OA\MediaType(
      *      mediaType="multipart/form-data",
@@ -137,10 +176,10 @@ class CarrierController extends BaseController
      * )
      */
 
-    public function actionCreate(): array
+    public function actionCreateCompany(): array
     {
         $transaction = Yii::$app->db->beginTransaction();
-        $this->carrierService->create();
+        $this->carrierService->createCompany();
         $transaction->commit();
 
         return $this->success();
@@ -148,15 +187,10 @@ class CarrierController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/carrier/{id}",
+     *     path="/carrier/my-account",
      *     tags={"carrier"},
-     *     operationId="getCarrier",
-     *     summary="getCarrier",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true
-     *     ),
+     *     operationId="getCarrierMyAccount",
+     *     summary="getCarrierMyAccount",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -176,59 +210,125 @@ class CarrierController extends BaseController
      *     security={
      *         {"main":{}},
      *      {"ClientCredentials":{}}
-     *
      *     }
      * )
      */
 
-    public function actionShow($id)
+    public function actionShow(): array
     {
-        $model = $this->findModel($id);
+        $model = $this->carrierService->show();
         return $this->success($model->getAsArray(Large::class));
     }
 
     /**
-     * @OA\Delete(
-     *     path="/carrier/{id}",
+     * @OA\Patch (
+     *     path="/carrier/my-account",
      *     tags={"carrier"},
-     *     operationId="deleteCarrier",
-     *     summary="deleteCarrier",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successfull operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="success"
-     *             )
+     *     operationId="updateCarrierMyAccount",
+     *     summary="updateCarrierMyAccount",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  @OA\Property (
+     *                      property="User[name]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Company[mc_number]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Company[dot]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="Company[is_dot]",
+     *                      type="string",
+     *                      enum={"true", "false"}
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Company[company_name]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="User[email]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="User[mobile_number]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Address[street_address]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Address[city]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Address[state_code]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Address[zip]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Carrier[scac]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Carrier[instagram]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Carrier[facebook]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Carrier[linkedin]",
+     *                      type="string"
+     *                  ),
+     *                  required={
+     *                      "Company[is_dot]",
+     *                      "User[name]",
+     *                      "Company[company_name]",
+     *                      "User[email]",
+     *                      "User[mobile_number]",
+     *                      "Address[street_address]",
+     *                      "Address[city]",
+     *                      "Address[state_code]",
+     *                      "Address[zip]"
+     *                  }
+     *              )
      *         )
      *     ),
-     *     security={
-     *         {"main":{}},
-     *      {"ClientCredentials":{}}
-     *     }
-     * )
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
      */
-
-    public function actionDelete($id) {
-        $model = $this->findModel($id);
-        $model->delete();
-        return $this->success();
-    }
-
-    private function findModel($id)
+    public function actionUpdate()
     {
-        $condition = ['id' => $id];
-        $model = Carrier::findOne($condition);
-        if (!$model){
-            throw new NotFoundHttpException();
-        }
-        return $model;
+        $transaction = Yii::$app->db->beginTransaction();
+        $this->carrierService->update();
+        $transaction->commit();
     }
+
+
 }

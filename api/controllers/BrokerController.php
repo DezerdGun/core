@@ -29,10 +29,9 @@ class BrokerController extends BaseController
      * @OA\Patch (
      *     path="/broker/my-account",
      *     tags={"broker"},
-     *     operationId="updateMyAccount",
+     *     operationId="updateBrokerMyAccount",
      *     summary="updateMyAccount",
      *     @OA\RequestBody(
-     *          request="ListingContainerForm",
      *         required=true,
      *         @OA\MediaType(
      *              mediaType="multipart/form-data",
@@ -58,6 +57,10 @@ class BrokerController extends BaseController
      *                      type="string"
      *                  ),
      *                  @OA\Property (
+     *                      property="Address[street_address]",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property (
      *                      property="Address[city]",
      *                      type="string"
      *                  ),
@@ -75,8 +78,8 @@ class BrokerController extends BaseController
      *                      "User[mobile_number]",
      *                      "Company[company_name]",
      *                      "Company[dot]",
+     *                      "Address[street_address]",
      *                      "Address[city]",
-     *                      "Adress[street_address]",
      *                      "Address[state_code]",
      *                      "Address[zip]"
      *                  }
@@ -111,8 +114,8 @@ class BrokerController extends BaseController
      * @OA\Get(
      *     path="/broker/my-account",
      *     tags={"broker"},
-     *     operationId="getMyAccount",
-     *     summary="getMyAccount",
+     *     operationId="getBrokerMyAccount",
+     *     summary="getBrokerMyAccount",
      *       @OA\Response(
      *         response=200,
      *         description="successfull operation",

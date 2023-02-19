@@ -3,18 +3,13 @@
 namespace api\templates\broker;
 
 use common\models\Broker;
-use common\models\User;
-use OpenApi\Annotations as OA;
 use TRS\RestResponse\templates\BaseTemplate;
+use Yii;
 
 /**
  *
  * @OA\Schema(
  *     schema="BrokerLarge",
- *         @OA\Property(
- *              property="id",
- *              type="integer"
- *         ),
  *         @OA\Property(
  *              property="user_picture",
  *              type="string",
@@ -65,8 +60,7 @@ class Large extends BaseTemplate
         /** @var Broker $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'user_picture' => $model->user->user_picture,
+            'user_picture' => ($model->user->user_picture) ? Yii::$app->params['CDN_URL'] . $model->user->user_picture : null,
             'name' => $model->user->name,
             'email' => $model->user->email,
             'mobile_number' => $model->user->mobile_number,

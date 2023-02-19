@@ -3,9 +3,9 @@
 namespace api\khalsa\services;
 
 use api\components\HttpException;
-use api\forms\company\CompanyCreateForm;
 use api\khalsa\repositories\ContactInfoRepository;
 use api\khalsa\repositories\CustomerRepository;
+use common\models\Company;
 use common\models\ContactInfo;
 use common\models\Customer;
 use Yii;
@@ -38,10 +38,10 @@ class CustomerService
 
     }
 
-    public function create(CompanyCreateForm $form)
+    public function create()
     {
-
-        $company = $this->companyService->create($form);
+        $company = new Company();
+        $this->companyService->create($company);
 
         $contactInfo = new ContactInfo();
         $contactInfo->scenario = ContactInfo::SCENARIO_CUSTOMER;
@@ -80,7 +80,7 @@ class CustomerService
     {
         $model = $this->customerRepository->getById($id);
 
-        $this->companyService->update($model->company_id);
+        $this->companyService->update($model->company);
 
         $contactInfo = $this->contactInfoRepository->getById($model->contact_info_id);
         $contactInfo->scenario = ContactInfo::SCENARIO_CUSTOMER;

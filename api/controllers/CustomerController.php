@@ -126,22 +126,22 @@ class CustomerController extends BaseController
      *                  enum={"Load owner","Broker", "Trucker"}
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[company_name]",
+     *                  property="Company[company_name]",
      *                  type="string",
      *                  example="Omega Global",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[mc_number]",
+     *                  property="Company[mc_number]",
      *                  type="string",
      *                  example="8054684",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[dot]",
+     *                  property="Company[dot]",
      *                  type="string",
      *                  example="875682",
      *               ),
      *              @OA\Property(
-     *                  property="CompanyCreateForm[ein]",
+     *                  property="Company[ein]",
      *                  type="string",
      *                  example="53-2307147",
      *               ),
@@ -197,7 +197,7 @@ class CustomerController extends BaseController
      *              ),
      *              required={
      *                  "Customer[type]",
-     *                  "CompanyCreateForm[company_name]",
+     *                  "Company[company_name]",
      *                  "Address[street_address]",
      *                  "Address[city]",
      *                  "Address[state_code]",
@@ -229,14 +229,9 @@ class CustomerController extends BaseController
      */
     public function actionCreate(): array
     {
-        $model = new CompanyCreateForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            $customer = $this->customerService->create($model);
-            $transaction->commit();
-        } else {
-            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-        }
+        $transaction = Yii::$app->db->beginTransaction();
+        $this->customerService->create();
+        $transaction->commit();
         return $this->success();
     }
 
