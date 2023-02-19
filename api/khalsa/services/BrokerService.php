@@ -41,7 +41,7 @@ class BrokerService
         $this->userService->update($user);
 
         if ($model->company_id) {
-            $this->companyService->update($model->company_id);
+            $this->companyService->update($model->company);
         } else {
             $company = new Company();
             $this->companyService->create($company);

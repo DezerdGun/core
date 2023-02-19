@@ -4,7 +4,9 @@
 
 namespace common\models\base;
 
-use Yii;
+use common\enums\UserRole;
+use common\models\Company;
+use common\models\User;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -20,9 +22,18 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  * @property string $aliasModel
  * @property integer $company_id
+ * @property string $scac
+ * @property string $instagram
+ * @property string $facebook
+ * @property string $linkedin
+ * @property string $w9_name
+ * @property string $ic_name
+ * @property User $user
+ * @property Company $company
  */
 abstract class Carrier extends \yii\db\ActiveRecord
 {
+    public $role = UserRole::CARRIER;
 
     /**
      * @inheritdoc
@@ -52,8 +63,9 @@ abstract class Carrier extends \yii\db\ActiveRecord
         return [
             [['user_id', 'company_id'], 'required'],
             [['user_id', 'company_id'], 'integer'],
-            [['user_id'], 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => ['user_id' => 'id'], 'skipOnEmpty' => true],
+            [['user_id'], 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => ['user_id' => 'id', 'role' => 'role'], 'skipOnEmpty' => true],
             ['user_id', 'unique', 'targetClass' => '\common\models\Carrier', 'message' => 'Carrier already exists'],
+            [['scac','instagram', 'facebook', 'linkedin', 'w9_name', 'ic_name'], 'string']
         ];
     }
 
@@ -65,15 +77,19 @@ abstract class Carrier extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => "User ID",
-            'mc' => 'Mc',
-            'dot' => 'Dot',
-            'ein' => 'Ein',
-            'w9_file' => 'W 9',
-            'ic_file' => 'Ic',
+            'w9_file' => 'W9 File',
+            'ic_file' => 'IC File',
             'w9_mime_type' => 'w9 mime type',
             'ic_mime_type' => 'ic mime type',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'company_id' => 'Company ID',
+            'scac' => 'SCAC',
+            'instagram' => 'Instagram',
+            'facebook' => 'Facebook',
+            'linkedin' => 'Linkedin',
+            'w9_name' => 'W9 Name',
+            'ic_name' => 'IC Name'
         ];
     }
 
@@ -88,5 +104,16 @@ abstract class Carrier extends \yii\db\ActiveRecord
         return new \api\models\CarrierQuery(get_called_class());
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
+    }
 
+    public function getCompany(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
+    }
 }

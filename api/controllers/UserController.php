@@ -32,48 +32,6 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/user",
-     *     tags={"user"},
-     *     operationId="User",
-     *     summary="createUser",
-     *     requestBody={"$ref":"#/components/requestBodies/UserCreateForm"},
-     *       @OA\Response(
-     *         response=200,
-     *         description="successfull operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="success"
-     *             ),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 ref="#/components/schemas/UserSmall"
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *     {"ClientCredentials":{}}
-     *     }
-     * )
-     */
-
-    public function actionCreate()
-    {
-       $model = new UserCreateForm();
-       $user = new User();
-       $user->role = $user::CARRIER;
-       if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-           $model->signup($user);
-       } else {
-           throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-       }
-       return $this->success($user->getAsArray(Small::class));
-    }
-
-    /**
-     * @OA\Post(
      *     path="/user/resend",
      *     tags={"user"},
      *     operationId="resendConfirmationCode",
@@ -151,7 +109,7 @@ class UserController extends BaseController
         }  else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
-        return $this->success('Thank For your Registration');
+        return $this->success();
     }
 
     /**
@@ -287,8 +245,8 @@ class UserController extends BaseController
      * @OA\Get(
      *     path="/user",
      *     tags={"user"},
-     *     operationId="refreshAccessTokenGetMe",
-     *     summary="/GetMe",
+     *     operationId="getMe",
+     *     summary="/getMe",
      *       @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -298,9 +256,10 @@ class UserController extends BaseController
      *                 type="string",
      *                 example="success"
      *             ),
-     *          @OA\Property(
+     *             @OA\Property(
      *                 property="data",
      *                 type="object",
+     *                 ref="#/components/schemas/UserSmall"
      *             ),
      *         )
      *     ),
@@ -314,17 +273,10 @@ class UserController extends BaseController
 
     function actionMe(): array
     {
-        $models = yii::$app->user->getId();
-        $model = User::findOne(['id' => $models]);
-        $rows = (new \yii\db\Query())
-            ->select(['id','username','name','email','role'])
-            ->from('user')
-            ->where(['id' => $model->id])
-            ->all();
-        if (!$rows) {
-            throw new NotFoundHttpException('User didnt find!');
-        }
-        return $this->success($rows);
+        $id = yii::$app->user->id;
+        $model = User::findOne(['id' => $id]);
+
+        return $this->success($model->getAsArray(Small::class));
     }
     /**
      * @OA\Patch (
