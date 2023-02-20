@@ -19,6 +19,7 @@ class UserService
 
     public function update(User $model)
     {
+        $model->load(Yii::$app->request->post());
         if ($model->validate()) {
             $this->userRepository->update($model);
         } else {

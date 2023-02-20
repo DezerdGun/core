@@ -13,11 +13,18 @@ class CarrierService
 {
     private $carrierRepository;
     private $companyService;
+    private $userService;
 
-    public function __construct(CarrierRepository $repository, CompanyService $companyService)
+    public function __construct
+    (
+        CarrierRepository $repository,
+        CompanyService $companyService,
+        UserService $userService
+    )
     {
         $this->carrierRepository = $repository;
         $this->companyService = $companyService;
+        $this->userService = $userService;
     }
 
     /**
@@ -48,6 +55,9 @@ class CarrierService
         $company = $model->company;
         $company->setScenario(Company::SCENARIO_CARRIER_UPDATE);
         $this->companyService->update($company);
+
+        $user = $model->user;
+        $this->userService->update($user);
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $this->carrierRepository->update($model);
