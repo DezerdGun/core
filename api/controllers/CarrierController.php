@@ -328,6 +328,7 @@ class CarrierController extends BaseController
         $transaction = Yii::$app->db->beginTransaction();
         $this->carrierService->update();
         $transaction->commit();
+        return $this->success();
     }
 
 
