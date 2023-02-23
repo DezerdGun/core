@@ -198,7 +198,7 @@ class ContainerLoadController extends BaseController
      * )
      */
 
-    public function actionStatus($status = 0,$page = 0,  $pageSize = 10)
+    public function actionStatus($status = 0,$page = 0,  $pageSize = 10): array
     {
         $query = Load::find();
         if ($status) {
@@ -224,6 +224,14 @@ class ContainerLoadController extends BaseController
      *     ),
      *    @OA\Parameter(
      *         name="SearchLoadContainer[customer_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[load_id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -299,11 +307,11 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchLoadContainer[owner_id]",
+     *         name="SearchLoadContainer[owner]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *             type="integer"
+     *             type="string"
      *         )
      *     ),
      *     @OA\Parameter(

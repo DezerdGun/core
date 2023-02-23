@@ -4,23 +4,17 @@ namespace common\models;
 
 use common\models\traits\Template;
 use Yii;
-use \common\models\base\Load as BaseLoad;
-use yii\db\ActiveQuery;
+use \common\models\base\LoadOrdinaryReferenceNumber as BaseLoadOrdinaryReferenceNumber;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "load".
+ * This is the model class for table "load_ordinary_reference_number".
  */
-class Load extends BaseLoad
+class LoadOrdinaryReferenceNumber extends BaseLoadOrdinaryReferenceNumber
 {
     use Template;
 
-    const PENDING = 'Pending';
-    const IN_PROGRESS = 'in_Progress';
-    const COMPLETED = 'Completed';
-    const CANCELLED = 'Cancelled';
-
-    public function behaviors(): array
+    public function behaviors()
     {
         return ArrayHelper::merge(
             parent::behaviors(),
@@ -30,7 +24,7 @@ class Load extends BaseLoad
         );
     }
 
-    public function rules(): array
+    public function rules()
     {
         return ArrayHelper::merge(
             parent::rules(),

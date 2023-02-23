@@ -24,6 +24,8 @@ use Yii;
  * @property string $urgent
  * @property string $urgent_description
  * @property string $note
+ *
+ * @property \common\models\OrdinaryLoad $load
  * @property string $aliasModel
  */
 abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
@@ -48,7 +50,8 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
             [['note'], 'string'],
-            [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'weight_in_LBs', 'weight_in_LBs_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255]
+            [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'weight_in_LBs', 'weight_in_LBs_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255],
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
 
@@ -74,6 +77,14 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             'urgent_description' => 'Urgent Description',
             'note' => 'Note',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoad()
+    {
+        return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'load_id']);
     }
 
 

@@ -47,6 +47,11 @@ $routes = [
     'GET /container-load/count' => 'container-load/active',
     'PATCH /container-load/status/<id:\d+>' => 'container-load/reassign',
     'POST /load-additional-info' => 'load-additional-info/create',
+    'POST /load-reference-number' => 'load-reference-number/create',
+
+    'POST /holds-load-container-info' => 'holds-load-container-info/create',
+    'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
+    'GET /holds-load-container-info' => 'holds-load-container-info/index',
 
 
     'PATCH /load-document/<id:\d+>' => 'load-document/update',
@@ -84,6 +89,9 @@ $routes = [
     'GET /ordinary-load/count' => 'ordinary-load/active',
     'GET /ordinary-load/<id:\d+>' => 'ordinary-load/show',
     'POST /load-ordinary-additional-info' => 'load-ordinary-additional-info/create',
+    'POST /load-ordinary-description' => 'load-ordinary-description/create',
+    'POST /ordinary-load-reference-number' => 'ordinary-load-reference-number/create',
+    'PATCH /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/update',
 
     'POST /customer' => 'customer/create',
     'DELETE /customer/<id:\d+>' => 'customer/delete',

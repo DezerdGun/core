@@ -175,7 +175,10 @@ class Large extends BaseTemplate
                 'noteFromBroker' => $model->loadAdditionalInfos->note_from_broker,
             ],
             'loadContainerInfo' => [
-                'owner_id' => $model->loadContainerInfos->owner_id,
+                'owner' => [
+                   'id' => $model->loadContainerInfos->owner->id,
+                   'name' => $model->loadContainerInfos->owner->name
+                    ],
                 'vesselName' => $model->loadContainerInfos->vessel_name,
                 'mbl' => $model->loadContainerInfos->mbl,
                 'hbl' => $model->loadContainerInfos->hbl,

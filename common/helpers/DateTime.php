@@ -11,12 +11,12 @@ class DateTime
 {
     public static function nowDateYMD()
     {
-        return strftime("%F"); // Same as "%Y-%m-%d" (commonly used in database datestamps) Example: 2009-02-05
+        return date('Y-m-d'); // Same as "%Y-%m-%d" (commonly used in database datestamps) Example: 2009-02-05
     }
 
     public static function nowTime()
     {
-        return strftime("%R"); // Same as "%H:%M", Example: 00:35 for 12:35 AM, 16:44 for 4:44 PM
+        return date("H:i"); // Same as "%H:%M", Example: 00:35 for 12:35 AM, 16:44 for 4:44 PM
     }
 
     public static function setLocalTimestamp($behaviors, $attributes = [])

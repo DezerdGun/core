@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\templates\user\Large;
 use common\models\Broker;
 use common\models\User;
+use OpenApi\Annotations as OA;
 use yii\db\StaleObjectException;
 
 
@@ -79,7 +80,8 @@ class ProfileController extends BaseController
         $condition = ['verification_token' => $verification_token];
         $model = User::findOne($condition);
         if ($condition){
-            $model->load(\Yii::$app->getRequest()->post(), 'Profile') && $model->validate();
+            $model->load(\Yii::$app->getRequest()->post(), 'Profile');
+            $model->validate();
             $model->setPassword($model->password_hash);
             $model->generateAuthKey();
             $model->verification_token = null;
