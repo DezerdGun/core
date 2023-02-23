@@ -19,7 +19,6 @@ class m221029_160520_edit_load_note_table extends Migration
             'created_by' => $this->integer()->notNull(),
             'created_at' => $this->timestamp()->notNull()->defaultExpression('LOCALTIMESTAMP'),
             'note_from_carrier' => $this->text()
-
         ]);
 
         $this->addForeignKey(

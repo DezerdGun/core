@@ -19,6 +19,7 @@ use yii\db\ActiveQuery;
 class SearchLoadContainer extends Model
 {
     public $id;
+    public $load_id;
     public $customer_id;
     public $port_id;
     public $destination_id;
@@ -26,7 +27,7 @@ class SearchLoadContainer extends Model
     public $container_number;
     public $size;
     public $type;
-    public $owner_id;
+    public $owner;
     public $vessel_eta_from;
     public $vessel_eta_to;
     public $status;
@@ -37,8 +38,8 @@ class SearchLoadContainer extends Model
     public function rules(): array
     {
         return [
-            [['id', 'port_id','destination_id','size','owner_id','customer_id', 'container_number'], 'integer'],
-            [['type'], 'string'],
+            [['id','load_id', 'port_id','destination_id','size','customer_id', 'container_number'], 'integer'],
+            [['type','owner'], 'string'],
             [['status'], 'each', 'rule' => ['in', 'range' => LoadStatus::getEnums()]],
             [['port_state_code', 'destination_state_code', 'container_code'], 'each', 'rule' => ['string']],
             [['port_id'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['port_state_code' => 'state_code']]],
@@ -69,6 +70,11 @@ class SearchLoadContainer extends Model
                     $query->from(['consignee' => Location::tableName()]);
                 },
                 'loadContainerInfos' => function (ActiveQuery $query) {
+                    $query->joinWith([
+                        'owner' => function (ActiveQuery $query) {
+                            $query->from(['loadContainerInfosOwner' => Owner::tableName()]);
+                        }
+                    ]);
                     $query->from(['loadContainerInfos' => LoadContainerInfo::tableName()]);
                 },
                 'loadAdditionalInfos' => function (ActiveQuery $query) {
@@ -85,6 +91,14 @@ class SearchLoadContainer extends Model
 
         if ($this->id) {
             $query->Where(['like', 'CAST(container.id AS CHAR)', $this->id . '%', false]);
+        }
+
+        if ($this->owner) {
+            $query->andFilterWhere(['loadContainerInfosOwner.name' => $this->owner]);
+        }
+
+        if ($this->load_id) {
+            $query->andFilterWhere(['loadContainerInfos.load_id' => $this->load_id]);
         }
 
         if ($this->status) {
@@ -109,10 +123,6 @@ class SearchLoadContainer extends Model
 
         if ($this->type) {
             $query->andFilterWhere(['loadContainerInfos.type' => $this->type]);
-        }
-
-        if ($this->owner_id) {
-            $query->andFilterWhere(['loadContainerInfos.owner_id' => $this->owner_id]);
         }
 
         if ($this->port_state_code) {

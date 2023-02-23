@@ -4,6 +4,7 @@ namespace api\templates\loadOrdinaryAdditionalInfo;
 
 
 use common\models\LoadOrdinaryAdditionalInfo;
+use OpenApi\Annotations as OA;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -12,11 +13,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *
  * @OA\Schema(
  *     schema="LoadOrdinaryAdditionalInfoLarge",
- *     @OA\Property(
- *          property="id",
- *          type="object",
- *          description="Object",
- *             @OA\Property(
+ *              @OA\Property(
  *                 property="id",
  *                 type="integer"
  *         ),
@@ -76,9 +73,9 @@ use TRS\RestResponse\templates\BaseTemplate;
  *                 property="note",
  *                 type="string"
  *         ),
- *     ),
  * )
  */
+
 class Large extends BaseTemplate
 {
     protected function prepareResult()

@@ -5,6 +5,7 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\templates\loadOrdinaryAdditionalInfo\Large;
 use common\models\LoadOrdinaryAdditionalInfo;
+use common\models\OrdinaryLoad;
 use yii\web\NotFoundHttpException;
 
 class LoadOrdinaryAdditionalInfoController extends BaseController
@@ -12,7 +13,7 @@ class LoadOrdinaryAdditionalInfoController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/load-ordinary-additional-info/create",
+     *     path="/load-ordinary-additional-info",
      *     tags={"ordinary-load"},
      *     operationId="LoadOrdinaryAdditionalInfo",
      *     summary="createLoadOrdinaryAdditionalInfo",
@@ -96,6 +97,11 @@ class LoadOrdinaryAdditionalInfoController extends BaseController
      *                 property="status",
      *                 type="string",
      *                 example="success"
+     *             ),
+     *              @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/LoadOrdinaryAdditionalInfoLarge")
      *             ),
      *         )
      *     ),

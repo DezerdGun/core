@@ -16,10 +16,6 @@ class ContainerInfoService
         $this->containerInfoRepository = $containerInfoRepository;
     }
 
-    /**
-     * @throws InvalidConfigException
-     * @throws HttpException
-     */
     public function create(): ListingContainerInfo
     {
         $model = new ListingContainerInfo();
