@@ -4,30 +4,32 @@ namespace api\khalsa\services;
 
 use api\components\HttpException;
 use api\khalsa\interfaces\ServiceInterface;
-use api\khalsa\repositories\LoadReferenceNumberRepository;
-use common\models\LoadReferenceNumber;
+use api\khalsa\repositories\LoadChassisLocationsRepository;
+use common\models\Chassis_locations;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
 
-class LoadReferenceNumberService implements ServiceInterface
+class LoadChassisLocationsService implements ServiceInterface
 {
-    public $loadReference;
-
-    public function __construct(LoadReferenceNumberRepository $loadReference)
+    public $chassisLocationsRepository;
+    /**
+     * @var LoadChassisLocationsRepository
+     */
+    public function __construct(LoadChassisLocationsRepository $chassisLocationsRepository)
     {
-        $this->loadReference = $loadReference;
+        $this->chassisLocationsRepository = $chassisLocationsRepository;
     }
 
     /**
      * @throws InvalidConfigException
      * @throws HttpException
      */
-    public function create():LoadReferenceNumber
+    public function create(): Chassis_locations
     {
-        $model = new LoadReferenceNumber();
+        $model = new Chassis_locations();
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
-            $this->loadReference->create($model);
+            $this->chassisLocationsRepository->create($model);
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
@@ -39,8 +41,8 @@ class LoadReferenceNumberService implements ServiceInterface
      */
     public function delete($id)
     {
-        $model = $this->loadReference->getById($id);
-        $this->loadReference->delete($model);
+        $model = $this->chassisLocationsRepository->getById($id);
+        $this->chassisLocationsRepository->delete($model);
     }
 
     /**
@@ -50,10 +52,10 @@ class LoadReferenceNumberService implements ServiceInterface
      */
     public function update($id)
     {
-        $model = $this->loadReference->getById($id);
+        $model = $this->chassisLocationsRepository->getById($id);
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
-            $this->loadReference->update($model);
+            $this->chassisLocationsRepository->update($model);
         } else throw new HttpException(400, [$model->formName() => $model->getErrors()]);
     }
 }

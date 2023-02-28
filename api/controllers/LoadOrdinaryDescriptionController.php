@@ -5,8 +5,11 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\LoadOrdinaryDescriptionService;
 use api\templates\load_ordinary_description\Large;
+use common\models\LoadOrdinaryDescription;
+use common\models\LoadOrdinaryDescriptionRows;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
+use yii\db\Exception;
 
 class LoadOrdinaryDescriptionController extends BaseController
 {
@@ -27,50 +30,101 @@ class LoadOrdinaryDescriptionController extends BaseController
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
+     *          encoding={
+     *             "From[pallets][]": {
+     *                 "explode": true
+     *             },
+     *          "From[commodity][]": {
+     *                 "explode": true
+     *             },
+     *         "From[description][]": {
+     *                 "explode": true
+     *             },
+     *          "From[description][]": {
+     *                 "explode": true
+     *             },
+     *          "From[pieces][]": {
+     *                 "explode": true
+     *             },
+     *          "From[weight_KGs][]": {
+     *                 "explode": true
+     *             },
+     *          "From[weight_LBs][]": {
+     *                 "explode": true
+     *             },
+     *         },
      *             @OA\Schema(
      *                  @OA\Property(
-     *                     property="load_id",
+     *                     property="Load[load_id]",
      *                     type="integer",
      *                     example="1",
      *                     description="1"
      *                 ),
-     *                  @OA\Property(
-     *                     property="commodity",
-     *                     type="string",
-     *                     example="Fruits",
-     *                     description="Fruits"
-     *                 ),
-     *                  @OA\Property (
-     *                      property="description",
+     *                   @OA\Property (
+     *                     property="From[pallets][]",
      *                      type="array",
      *                      @OA\Items(
-     *                          type="string"
+     *                           type="integer",
+     *                           example="12",
      *                      )
      *                  ),
+     *                   @OA\Property (
+     *                      property="From[commodity][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="string",
+     *                          example="Fruits",
+     *                      )
+     *                  ),
+     *                   @OA\Property (
+     *                       property="From[description][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="string",
+     *                          example="Apples, Peaches, Bananas",
+     *                      )
+     *                  ),
+     *                 @OA\Property (
+     *                      property="From[pieces][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="integer",
+     *                          example="3",
+     *                      )
+     *                  ),
+     *                 @OA\Property (
+     *                      property="From[weight_KGs][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="integer",
+     *                          example="3.33",
+     *                      )
+     *                  ),
+     *                 @OA\Property (
+     *                       property="From[weight_LBs][]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="integer",
+     *                          example="9",
+     *                      )
+     *                  ),
+     *                  @OA\Property (
+     *                      property="Load[pallets]",
+     *                      type="integer",
+     *                      example="28",
+     *                      description="(number) => overall Pallets"
+     *                  ),
      *                  @OA\Property(
-     *                     property="pieces",
+     *                     property="Load[pallet_size]",
      *                     type="integer",
-     *                     example="3",
-     *                     description="3"
+     *                     enum={"48x40","42x42","48x48"}
      *                 ),
-     *                  @OA\Property(
-     *                     property="pallets",
-     *                     type="integer",
-     *                     example="12",
-     *                     description="12"
-     *                 ),
-     *                  @OA\Property(
-     *                     property="weight_KGs",
-     *                     type="integer",
-     *                     example="52.123",
-     *                     description="52.123"
-     *                 ),
-     *                  @OA\Property(
-     *                     property="weight_LBs",
-     *                     type="integer",
-     *                     example="9.000",
-     *                     description="9.000"
-     *                 ),
+     *                  @OA\Property (
+     *                       property="Load[weight_LBs]",
+     *                       type="integer",
+     *                       example="24",
+     *                      description="Total weight (LBs) => overall weight (LBs)"
+     *                  ),
      *             )
      *         )
      *     ),
@@ -97,10 +151,11 @@ class LoadOrdinaryDescriptionController extends BaseController
      * )
      * @throws HttpException
      * @throws InvalidConfigException
+     * @throws Exception
      */
     public function actionCreate(): array
     {
-       $model =  $this->loadOrdinaryDescription->create();
+        $model =  $this->loadOrdinaryDescription->create();
         return $this->success($model->getAsArray(Large::class));
     }
 }

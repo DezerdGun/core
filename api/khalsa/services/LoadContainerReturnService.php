@@ -4,30 +4,32 @@ namespace api\khalsa\services;
 
 use api\components\HttpException;
 use api\khalsa\interfaces\ServiceInterface;
-use api\khalsa\repositories\LoadReferenceNumberRepository;
-use common\models\LoadReferenceNumber;
+use api\khalsa\repositories\LoadContainerReturnRepository;
+use common\models\Container_return;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
 
-class LoadReferenceNumberService implements ServiceInterface
+class LoadContainerReturnService implements ServiceInterface
 {
-    public $loadReference;
-
-    public function __construct(LoadReferenceNumberRepository $loadReference)
+    public $ContainerReturnRepository;
+    /**
+     * @var LoadContainerReturnRepository
+     */
+    public function __construct(LoadContainerReturnRepository $ContainerReturnRepository)
     {
-        $this->loadReference = $loadReference;
+        $this->ContainerReturnRepository = $ContainerReturnRepository;
     }
 
     /**
-     * @throws InvalidConfigException
      * @throws HttpException
+     * @throws InvalidConfigException
      */
-    public function create():LoadReferenceNumber
+    public function create(): Container_return
     {
-        $model = new LoadReferenceNumber();
+        $model = new Container_return();
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
-            $this->loadReference->create($model);
+            $this->ContainerReturnRepository->create($model);
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
@@ -39,21 +41,20 @@ class LoadReferenceNumberService implements ServiceInterface
      */
     public function delete($id)
     {
-        $model = $this->loadReference->getById($id);
-        $this->loadReference->delete($model);
+        $model = $this->ContainerReturnRepository->getById($id);
+        $this->ContainerReturnRepository->delete($model);
     }
 
     /**
-     * @throws StaleObjectException
      * @throws InvalidConfigException
      * @throws HttpException
      */
     public function update($id)
     {
-        $model = $this->loadReference->getById($id);
+        $model = $this->ContainerReturnRepository->getById($id);
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
-            $this->loadReference->update($model);
+            $this->ContainerReturnRepository->update($model);
         } else throw new HttpException(400, [$model->formName() => $model->getErrors()]);
     }
 }

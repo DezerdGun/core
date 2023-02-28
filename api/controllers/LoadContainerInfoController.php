@@ -3,14 +3,28 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use api\khalsa\services\LoadContainerInfoService;
 use api\templates\containerinfo\Small;
 use api\templates\load\Large;
 use common\models\LoadContainerInfo;
 use common\models\Load;
 use OpenApi\Annotations as OA;
+use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 class LoadContainerInfoController extends BaseController
 {
+
+    public $loadContainerInfo;
+
+    public function __construct($id, $module, $config = [],
+                                loadContainerInfoService $loadContainerInfo
+    )
+    {
+        parent::__construct($id, $module, $config);
+        $this->loadContainerInfo = $loadContainerInfo;
+
+    }
     /**
      * @OA\Post(
      *     path="/load-container-info",
@@ -130,4 +144,105 @@ class LoadContainerInfoController extends BaseController
                 [$model->formName() => $model->getErrors()]);
         }
     }
+
+    /**
+     * @OA\Patch (
+     *     path="/load-container-info/{id}",
+     *     tags={"container-load"},
+     *     operationId="updateLoadContainerInfo",
+     *     summary="updateLoadContainerInfo",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                      @OA\Property(
+     *                          property="container_number",
+     *                          type="integer",
+     *                          example="434332",
+     *                          description="NumberContainer",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="size",
+     *                          type="integer",
+     *                          example="53",
+     *                          description="SizeContainerOwner",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="type",
+     *                          type="string",
+     *                          example="20TD",
+     *                          description="TypeContainerOwner",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="owner_id",
+     *                          type="integer",
+     *                          example="1",
+     *                          description="ContainerOwner",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="chassis",
+     *                          type="string",
+     *                 ),
+     *                       @OA\Property(
+     *                          property="chassis_size",
+     *                          type="integer",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="chassis_type",
+     *                          type="string",
+     *                          example="20TN",
+     *                          description="code Container",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="chassis_owner_id",
+     *                          type="integer",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="chassis_genset",
+     *                          type="string",
+     *                 ),
+     *                       required={
+     *                              "size",
+     *                              "container_number",
+     *                              "type",
+     *                              "owner_id",
+     *              },
+     *            )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              ),
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+
+    public function actionUpdate($id): array
+    {
+        $this->loadContainerInfo->update($id);
+        return $this->success();
+    }
+
+
+
 }

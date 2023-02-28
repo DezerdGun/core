@@ -22,26 +22,11 @@ use TRS\RestResponse\templates\BaseTemplate;
  *                     type="integer",
  *                 ),
  *                  @OA\Property(
- *                     property="commodity",
- *                     type="string",
- *                 ),
- *                  @OA\Property (
- *                      property="description",
- *                      type="array",
- *                      @OA\Items(
- *                          type="string"
- *                      )
- *                  ),
- *                  @OA\Property(
- *                     property="pieces",
- *                     type="integer",
- *                 ),
- *                  @OA\Property(
  *                     property="pallets",
  *                     type="integer",
  *                 ),
  *                  @OA\Property(
- *                     property="weight_KGs",
+ *                     property="pallet_size",
  *                     type="integer",
  *                 ),
  *                  @OA\Property(
@@ -63,12 +48,17 @@ class Large extends BaseTemplate
         $this->result = [
             'id' => $model->id,
             'load_id' => $model->load_id,
-            'commodity' => $model->commodity,
-            'description' => $model->description,
-            'pieces' => $model->pieces,
-            'pallets' => $model->pallets,
-            'weight_KGs' => $model->weight_KGs,
-            'weight_LBs' => $model->weight_LBs,
+            'commodity' => $model->loadOrdinaryDescriptionRows->commodity,
+            'description' => $model->loadOrdinaryDescriptionRows->description,
+            'pieces' => $model->loadOrdinaryDescriptionRows->pieces,
+            'pallets' => $model->loadOrdinaryDescriptionRows->pallets,
+            'weight_KGs' => $model->loadOrdinaryDescriptionRows->weight_KGs,
+            'weight_LBs' => $model->loadOrdinaryDescriptionRows->weight_LBs,
+            'Total' => [
+                'pallet_size' => $model->pallet_size,
+                'pallets' => $model->pallets,
+                'weight_LBs' => $model->weight_LBs,
+            ]
 
         ];
     }
