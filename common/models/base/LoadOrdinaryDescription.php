@@ -11,14 +11,12 @@ use Yii;
  *
  * @property integer $id
  * @property integer $load_id
- * @property string $commodity
- * @property string $description
- * @property integer $pieces
  * @property integer $pallets
- * @property string $weight_KGs
  * @property string $weight_LBs
+ * @property string $pallet_size
  *
  * @property \common\models\OrdinaryLoad $load
+ * @property \common\models\LoadOrdinaryDescriptionRows $loadOrdinaryDescriptionRows
  * @property string $aliasModel
  */
 abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
@@ -40,10 +38,10 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['load_id', 'pieces', 'pallets'], 'default', 'value' => null],
-            [['load_id', 'pieces', 'pallets'], 'integer'],
-            [['weight_KGs', 'weight_LBs'], 'number'],
-            [['commodity', 'description'], 'string', 'max' => 32],
+            [['load_id', 'pallets'], 'default', 'value' => null],
+            [['load_id', 'pallets'], 'integer'],
+            [['weight_LBs'], 'number'],
+            [['pallet_size'], 'string', 'max' => 255],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
@@ -56,12 +54,9 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'load_id' => 'Load ID',
-            'commodity' => 'Commodity',
-            'description' => 'Description',
-            'pieces' => 'Pieces',
             'pallets' => 'Pallets',
-            'weight_KGs' => 'Weight K Gs',
             'weight_LBs' => 'Weight L Bs',
+            'pallet_size' => 'Pallet Size',
         ];
     }
 
@@ -71,6 +66,14 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
     public function getLoad()
     {
         return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'load_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadOrdinaryDescriptionRows()
+    {
+        return $this->hasOne(\common\models\LoadOrdinaryDescriptionRows::className(), ['load_ordinary_description_id' => 'id']);
     }
 
 

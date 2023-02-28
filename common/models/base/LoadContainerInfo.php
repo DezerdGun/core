@@ -19,7 +19,14 @@ use Yii;
  * @property integer $load_reference_number
  * @property integer $size
  * @property integer $owner_id
+ * @property string $chassis
+ * @property string $chassis_type
+ * @property integer $chassis_size
+ * @property integer $chassis_owner_id
+ * @property string $chassis_genset
  *
+ * @property \common\models\Owner $chassisOwner
+ * @property \common\models\Container $chassisType
  * @property \common\models\Load $load
  * @property \common\models\Owner $owner
  * @property \common\models\Container $type0
@@ -44,12 +51,14 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['load_id', 'container_number', 'load_reference_number', 'size', 'owner_id'], 'default', 'value' => null],
-            [['load_id', 'container_number', 'load_reference_number', 'size', 'owner_id'], 'integer'],
-            [['vessel_name', 'mbl', 'hbl', 'type'], 'string', 'max' => 32],
+            [['load_id', 'container_number', 'load_reference_number', 'size', 'owner_id', 'chassis_size', 'chassis_owner_id'], 'default', 'value' => null],
+            [['load_id', 'container_number', 'load_reference_number', 'size', 'owner_id', 'chassis_size', 'chassis_owner_id'], 'integer'],
+            [['vessel_name', 'mbl', 'hbl', 'type', 'chassis', 'chassis_type', 'chassis_genset'], 'string', 'max' => 32],
             [['type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['type' => 'code']],
+            [['chassis_type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['chassis_type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
-            [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner_id' => 'id']]
+            [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner_id' => 'id']],
+            [['chassis_owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['chassis_owner_id' => 'id']]
         ];
     }
 
@@ -69,7 +78,28 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
             'load_reference_number' => 'Load Reference Number',
             'size' => 'Size',
             'owner_id' => 'Owner ID',
+            'chassis' => 'Chassis',
+            'chassis_type' => 'Chassis Type',
+            'chassis_size' => 'Chassis Size',
+            'chassis_owner_id' => 'Chassis Owner ID',
+            'chassis_genset' => 'Chassis Genset',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChassisOwner()
+    {
+        return $this->hasOne(\common\models\Owner::className(), ['id' => 'chassis_owner_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChassisType()
+    {
+        return $this->hasOne(\common\models\Container::className(), ['code' => 'chassis_type']);
     }
 
     /**

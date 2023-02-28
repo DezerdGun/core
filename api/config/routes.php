@@ -35,6 +35,16 @@ $routes = [
     'GET /lists/doc-types' => 'doc-types/index',
     'GET /lists/owner' => 'owner/index',
 
+    'POST /load-container-return' => 'load-container-return/create',
+    'PATCH /load-container-return/<id:\d+>' => 'load-container-return/update',
+    'DELETE /load-container-return/<id:\d+>' => 'load-container-return/delete',
+
+    'POST /load-chassis-locations' => 'load-chassis-locations/create',
+    'PATCH /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/update',
+    'DELETE /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/delete',
+
+    'PATCH /load-dates/<id:\d+>' => 'load-dates/update',
+    'DELETE /load-dates/<id:\d+>' => 'load-dates/delete',
 
     'POST /company' => 'company/create',
 
@@ -47,7 +57,10 @@ $routes = [
     'GET /container-load/count' => 'container-load/active',
     'PATCH /container-load/status/<id:\d+>' => 'container-load/reassign',
     'POST /load-additional-info' => 'load-additional-info/create',
+    'PATCH /load-reference-number/<id:\d+>' => 'load-reference-number/update',
     'POST /load-reference-number' => 'load-reference-number/create',
+    'PATCH /load-container-info/<id:\d+>' => 'load-container-info/update',
+    'DELETE /load-reference-number/<id:\d+>' => 'load-reference-number/delete',
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
     'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
