@@ -250,7 +250,23 @@ class ContainerLoadController extends BaseController
      *             ),
      *         )
      *     ),
+     *      @OA\Parameter(
+     *         name="SearchLoadContainer[port_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
      *     @OA\Parameter(
+     *         name="SearchLoadContainer[destination_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *      @OA\Parameter(
      *         name="SearchLoadContainer[port_state_code][]",
      *         in="query",
      *         required=false,
@@ -291,6 +307,14 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
+     *         name="SearchLoadContainer[container_number]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *     @OA\Parameter(
      *         name="SearchLoadContainer[size]",
      *         in="query",
      *         required=false,
@@ -307,11 +331,11 @@ class ContainerLoadController extends BaseController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="SearchLoadContainer[owner]",
+     *         name="SearchLoadContainer[owner_id]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *             type="string"
+     *             type="integer"
      *         )
      *     ),
      *     @OA\Parameter(
