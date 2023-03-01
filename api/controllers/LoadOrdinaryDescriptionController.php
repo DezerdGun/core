@@ -97,7 +97,7 @@ class LoadOrdinaryDescriptionController extends BaseController
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer",
-     *                          example="3.33",
+     *                          example="3408.33",
      *                      )
      *                  ),
      *                 @OA\Property (
@@ -105,7 +105,7 @@ class LoadOrdinaryDescriptionController extends BaseController
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer",
-     *                          example="9",
+     *                          example="9.000",
      *                      )
      *                  ),
      *                  @OA\Property (
@@ -122,7 +122,7 @@ class LoadOrdinaryDescriptionController extends BaseController
      *                  @OA\Property (
      *                       property="Load[weight_LBs]",
      *                       type="integer",
-     *                       example="24",
+     *                       example="24.000",
      *                      description="Total weight (LBs) => overall weight (LBs)"
      *                  ),
      *             )

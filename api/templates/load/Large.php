@@ -162,6 +162,7 @@ class Large extends BaseTemplate
             'customer' => $model->customer->company->company_name,
             'vessel_eta' =>$model->date->vessel_eta,
             'loadAdditionalInfo' => [
+                'load_id' => $model->loadAdditionalInfos->load_id,
                 'hazmat' => $model->loadAdditionalInfos->hazmat,
                 'hazmatDescription' => $model->loadAdditionalInfos->hazmat_description,
                 'overweight' => $model->loadAdditionalInfos->overweight,
@@ -175,6 +176,7 @@ class Large extends BaseTemplate
                 'noteFromBroker' => $model->loadAdditionalInfos->note_from_broker,
             ],
             'loadContainerInfo' => [
+                'load_id' => $model->loadContainerInfos->load_id,
                 'owner' => [
                    'id' => $model->loadContainerInfos->owner->id,
                    'name' => $model->loadContainerInfos->owner->name

@@ -27,23 +27,23 @@ class SearchLoadContainer extends Model
     public $container_number;
     public $size;
     public $type;
-    public $owner;
+    public $owner_id;
     public $vessel_eta_from;
     public $vessel_eta_to;
     public $status;
     public $port_state_code;
     public $destination_state_code;
-    public $container_code;
+    public $consignee_id;
 
     public function rules(): array
     {
         return [
-            [['id','load_id', 'port_id','destination_id','size','customer_id', 'container_number'], 'integer'],
-            [['type','owner'], 'string'],
+            [['id','load_id','owner_id', 'port_id','container_number','destination_id','size','customer_id' ], 'integer'],
+            [['type'], 'string'],
             [['status'], 'each', 'rule' => ['in', 'range' => LoadStatus::getEnums()]],
-            [['port_state_code', 'destination_state_code', 'container_code'], 'each', 'rule' => ['string']],
-            [['port_id'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['port_state_code' => 'state_code']]],
-            [['destination_id'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['destination_state_code' => 'state_code']]],
+            [['port_state_code', 'destination_state_code'], 'each', 'rule' => ['string']],
+            [['port_state_code'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['port_state_code' => 'state_code']]],
+            [['destination_state_code'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['destination_state_code' => 'state_code']]],
             [['vessel_eta_from', 'vessel_eta_to'], 'date', 'format' => 'php:Y-m-d']
         ];
     }
@@ -90,11 +90,11 @@ class SearchLoadContainer extends Model
         }
 
         if ($this->id) {
-            $query->Where(['like', 'CAST(container.id AS CHAR)', $this->id . '%', false]);
+            $query->andWhere(['like', 'CAST(container.id AS CHAR(50))', $this->id ]);
         }
 
-        if ($this->owner) {
-            $query->andFilterWhere(['loadContainerInfosOwner.name' => $this->owner]);
+        if ($this->owner_id) {
+            $query->andFilterWhere(['loadContainerInfosOwner.id' => $this->owner_id]);
         }
 
         if ($this->load_id) {
@@ -114,7 +114,11 @@ class SearchLoadContainer extends Model
         }
 
         if ($this->destination_id) {
-            $query->andFilterWhere(['destination_id' => $this->destination_id]);
+            $query->andFilterWhere(['consignee_id' => $this->destination_id]);
+        }
+
+        if ($this->container_number) {
+            $query->andFilterWhere(['loadContainerInfos.container_number'=>$this->container_number]);
         }
 
         if ($this->size) {
