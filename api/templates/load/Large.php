@@ -186,7 +186,7 @@ class Large extends BaseTemplate
                 'hbl' => $model->loadContainerInfos->hbl,
                 'type' => $model->loadContainerInfos->type,
                 'container_number' => $model->loadContainerInfos->container_number,
-                'loadReferenceNumber' => $model->loadContainerInfos->load_reference_number,
+                'Load_id' => $model->loadContainerInfos->load_reference_number,
                 'size' => $model->loadContainerInfos->size,
             ]
         ];

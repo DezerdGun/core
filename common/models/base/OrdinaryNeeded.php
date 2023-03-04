@@ -11,8 +11,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $ordinary_need
+ * @property integer $equipment_needed_id
  *
- * @property \common\models\OrdinaryLoad[] $ordinaryLoads
+ * @property \common\models\OrdinaryLoad $equipmentNeeded
  * @property string $aliasModel
  */
 abstract class OrdinaryNeeded extends \yii\db\ActiveRecord
@@ -34,7 +35,10 @@ abstract class OrdinaryNeeded extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ordinary_need'], 'string', 'max' => 255]
+            [['equipment_needed_id'], 'default', 'value' => null],
+            [['equipment_needed_id'], 'integer'],
+            [['ordinary_need'], 'string', 'max' => 255],
+            [['equipment_needed_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['equipment_needed_id' => 'id']]
         ];
     }
 
@@ -46,15 +50,16 @@ abstract class OrdinaryNeeded extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'ordinary_need' => 'Ordinary Need',
+            'equipment_needed_id' => 'Equipment Needed ID',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrdinaryLoads()
+    public function getEquipmentNeeded()
     {
-        return $this->hasMany(\common\models\OrdinaryLoad::className(), ['equipment_need' => 'id']);
+        return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'equipment_needed_id']);
     }
 
 
