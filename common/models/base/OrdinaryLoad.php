@@ -13,14 +13,15 @@ use Yii;
  * @property integer $customer_id
  * @property integer $origin_id
  * @property integer $destination_id
- * @property integer $equipment_need_id
  * @property string $pick_up_date
  * @property integer $user_id
  * @property string $status
  *
  * @property \common\models\Company $customer
  * @property \common\models\Location $destination
- * @property \common\models\OrdinaryNeeded $equipmentNeed
+ * @property \common\models\LoadOrdinaryAdditionalInfo $loadOrdinaryAdditionalInfos
+ * @property \common\models\LoadOrdinaryDescription $loadOrdinaryDescriptions
+ * @property \common\models\OrdinaryNeeded[] $ordinaryNeededs
  * @property \common\models\Location $origin
  * @property \common\models\User $user
  * @property string $aliasModel
@@ -44,15 +45,14 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'origin_id', 'destination_id', 'equipment_need_id', 'user_id'], 'default', 'value' => null],
-            [['customer_id', 'origin_id', 'destination_id', 'equipment_need_id', 'user_id'], 'integer'],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id'], 'default', 'value' => null],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id'], 'integer'],
             [['pick_up_date'], 'safe'],
             [['user_id'], 'required'],
             [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['origin_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['origin_id' => 'id']],
             [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['destination_id' => 'id']],
-            [['equipment_need_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryNeeded::className(), 'targetAttribute' => ['equipment_need_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
     }
@@ -67,7 +67,6 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
             'customer_id' => 'Customer ID',
             'origin_id' => 'Origin ID',
             'destination_id' => 'Destination ID',
-            'equipment_need_id' => 'Equipment Need ID',
             'pick_up_date' => 'Pick Up Date',
             'user_id' => 'User ID',
             'status' => 'Status',
@@ -93,9 +92,25 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipmentNeed()
+    public function getLoadOrdinaryAdditionalInfos()
     {
-        return $this->hasOne(\common\models\OrdinaryNeeded::className(), ['id' => 'equipment_need_id']);
+        return $this->hasOne(\common\models\LoadOrdinaryAdditionalInfo::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadOrdinaryDescriptions()
+    {
+        return $this->hasOne(\common\models\LoadOrdinaryDescription::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrdinaryNeededs()
+    {
+        return $this->hasMany(\common\models\OrdinaryNeeded::className(), ['equipment_needed_id' => 'id']);
     }
 
     /**

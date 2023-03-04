@@ -66,7 +66,7 @@ class Large extends BaseTemplate
             'customer_id' => $model->customer_id,
             'originId' => $model->origin,
             'destination' => $model->destination,
-            'equipmentNeedId' => $model->equipmentNeed->ordinary_need,
+            'equipmentNeedId' => $model->ordinaryNeededs->ordinary_need,
             'pick_up_date' => $model->pick_up_date,
         ];
     }

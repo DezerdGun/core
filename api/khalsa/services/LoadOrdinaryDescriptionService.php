@@ -32,9 +32,11 @@ class LoadOrdinaryDescriptionService implements ServiceInterface
     {
         $model = new LoadOrdinaryDescription();
         $form = new LoadOrdinaryDescriptionRows();
-        if ($model->load(\Yii::$app->request->post(),'Load')  && $model->validate() ) {
+        $model->load(\Yii::$app->request->post(),'Load');
+        if ($model->validate() ) {
             $model->save();
-            if ($form->load(\Yii::$app->request->post(),'From') && $model->validate() ){
+            $form->load(\Yii::$app->request->post(),'From');
+            if ($model->validate()){
                 $form->load_ordinary_description_id = $model->id;
                 $rows = [];
                 for ($i = 0; $i < count($form->commodity); $i++) {

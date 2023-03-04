@@ -3,17 +3,35 @@
 namespace api\controllers;
 
 use api\components\HttpException;
+use api\khalsa\services\LoadOrdinaryReferenceNumberService;
+use api\khalsa\services\LoadOrdinaryService;
 use api\templates\ordinaryload\Large;
+use api\templates\ordinaryload\Small;
 use common\models\Load;
 use common\models\OrdinaryLoad;
 use common\models\OrdinaryNeeded;
+use common\models\search\SearchLoadOrdinary;
 use common\models\User;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
 
 class OrdinaryLoadController extends BaseController
 {
+
+    public $loadOrdinaryService;
+
+
+    public function __construct($id, $module, $config = [],
+                                LoadOrdinaryService $loadOrdinaryService
+
+    )
+    {
+        parent::__construct($id, $module, $config);
+        $this->loadOrdinaryService = $loadOrdinaryService;
+
+    }
 
     /**
      * @OA\Get(
@@ -83,6 +101,11 @@ class OrdinaryLoadController extends BaseController
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
+     *          encoding={
+     *             "OrdinaryNeeded[ordinary_need][]": {
+     *                 "explode": true
+     *             },
+     *         },
      *             @OA\Schema(
      *         @OA\Property(
      *              property="OrdinaryLoad[customer_id]",
@@ -106,7 +129,7 @@ class OrdinaryLoadController extends BaseController
      *              description="Destination[ForeignKey]TO[Location]"
      *              ),
      *          @OA\Property(
-     *                  property="OrdinaryNeeded[ordinary_need]",
+     *                 property="OrdinaryNeeded[ordinary_need][]",
      *                 type="array",
      *                 @OA\Items(
      *                     type="string"
@@ -147,24 +170,14 @@ class OrdinaryLoadController extends BaseController
      * )
      * @throws InvalidConfigException
      * @throws HttpException
+     * @throws Exception
      */
 
     public function actionCreate(): array
     {
-        $model = new OrdinaryNeeded();
-        if ($model->load(\Yii::$app->request->post())  && $model->save() && $model->validate()) {
-            $model = new OrdinaryLoad(['equipment_need_id' => $model->id]);
-            $model->user_id = \Yii::$app->user->id;
-            if ($model->load(\Yii::$app->request->post()) && $model->validate()  ) {
-                $model->status = OrdinaryLoad::PENDING;
-                $model->save();
-                return $this->success($model->getAsArray(Large::class));
-            } else {
-                throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-            }
-        } else {
-            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
-        }
+
+        $model = $this->loadOrdinaryService->create();
+        return $this->success($model->getAsArray(Large::class));
     }
 
 
@@ -224,20 +237,125 @@ class OrdinaryLoadController extends BaseController
      * @OA\Get(
      *     path="/ordinary-load",
      *     tags={"ordinary-load"},
-     *     operationId="getOrdinaryLoads",
-     *     summary="getOrdinaryLoads",
+     *     operationId="getOrdinaryLoad",
+     *     summary="getOrdinaryLoad",
+     *    @OA\Parameter(
+     *         name="SearchLoadOrdinary[id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="SearchLoadOrdinary[port_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadOrdinary[destination_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="SearchLoadOrdinary[equipmentNeed][]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *                 @OA\Items(
+     *                     type="string"
+     *                 ),
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadOrdinary[pick_up_date_from]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="date",
+     *              pattern="^([0-9]{4})-(?:[0-9]{2})-([0-9]{2})$"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadOrdinary[pick_up_date_to]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="date",
+     *              pattern="^([0-9]{4})-(?:[0-9]{2})-([0-9]{2})$"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadOrdinary[pallets]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *       @OA\Parameter(
+     *          name="SearchLoadOrdinary[pallet_size]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="string",
+     *              enum={"48x40","42x42","48x48"}
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="SearchLoadOrdinary[weight_LBs]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="string",
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="SearchLoadContainer[owner_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=0
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page_size",
+     *         in="query",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=10
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
      *         @OA\JsonContent(
      *             @OA\Property(
-     *                 property="id",
+     *                 property="status",
      *                 type="string",
      *                 example="success"
      *             ),
      *             @OA\Property(
      *                 property="data",
-     *                 type="string",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/OrdinaryLoadSmall")
      *             ),
      *             @OA\Property(
      *                 property="meta",
@@ -255,12 +373,15 @@ class OrdinaryLoadController extends BaseController
 
     public function actionIndex($page = 0, $pageSize = 10): array
     {
-        $query = OrdinaryLoad::find();
-        return $this->index($query, $page, $pageSize,Large::class );
+        $SearchLoadOrdinary = new SearchLoadOrdinary();
+        $SearchLoadOrdinary->load(\Yii::$app->request->queryParams);
+        if ( $SearchLoadOrdinary->validate()) {
+            $query =  $SearchLoadOrdinary->search();
+        } else {
+            throw new HttpException(400, ['SearchLoadOrdinary' => $SearchLoadOrdinary->getErrors()]);
+        }
+        return $this->index($query, $page, $pageSize, Small::class);
 
     }
-
-
-
 
 }
