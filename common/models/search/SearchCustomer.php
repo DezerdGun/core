@@ -34,6 +34,10 @@ class SearchCustomer extends \yii\base\Model
             $query->andfilterWhere(['ILIKE', 'company.company_name', '%' . $this->company_name . '%', false]);
         }
 
+        $query->orderBy([
+            'id' => SORT_DESC
+        ]);
+
         return $query;
     }
 }

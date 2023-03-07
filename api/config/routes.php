@@ -143,7 +143,17 @@ $routes = [
     'PATCH /listing/ordinary/reassign/<id:\d+>' => '/listing-ordinary/reassign',
 
     'GET /broker/my-account' => '/broker/show',
-    'PATCH /broker/my-account' => '/broker/update'
+    'PATCH /broker/my-account' => '/broker/update',
+
+    'POST /container/bid' => 'container-bid/create',
+    'GET /container/bid' => 'container-bid/index',
+    'PATCH /container/bid/favorite/<id:\d+>' => 'container-bid/favorite',
+    'DELETE /container/bid/<id:\d+>' => 'container-bid/delete',
+    'PATCH /container/bid/<id:\d+>' => 'container-bid/update',
+
+    'POST /container/bid/detail' =>'container-bid-detail/create',
+    'PATCH /container/bid/detail/<id:>' => 'container-bid-detail/update',
+    'DELETE /container/bid/detail/<id:>' => 'container-bid-detail/delete'
     ];
 
 return $routes;

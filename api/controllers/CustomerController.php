@@ -244,7 +244,10 @@ class CustomerController extends BaseController
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         required=true
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
