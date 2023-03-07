@@ -155,7 +155,7 @@ class SearchListingOrdinary extends \yii\base\Model
         }
 
         $query->orderBy([
-            'id' => 'SORT_ASC'
+            'id' => SORT_DESC
         ]);
 
         return $query;
