@@ -34,6 +34,8 @@ $routes = [
     'GET /lists/stop-types' => 'stop-types/index',
     'GET /lists/doc-types' => 'doc-types/index',
     'GET /lists/owner' => 'owner/index',
+    'GET /lists/charge' => 'charge/index',
+    'GET /lists/measure' => 'measure/index',
 
     'POST /load-container-return' => 'load-container-return/create',
     'PATCH /load-container-return/<id:\d+>' => 'load-container-return/update',
@@ -154,6 +156,7 @@ $routes = [
     'POST /container/bid/detail' =>'container-bid-detail/create',
     'PATCH /container/bid/detail/<id:>' => 'container-bid-detail/update',
     'DELETE /container/bid/detail/<id:>' => 'container-bid-detail/delete'
+
     ];
 
 return $routes;
