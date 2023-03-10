@@ -16,8 +16,31 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         property="id",
  *         type="integer"
  *     ),
- *      )
+ *      @OA\Property(
+ *         property="vessel_eta",
+ *         type="date"
  *     ),
+ *      @OA\Property(
+ *         property="last_free_day",
+ *         type="date"
+ *     ),
+ *      @OA\Property(
+ *         property="discharged_date",
+ *         type="date"
+ *     ),
+ *      @OA\Property(
+ *         property="outgate_date",
+ *         type="date"
+ *     ),
+ *      @OA\Property(
+ *         property="empty_date",
+ *         type="date"
+ *     ),
+ *      @OA\Property(
+ *         property="ingate_ate",
+ *         type="date"
+ *     ),
+
  * )
  */
 

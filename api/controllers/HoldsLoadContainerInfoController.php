@@ -117,22 +117,26 @@ class HoldsLoadContainerInfoController extends BaseController
      *              @OA\Property(
      *                  property="freight_hold",
      *                  enum={"yes","no"},
+     *                  example="yes",
      *                  type="string"
      *               ),
      *              @OA\Property(
      *                  property="customer_hold",
      *                  enum={"yes","no"},
-     *                  type="string"
+     *                  type="string",
+     *                  example="yes",
      *               ),
      *              @OA\Property(
      *                  property="carrier_hold",
      *                  enum={"yes","no"},
-     *                  type="string"
+     *                  type="string",
+     *                   example="yes",
      *               ),
      *              @OA\Property(
      *                  property="broker_hold",
      *                  enum={"yes","no"},
-     *                  type="string"
+     *                  type="string",
+     *                  example="yes",
      *               ),
      *            )
      *         )
@@ -211,7 +215,7 @@ class HoldsLoadContainerInfoController extends BaseController
     private function list($id)
     {
         $con = ['id' => $id];
-        $model = Date::findOne($con);
+        $model = Holds::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();
         }
