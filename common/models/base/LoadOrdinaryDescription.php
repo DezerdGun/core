@@ -16,7 +16,7 @@ use Yii;
  * @property string $pallet_size
  *
  * @property \common\models\OrdinaryLoad $load
- * @property \common\models\LoadOrdinaryDescriptionRows $loadOrdinaryDescriptionRows
+ * @property \common\models\LoadOrdinaryDescriptionRows[] $loadOrdinaryDescriptionRows
  * @property string $aliasModel
  */
 abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
@@ -73,7 +73,7 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
      */
     public function getLoadOrdinaryDescriptionRows()
     {
-        return $this->hasOne(\common\models\LoadOrdinaryDescriptionRows::className(), ['load_ordinary_description_id' => 'id']);
+        return $this->hasMany(\common\models\LoadOrdinaryDescriptionRows::className(), ['load_ordinary_description_id' => 'id']);
     }
 
 

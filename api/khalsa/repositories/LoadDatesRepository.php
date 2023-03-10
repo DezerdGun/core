@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\Date;
@@ -13,7 +14,7 @@ class LoadDatesRepository implements RepositoryInterface
     public function getById($id): Date
     {
         if (!$model = Date::findOne(['id' => $id])) {
-            throw new NotFoundException('Date is not found.');
+            throw new HttpException(400, 'Date is not found.');
         }
         return $model;
     }

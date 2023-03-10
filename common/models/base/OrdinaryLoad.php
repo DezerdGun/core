@@ -16,6 +16,7 @@ use Yii;
  * @property string $pick_up_date
  * @property integer $user_id
  * @property string $status
+ *  @property integer $load_reference_number
  *
  * @property \common\models\Company $customer
  * @property \common\models\Location $destination
@@ -70,6 +71,7 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
             'pick_up_date' => 'Pick Up Date',
             'user_id' => 'User ID',
             'status' => 'Status',
+            'load_reference_number' => 'Load Reference Number',
         ];
     }
 

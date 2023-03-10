@@ -39,8 +39,12 @@ class LoadAdditionalInfoController extends BaseController
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[weight_in_lbs]",
+     *              property="LoadAdditionalInfo[overweight_description]",
      *              type="string",
+     *              ),
+     *          @OA\Property(
+     *              property="LoadAdditionalInfo[weight_in_lbs]",
+     *              type="integer",
      *              ),
      *          @OA\Property(
      *              property="LoadAdditionalInfo[reefer]",
@@ -48,7 +52,7 @@ class LoadAdditionalInfoController extends BaseController
      *              enum={"yes","no"},
      *              ),
      *          @OA\Property(
-     *              property="LoadAdditionalInfo[temp_in_f]",
+     *              property="LoadAdditionalInfo[reefer_description]",
      *              type="string",
      *              ),
      *           @OA\Property(

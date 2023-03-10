@@ -62,14 +62,12 @@ class Small extends BaseTemplate
         $this->result = [
             'id' => $model->id,
             'owner' => $model->owner->name,
-            'vesselName' => $model->vessel_name,
-            'mbl' => $model->mbl,
-            'hbl' => $model->hbl,
+            'vesselName' => $model->loadReferenceNumbers->vessel_name,
             'type' => $model->type,
             'container_number' => $model->container_number,
-            'loadReferenceNumber' => $model->load_reference_number,
+            'mbl' => $model->loadReferenceNumbers->mbl,
+            'hbl' => $model->loadReferenceNumbers->hbl,
             'size' => $model->size,
-
         ];
     }
 }

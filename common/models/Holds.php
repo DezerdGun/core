@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 class Holds extends BaseHolds
 {
     use Template;
+    const Fixed = 'no';
     public function behaviors(): array
     {
         return DateTime::setLocalTimestamp(parent::behaviors());

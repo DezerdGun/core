@@ -8,6 +8,7 @@ use api\templates\load\Middle;
 use api\templates\loaddocuments\Small;
 use common\enums\LoadStatus;
 use common\models\Date;
+use common\models\Holds;
 use common\models\Load;
 use common\models\LoadContainerInfo;
 use common\models\LoadDocuments;
@@ -42,7 +43,7 @@ class ContainerLoadController extends BaseController
      *                  @OA\Property(
      *                      property="UpdateStatusForm[status]",
      *                      type="string",
-     *                      enum={"Pending","in_Progress", "Completed","Cancelled"}
+     *                      enum={"pending","in_progress", "completed","cancelled"}
      *                  ),
      *                  required={
      *                      "UpdateStatusForm[status]",
@@ -470,6 +471,7 @@ class ContainerLoadController extends BaseController
     public function actionCreate(): array
     {
         $model = new Load();
+        $model->load_reference_number = rand(1000000,9999999);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->status = $model::PENDING;
             $role = Yii::$app->user->id;
@@ -484,11 +486,17 @@ class ContainerLoadController extends BaseController
                     $model->user_id = $masterBroker->id;
                     $model->vessel_eta = $date->id;
                     $model->save();
+                    $model->chassisLocation($model);
+                    $model->containerReturn($model);
+                    $model->hold($model);
                     return $this->success($model->getAsArray(Large::class));
                 } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
                     $model->user_id = $subbroker->id;
                     $model->vessel_eta = $date->id;
                     $model->save();
+                    $model->chassisLocation($model);
+                    $model->containerReturn($model);
+                    $model->hold($model);
                     return $this->success($model->getAsArray(Large::class));
                 } else {
                     throw new HttpException(400, 'You are not Broker');

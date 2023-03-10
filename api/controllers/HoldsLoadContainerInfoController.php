@@ -5,10 +5,12 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\HoldsLoadContainerInfoService;
 use api\templates\holds_container_info\Large;
+use common\models\Date;
 use common\models\Holds;
 use common\models\Holds_history;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
+use yii\web\NotFoundHttpException;
 
 class HoldsLoadContainerInfoController extends BaseController
 {
@@ -95,13 +97,13 @@ class HoldsLoadContainerInfoController extends BaseController
 
     /**
      * @OA\Patch (
-     *     path="/holds-load-container-info/{id}",
+     *     path="/holds-load-container-info/{load_id}",
      *     tags={"holds-load-info"},
      *     operationId="updateHoldsLoadsInfo",
      *     summary="updateHoldsLoadsInfo",
      *     @OA\Parameter(
      *         in="path",
-     *         name="id",
+     *         name="load_id",
      *         required=true,
      *         @OA\Schema(
      *          type="integer"
@@ -153,22 +155,74 @@ class HoldsLoadContainerInfoController extends BaseController
      *  )
      */
 
-    public function actionUpdate($id): array
+    public function actionUpdate($load_id): array
     {
-        try {
-            $this->holdsLoadContainerInfo->update($id);
-        } catch (HttpException $e) {
-        } catch (InvalidConfigException $e) {
-        }
+        $this->holdsLoadContainerInfo->update($load_id);
         return $this->success();
     }
 
     /**
      * @OA\Get(
+     *     path="/holds-load-container-info/{id}",
+     *     tags={"holds-load-info"},
+     *     operationId="getHoldsLoadsInfoId",
+     *     summary="getHoldsLoadsInfoId",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionShow($id): array
+    {
+        $model = $this->list($id);
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    private function list($id)
+    {
+        $con = ['id' => $id];
+        $model = Date::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
+    }
+    /**
+     * @OA\Get(
      *     path="/holds-load-container-info",
      *     tags={"holds-load-info"},
-     *     operationId="getHoldsLoadsInfo",
-     *     summary="getHoldsLoadsInfo",
+     *     operationId="getHoldsLoadsHistory",
+     *     summary="getHoldsLoadsHistory",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -186,11 +240,19 @@ class HoldsLoadContainerInfoController extends BaseController
      *                         property="id",
      *                         type="string"
      *                     ),
-     *                     @OA\Property(
+     *                    @OA\Property(
+     *                         property="load_id",
+     *                         type="integer"
+     *                     ),
+     *                    @OA\Property(
      *                         property="updated_at",
      *                         type="date"
      *                     ),
-     *                      @OA\Property(
+     *                     @OA\Property(
+     *                         property="created_at ",
+     *                         type="date"
+     *                     ),
+     *                     @OA\Property(
      *                         property="note_from_customer_and_broker",
      *                         type="text"
      *                     ),
@@ -207,9 +269,8 @@ class HoldsLoadContainerInfoController extends BaseController
     public function actionIndex(): array
     {
         $equipment = Holds_history::find()
-            ->select('id,updated_at,note_from_customer_and_broker')
+            ->select('id,load_id,updated_at,created_at,note_from_customer_and_broker')
             ->all();
         return $this->success($equipment);
     }
-
 }

@@ -55,19 +55,14 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'load_id' => [
-                $model->load_id,
-                Load::find()
-                    ->select('id,user_id,consignee_id,port_id,customer_id,status,vessel_eta')
-                    ->where(['id' => $model->load_id])
-                    ->asArray()->one(),
-            ],
+            'load_id' => $model->load_id,
             'hazmat' => $model->hazmat,
             'hazmat_description' => $model->hazmat_description,
             'overweight' => $model->overweight,
+            'overweight_description' => $model->overweight_description,
             'weight_in_lbs' => $model->weight_in_lbs,
             'reefer' => $model->reefer,
-            'temp_in_f' => $model->temp_in_f,
+            'reefer_description' => $model->reefer_description,
             'alcohol' => $model->alcohol,
             'alcohol_description' => $model->alcohol_description,
             'urgent' => $model->urgent,

@@ -32,15 +32,16 @@ class SearchLoadOrdinary extends Model
     public $weight_LBs;
     public $owner_id;
     public $origin_id;
-
+    public $load_id;
 
     public $port_state_code;
     public $destination_state_code;
 
+
     public function rules(): array
     {
        return[
-           [['id','port_id','destination_id','pallets','owner_id'],'integer'],
+           [['id','port_id','destination_id','load_id','pallets','owner_id'],'integer'],
            [['pallet_size','weight_LBs','pick_up_date'],'string'],
            [['equipmentNeed'], 'each', 'rule' => ['exist', 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipmentNeed' => 'code']]],
            [['port_state_code', 'destination_state_code'], 'each', 'rule' => ['string']],
@@ -103,6 +104,10 @@ class SearchLoadOrdinary extends Model
 
         if ($this->destination_id) {
             $query->andFilterWhere(['destination_id' => $this->destination_id]);
+        }
+
+        if ($this->load_id) {
+            $query->andFilterWhere(['like', 'CAST(load_reference_number AS char(50))', $this->load_id.'%',false]);
         }
 
         if ($this->pick_up_date_from && $this->pick_up_date_to) {

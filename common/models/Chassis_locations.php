@@ -30,8 +30,6 @@ class Chassis_locations extends BaseChassis_locations
             parent::rules(),
             [
                 [['chassis_pickup','chassis_termination'], 'integer'],
-                [['chassis_pickup','chassis_termination'], 'required'],
-                [['chassis_pickup','chassis_termination'], 'default', 'value' => null],
             ]
         );
     }

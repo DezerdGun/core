@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\LoadContainerInfo;
@@ -13,7 +14,7 @@ class LoadContainerInfoRepository implements RepositoryInterface
     public function getById($id): LoadContainerInfo
     {
         if (!$model = LoadContainerInfo::findOne(['id' => $id])) {
-            throw new NotFoundException('LoadContainerInfo is not found.');
+            throw new HttpException(400, 'LoadContainerInfo is not found.');
         }
         return $model;
     }

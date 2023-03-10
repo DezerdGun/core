@@ -10,14 +10,14 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "ordinary_load".
  */
-class OrdinaryLoad extends BaseOrdinaryLoad
+class   OrdinaryLoad extends BaseOrdinaryLoad
 {
     use Template;
 
-    const PENDING = 'Pending';
-    const IN_PROGRESS = 'in_Progress';
-    const COMPLETED = 'Completed';
-    const CANCELLED = 'Cancelled';
+    const PENDING = 'pending';
+    const IN_PROGRESS = 'in_progress';
+    const COMPLETED = 'completed';
+    const CANCELLED = 'cancelled';
 
     public function behaviors(): array
     {

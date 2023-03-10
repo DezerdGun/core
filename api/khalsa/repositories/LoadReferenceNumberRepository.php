@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\LoadReferenceNumber;
@@ -13,7 +14,7 @@ class LoadReferenceNumberRepository implements RepositoryInterface
     public function getById($id): LoadReferenceNumber
     {
         if (!$model = LoadReferenceNumber::findOne(['load_id' => $id])) {
-            throw new NotFoundException('Load is not found.');
+            throw new HttpException(400, 'Load is not found.');
         }
         return $model;
     }

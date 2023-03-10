@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\Holds;
@@ -9,11 +10,11 @@ use common\models\Holds;
 class holdsLoadContainerInfoRepository implements RepositoryInterface
 {
 
-    public function getById($id): Holds
+    public function getById($load_id): Holds
     {
 
-        if (!$model = Holds::findOne(['id' => $id])) {
-            throw new NotFoundException('Hold is not found.');
+        if (!$model = Holds::findOne(['load_id' => $load_id])) {
+            throw new HttpException(400, 'Holds Load_Id is not found.');
         }
         return $model;
     }

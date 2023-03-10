@@ -86,9 +86,9 @@ Rbac migration commands
 
 ### gii/giiant
 
-http://backend.tms.loc/gii
+http://backend.tmp.loc/gii
 
-http://frontend.tms.loc/gii
+http://frontend.tmp.loc/gii
 
 ### backend.tmp.loc and frontend.tmp.loc
 http://localhost:8000
