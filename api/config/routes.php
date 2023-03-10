@@ -161,6 +161,9 @@ $routes = [
     'DELETE /container/bid/<id:\d+>' => 'container-bid/delete',
     'PATCH /container/bid/<id:\d+>' => 'container-bid/update',
 
+    'POST /container/bid/log/<id:\d+>' => 'container-bid-log/create',
+    'GET /container/bid/log/<id:\d+>' => 'container-bid-log/index',
+
     'POST /container/bid/detail' =>'container-bid-detail/create',
     'PATCH /container/bid/detail/<id:>' => 'container-bid-detail/update',
     'DELETE /container/bid/detail/<id:>' => 'container-bid-detail/delete'

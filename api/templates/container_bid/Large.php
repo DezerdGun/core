@@ -4,139 +4,6 @@ namespace api\templates\container_bid;
 
 use common\models\ContainerBid;
 
-/**
- *
- * @OA\Schema(
- *     schema="ContainerBidLarge",
- *     @OA\Property(
- *         property="id",
- *         type="integer"
- *     ),
- *     @OA\Property(
- *         property="broker_name",
- *         type="string"
- *     ),
- *      @OA\Property(
- *          property="vessel_eta",
- *          type="string"
- *      ),
- *      @OA\Property(
- *          property="quantity",
- *          type="integer"
- *      ),
- *      @OA\Property(
- *          property="created_at",
- *          type="string"
- *      ),
- *      @OA\Property(
- *          property="updated_at",
- *          type="string"
- *      ),
- *      @OA\Property (
- *          property="note_from_carrier",
- *          type="string"
- *      ),
- *      @OA\Property (
- *          property="is_favorite",
- *          type="boolean"
- *      ),
- *      @OA\Property(
- *          property="container_info",
- *          type="object",
- *          @OA\Property(
- *              property="port_city",
- *              type="string"
- *          ),
- *          @OA\Property(
- *              property="port_state_code",
- *              type="string"
- *          ),
- *          @OA\Property(
- *              property="destination_city",
- *              type="string"
- *          ),
- *          @OA\Property(
- *              property="destination_state_code",
- *              type="string"
- *          ),
- *          @OA\Property(
- *              property="container_code",
- *              type="string"
- *          ),
- *          @OA\Property(
- *              property="size",
- *              type="integer"
- *          ),
- *          @OA\Property(
- *              property="weight",
- *              type="integer"
- *          )
- *      ),
- *      @OA\Property (
- *          property="additional_info",
- *          type="object",
- *          @OA\Property (
- *              property="mobile_number",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="email",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="hazmat",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="overweight",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="reefer",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="alcohol",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="urgent",
- *              type="string"
- *          ),
- *          @OA\Property (
- *              property="note_from_broker",
- *              type="string"
- *          )
- *      ),
- *     @OA\Property (
- *          property="bid_detail",
- *          type="array",
- *          @OA\Items(
- *              @OA\Property (
- *                  property="bid_detail_id",
- *                  type="integer"
- *              ),
- *              @OA\Property (
- *                  property="charge_name",
- *                  type="string"
- *              ),
- *              @OA\Property (
- *                  property="measure_name",
- *                  type="string"
- *              ),
- *              @OA\Property (
- *                  property="price",
- *                  type="number",
- *                  format="float"
- *              ),
- *              @OA\Property (
- *                  property="free_unit",
- *                  type="integer"
- *              )
- *          )
- *      )
- * )
- */
 class Large extends \TRS\RestResponse\templates\BaseTemplate
 {
 
@@ -159,8 +26,8 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
             'broker_name' => $model->listingContainer->user->name,
             'vessel_eta' => $model->listingContainer->vessel_eta,
             'quantity' => $model->quantity,
-            'created_at' => date('Y-m-d-H-i-s', $model->created_at),
-            'updated_at' => date('Y-m-d-H-i-s',$model->updated_at),
+            'created_at' => $model->created_at,
+            'updated_at' => $model->updated_at,
             'note_from_carrier' => $model->note,
             'is_favorite' => $model->is_favorite,
             'container_info' => [
