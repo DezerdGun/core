@@ -47,10 +47,6 @@ class LoadOrdinaryAdditionalInfoController extends BaseController
      *              type="string",
      *              ),
      *          @OA\Property(
-     *              property="LoadOrdinaryAdditionalInfo[weight_in_LBs]",
-     *              type="integer",
-     *              ),
-     *          @OA\Property(
      *              property="LoadOrdinaryAdditionalInfo[reefer]",
      *              type="string",
      *              enum={"yes","no"},

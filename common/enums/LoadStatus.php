@@ -6,10 +6,10 @@ use TRS\Enum\Enum;
 
 class LoadStatus extends Enum
 {
-    const PENDING = 'Pending';
-    const IN_PROGRESS = 'in_Progress';
-    const COMPLETED = 'Completed';
-    const CANCELLED = 'Cancelled';
+    const PENDING = 'pending';
+    const IN_PROGRESS = 'in_progress';
+    const COMPLETED = 'completed';
+    const CANCELLED = 'cancelled';
 
     const ARCHIVED = 'archived';
     const HIDDEN = 'hidden';

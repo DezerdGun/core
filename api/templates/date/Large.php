@@ -1,6 +1,6 @@
 <?php
 
-namespace api\templates\Date;
+namespace api\templates\date;
 
 
 use common\models\Date;
@@ -11,7 +11,7 @@ use TRS\RestResponse\templates\BaseTemplate;
 /**
  *
  * @OA\Schema(
- *     schema="DateLarge",
+ *     schema="dateLarge",
  *     @OA\Property(
  *         property="id",
  *         type="integer"

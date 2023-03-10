@@ -2,9 +2,8 @@
 
 namespace api\templates\additionalinfo;
 
-use common\models\Load;
+
 use common\models\LoadAdditionalInfo;
-use common\models\User;
 use TRS\RestResponse\templates\BaseTemplate;
 
 
@@ -41,7 +40,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *              type="string",
  *              ),
  *         @OA\Property(
- *              property="note_from_broker",
+ *              property="note",
  *              type="string",
  *              ),
  *     ),
@@ -60,14 +59,13 @@ class Small extends BaseTemplate
             'hazmat_description' => $model->hazmat_description,
             'overweight' => $model->overweight,
             'overweight_description' => $model->overweight_description,
-            'weight_in_lbs' => $model->weight_in_lbs,
             'reefer' => $model->reefer,
             'reefer_description' => $model->reefer_description,
             'alcohol' => $model->alcohol,
             'alcohol_description' => $model->alcohol_description,
             'urgent' => $model->urgent,
             'urgent_description' => $model->urgent_description,
-            'note_from_broker' => $model->note_from_broker
+            'note' => $model->note
         ];
     }
 }
