@@ -22,7 +22,7 @@ use Yii;
  * @property \common\models\Location $destination
  * @property \common\models\LoadOrdinaryAdditionalInfo $loadOrdinaryAdditionalInfos
  * @property \common\models\LoadOrdinaryDescription $loadOrdinaryDescriptions
- * @property \common\models\OrdinaryNeeded[] $ordinaryNeededs
+ * @property \common\models\OrdinaryNeeded $ordinaryNeededs
  * @property \common\models\Location $origin
  * @property \common\models\User $user
  * @property string $aliasModel

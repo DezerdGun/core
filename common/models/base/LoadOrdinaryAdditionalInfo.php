@@ -22,7 +22,6 @@ use Yii;
  * @property string $urgent
  * @property string $urgent_description
  * @property string $note
- * @property integer $weight_in_LBs
  *
  * @property \common\models\OrdinaryLoad $load
  * @property string $aliasModel
@@ -46,8 +45,8 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['load_id', 'weight_in_LBs'], 'default', 'value' => null],
-            [['load_id', 'weight_in_LBs'], 'integer'],
+            [['load_id'], 'default', 'value' => null],
+            [['load_id'], 'integer'],
             [['note'], 'string'],
             [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
@@ -73,7 +72,6 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             'urgent' => 'Urgent',
             'urgent_description' => 'Urgent Description',
             'note' => 'Note',
-            'weight_in_LBs' => 'Weight In L Bs',
         ];
     }
 

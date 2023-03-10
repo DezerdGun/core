@@ -4,7 +4,7 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\khalsa\services\LoadDatesService;
-use api\templates\Date\Large;
+use api\templates\date\Large;
 use common\models\Date;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;

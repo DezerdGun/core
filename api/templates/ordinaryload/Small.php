@@ -111,10 +111,6 @@ use yii\helpers\ArrayHelper;
      *          type="integer"
      *      ),
      *       @OA\Property(
-     *          property="weight_LBs",
-     *          type="integer"
-     *      ),
-     *       @OA\Property(
      *          property="pallet_size",
      *          type="string"
      *      ),
@@ -159,7 +155,6 @@ class Small extends BaseTemplate
                 'hazmat_description' => $model->loadOrdinaryAdditionalInfos->hazmat_description,
                 'overweight' => $model->loadOrdinaryAdditionalInfos->overweight,
                 'overweight_description' => $model->loadOrdinaryAdditionalInfos->overweight_description,
-                'weight_in_LBs' => $model->loadOrdinaryAdditionalInfos->weight_in_LBs,
                 'reefer' => $model->loadOrdinaryAdditionalInfos->reefer,
                 'reefer_description' => $model->loadOrdinaryAdditionalInfos->reefer_description,
                 'alcohol' => $model->loadOrdinaryAdditionalInfos->alcohol,

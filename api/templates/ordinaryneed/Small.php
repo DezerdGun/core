@@ -29,7 +29,7 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'equipment_needed' => $model->equipment_need,
+            'equipment_needed' => $model->ordinaryNeededs,
         ];
     }
 }

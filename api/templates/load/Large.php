@@ -116,15 +116,11 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="string"
  *      ),
  *      @OA\Property(
- *         property="note_from_broker",
+ *         property="note",
  *         type="text"
  *      ),
  *      @OA\Property(
  *         property="hazmat_description",
- *         type="string"
- *      ),
- *      @OA\Property(
- *         property="weight_in_lbs",
  *         type="string"
  *      ),
  *      @OA\Property(
@@ -178,8 +174,7 @@ class Large extends BaseTemplate
                 'alcoholDescription' => $model->loadAdditionalInfos->alcohol_description,
                 'urgent' => $model->loadAdditionalInfos->urgent,
                 'urgentDescription' => $model->loadAdditionalInfos->urgent_description,
-                'weightInLBs' => $model->loadAdditionalInfos->weight_in_lbs,
-                'noteFromBroker' => $model->loadAdditionalInfos->note_from_broker,
+                'noteFromBroker' => $model->loadAdditionalInfos->note,
             ],
             'loadContainerInfo' => [
                 'load_id' => $model->loadContainerInfos->load_id,

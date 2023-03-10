@@ -16,9 +16,8 @@ use Yii;
  * @property string $reefer
  * @property string $alcohol
  * @property string $urgent
- * @property string $note_from_broker
+ * @property string $note
  * @property string $hazmat_description
- * @property string $weight_in_lbs
  * @property string $alcohol_description
  * @property string $urgent_description
  * @property string $overweight_description
@@ -48,10 +47,10 @@ abstract class LoadAdditionalInfo extends \yii\db\ActiveRecord
         return [
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
-            [['note_from_broker'], 'string'],
+            [['note'], 'string'],
             [['hazmat', 'overweight'], 'string', 'max' => 132],
             [['reefer', 'alcohol', 'urgent'], 'string', 'max' => 32],
-            [['hazmat_description', 'weight_in_lbs', 'alcohol_description', 'urgent_description', 'overweight_description', 'reefer_description'], 'string', 'max' => 255],
+            [['hazmat_description', 'alcohol_description', 'urgent_description', 'overweight_description', 'reefer_description'], 'string', 'max' => 255],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
@@ -69,9 +68,8 @@ abstract class LoadAdditionalInfo extends \yii\db\ActiveRecord
             'reefer' => 'Reefer',
             'alcohol' => 'Alcohol',
             'urgent' => 'Urgent',
-            'note_from_broker' => 'Note From Broker',
+            'note' => 'Note',
             'hazmat_description' => 'Hazmat Description',
-            'weight_in_lbs' => 'Weight In Lbs',
             'alcohol_description' => 'Alcohol Description',
             'urgent_description' => 'Urgent Description',
             'overweight_description' => 'Overweight Description',
