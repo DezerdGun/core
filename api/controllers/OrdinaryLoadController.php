@@ -227,7 +227,11 @@ class OrdinaryLoadController extends BaseController
         $user = OrdinaryLoad::find()
             ->select(['status','COUNT(status) as number'])
             ->where([
-                'status' => [OrdinaryLoad::CANCELLED,OrdinaryLoad::IN_PROGRESS,OrdinaryLoad::PENDING,OrdinaryLoad::COMPLETED],
+                'status' => [
+                    LoadStatus::CANCELLED,
+                    LoadStatus::IN_PROGRESS,
+                    LoadStatus::PENDING,
+                    LoadStatus::COMPLETED],
             ])
             ->groupBy(['status'])
             ->asArray()

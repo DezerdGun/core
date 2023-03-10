@@ -3,9 +3,7 @@
 namespace common\models;
 
 use common\models\traits\Template;
-use Yii;
 use \common\models\base\Load as BaseLoad;
-use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -14,12 +12,6 @@ use yii\helpers\ArrayHelper;
 class Load extends BaseLoad
 {
     use Template;
-
-    const PENDING = 'pending';
-    const IN_PROGRESS = 'in_progress';
-    const COMPLETED = 'completed';
-    const CANCELLED = 'cancelled';
-    const EMPTY = null;
     public function behaviors(): array
     {
         return ArrayHelper::merge(
@@ -55,8 +47,8 @@ class Load extends BaseLoad
     {
         $chassisLocation = new Chassis_locations();
         $chassisLocation->load_id = $model->id;
-        $chassisLocation->chassis_pickup = Load::EMPTY;
-        $chassisLocation->chassis_termination = Load::EMPTY;
+        $chassisLocation->chassis_pickup = \common\enums\LoadStatus::EMPTY;
+        $chassisLocation->chassis_termination = \common\enums\LoadStatus::EMPTY;
         $chassisLocation->save();
     }
 
@@ -64,7 +56,7 @@ class Load extends BaseLoad
     {
         $container = new Container_return();
         $container->load_id = $model->id;
-        $container->container_return = Load::EMPTY;
+        $container->container_return = \common\enums\LoadStatus::EMPTY;
         $container->save();
     }
 }
