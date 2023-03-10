@@ -39,11 +39,7 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         ),
  *             @OA\Property(
  *                 property="weight_in_LBs",
- *                 type="string"
- *         ),
- *             @OA\Property(
- *                 property="weight_in_LBs_description",
- *                 type="string"
+ *                 type="integer"
  *         ),
  *             @OA\Property(
  *                 property="reefer",
@@ -90,7 +86,6 @@ class Large extends BaseTemplate
             'overweight' => $model->overweight,
             'overweightDescription' => $model->overweight_description,
             'weightInLBs' => $model->weight_in_LBs,
-            'weightInLBsDescription' => $model->weight_in_LBs_description,
             'reefer' => $model->reefer,
             'reeferDescription' => $model->reefer_description,
             'alcohol' => $model->alcohol,

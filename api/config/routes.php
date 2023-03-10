@@ -40,13 +40,17 @@ $routes = [
     'POST /load-container-return' => 'load-container-return/create',
     'PATCH /load-container-return/<id:\d+>' => 'load-container-return/update',
     'DELETE /load-container-return/<id:\d+>' => 'load-container-return/delete',
+    'GET /load-container-return/<id:\d+>' => 'load-container-return/show',
 
     'POST /load-chassis-locations' => 'load-chassis-locations/create',
     'PATCH /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/update',
     'DELETE /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/delete',
+    'GET /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/show',
 
     'PATCH /load-dates/<id:\d+>' => 'load-dates/update',
     'DELETE /load-dates/<id:\d+>' => 'load-dates/delete',
+    'GET /load-dates' => 'load-dates/index',
+    'GET /load-dates/<id:\d+>' => 'load-dates/show',
 
     'POST /company' => 'company/create',
 
@@ -63,9 +67,11 @@ $routes = [
     'POST /load-reference-number' => 'load-reference-number/create',
     'PATCH /load-container-info/<id:\d+>' => 'load-container-info/update',
     'DELETE /load-reference-number/<id:\d+>' => 'load-reference-number/delete',
+    'GET /load-reference-number/<id:\d+>' => 'load-reference-number/show',
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
-    'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
+    'PATCH /holds-load-container-info/<load_id:\d+>' => 'holds-load-container-info/update',
+    'GET /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/show',
     'GET /holds-load-container-info' => 'holds-load-container-info/index',
 
 
@@ -107,6 +113,8 @@ $routes = [
     'POST /load-ordinary-description' => 'load-ordinary-description/create',
     'POST /ordinary-load-reference-number' => 'ordinary-load-reference-number/create',
     'PATCH /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/update',
+    'PATCH /ordinary-load/status/<id:\d+>' => 'ordinary-load/reassign',
+    'DELETE /ordinary-load/<id:\d+>' => 'ordinary-load/delete',
 
     'POST /customer' => 'customer/create',
     'DELETE /customer/<id:\d+>' => 'customer/delete',

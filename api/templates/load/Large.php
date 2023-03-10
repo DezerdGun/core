@@ -153,14 +153,21 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
+            'load_id' => $model->load_reference_number,
             'loadStatus' => $model->status,
-            'consignee_id' => $model->consignee->name,
+            'consignee' => $model->port->name,
             'portCity' =>  $model->port->address->city,
             'portStateCode' => $model->port->address->state_code,
+            'port' => $model->consignee->name,
             'destinationCity' => $model->consignee->address->city,
             'destinationStateCode' => $model->consignee->address->state_code,
             'customer' => $model->customer->company->company_name,
             'vessel_eta' =>$model->date->vessel_eta,
+            'created_by' => [
+                'name' => $model->user->name,
+                "email" =>  $model->user->email,
+                'role' =>  $model->user->role,
+            ],
             'loadAdditionalInfo' => [
                 'load_id' => $model->loadAdditionalInfos->load_id,
                 'hazmat' => $model->loadAdditionalInfos->hazmat,
@@ -172,7 +179,6 @@ class Large extends BaseTemplate
                 'urgent' => $model->loadAdditionalInfos->urgent,
                 'urgentDescription' => $model->loadAdditionalInfos->urgent_description,
                 'weightInLBs' => $model->loadAdditionalInfos->weight_in_lbs,
-                'tempInF' => $model->loadAdditionalInfos->temp_in_f,
                 'noteFromBroker' => $model->loadAdditionalInfos->note_from_broker,
             ],
             'loadContainerInfo' => [
@@ -181,12 +187,11 @@ class Large extends BaseTemplate
                    'id' => $model->loadContainerInfos->owner->id,
                    'name' => $model->loadContainerInfos->owner->name
                     ],
-                'vesselName' => $model->loadContainerInfos->vessel_name,
-                'mbl' => $model->loadContainerInfos->mbl,
-                'hbl' => $model->loadContainerInfos->hbl,
+                'vesselName' => $model->loadContainerInfos->loadReferenceNumbers->vessel_name,
+                'mbl' => $model->loadContainerInfos->loadReferenceNumbers->mbl,
+                'hbl' => $model->loadContainerInfos->loadReferenceNumbers->hbl,
                 'type' => $model->loadContainerInfos->type,
                 'container_number' => $model->loadContainerInfos->container_number,
-                'Load_id' => $model->loadContainerInfos->load_reference_number,
                 'size' => $model->loadContainerInfos->size,
             ]
         ];

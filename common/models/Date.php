@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\Date as BaseDate;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,7 @@ use yii\helpers\ArrayHelper;
  */
 class Date extends BaseDate
 {
-
+    use Template;
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -31,4 +32,6 @@ class Date extends BaseDate
             ]
         );
     }
+
+
 }

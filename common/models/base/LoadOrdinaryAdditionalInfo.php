@@ -15,8 +15,6 @@ use Yii;
  * @property string $hazmat_description
  * @property string $overweight
  * @property string $overweight_description
- * @property string $weight_in_LBs
- * @property string $weight_in_LBs_description
  * @property string $reefer
  * @property string $reefer_description
  * @property string $alcohol
@@ -24,6 +22,7 @@ use Yii;
  * @property string $urgent
  * @property string $urgent_description
  * @property string $note
+ * @property integer $weight_in_LBs
  *
  * @property \common\models\OrdinaryLoad $load
  * @property string $aliasModel
@@ -47,10 +46,10 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['load_id'], 'default', 'value' => null],
-            [['load_id'], 'integer'],
+            [['load_id', 'weight_in_LBs'], 'default', 'value' => null],
+            [['load_id', 'weight_in_LBs'], 'integer'],
             [['note'], 'string'],
-            [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'weight_in_LBs', 'weight_in_LBs_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255],
+            [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
@@ -67,8 +66,6 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             'hazmat_description' => 'Hazmat Description',
             'overweight' => 'Overweight',
             'overweight_description' => 'Overweight Description',
-            'weight_in_LBs' => 'Weight In L Bs',
-            'weight_in_LBs_description' => 'Weight In L Bs Description',
             'reefer' => 'Reefer',
             'reefer_description' => 'Reefer Description',
             'alcohol' => 'Alcohol',
@@ -76,6 +73,7 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             'urgent' => 'Urgent',
             'urgent_description' => 'Urgent Description',
             'note' => 'Note',
+            'weight_in_LBs' => 'Weight In L Bs',
         ];
     }
 

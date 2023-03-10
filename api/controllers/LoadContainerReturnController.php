@@ -5,6 +5,7 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\LoadContainerReturnService;
 use api\templates\container_return\Large;
+use common\models\Container_return;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
@@ -153,11 +154,7 @@ class LoadContainerReturnController extends BaseController
 
     public function actionUpdate($id): array
     {
-        try {
-            $this->containerReturn->update($id);
-        } catch (HttpException $e) {
-        } catch (InvalidConfigException $e) {
-        }
+        $this->containerReturn->update($id);
         return $this->success();
     }
 
@@ -195,5 +192,79 @@ class LoadContainerReturnController extends BaseController
     {
         $this->containerReturn->delete($id);
         return $this->success();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/load-container-return/{id}",
+     *     tags={"container-return"},
+     *     operationId="getContainerReturnID",
+     *     summary="getContainerReturnID",
+     *         @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="load_id",
+     *                         type="date"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="container_return",
+     *                         type="date"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="return_from",
+     *                         type="date"
+     *                     ),
+     *                      @OA\Property(
+     *                         property="return_to",
+     *                         type="date"
+     *                     ),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionShow($id): array
+    {
+        $model = $this->list($id);
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    private function list($id): Container_return
+    {
+        $con = ['id' => $id];
+        $model = container_return::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 }

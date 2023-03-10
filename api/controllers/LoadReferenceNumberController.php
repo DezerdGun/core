@@ -4,9 +4,12 @@ namespace api\controllers;
 
 use api\components\HttpException;
 use api\khalsa\services\LoadReferenceNumberService;
+use api\templates\load_container_reference_number\Large;
+use common\models\LoadReferenceNumber;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
+use yii\web\NotFoundHttpException;
 
 
 class LoadReferenceNumberController extends BaseController
@@ -129,11 +132,11 @@ class LoadReferenceNumberController extends BaseController
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="master_bill_of_loading",
+     *                     property="mbl",
      *                     type="string"
      *                 ),
      *                 @OA\Property(
-     *                     property="house_bill_of_loading",
+     *                     property="hbl",
      *                     type="string"
      *                 ),
      *                 @OA\Property(
@@ -195,12 +198,8 @@ class LoadReferenceNumberController extends BaseController
 
     public function actionUpdate($id): array
     {
-        try {
-            $this->loadReference->update($id);
-        } catch (HttpException $e) {
-        } catch (InvalidConfigException $e) {
-        } catch (StaleObjectException $e) {
-        }
+
+         $this->loadReference->update($id);
         return $this->success();
     }
 
@@ -238,5 +237,54 @@ class LoadReferenceNumberController extends BaseController
     {
         $this->loadReference->delete($id);
         return $this->success();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/load-reference-number/{id}",
+     *     tags={"load-container-info-reference-number"},
+     *     operationId="getLoadReferenceNumberId",
+     *     summary="getLoadReferenceNumberId",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/LoadReferenceNumberLarge"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionShow($id)
+    {
+        $model = $this->list($id);
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    private function list($id)
+    {
+        $con = ['id' => $id];
+        $model = LoadReferenceNumber::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\LoadReferenceNumber as BaseLoadReferenceNumber;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,7 @@ use yii\helpers\ArrayHelper;
  */
 class LoadReferenceNumber extends BaseLoadReferenceNumber
 {
-
+    use Template;
     public function behaviors()
     {
         return ArrayHelper::merge(

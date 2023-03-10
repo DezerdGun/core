@@ -34,7 +34,6 @@ use TRS\RestResponse\templates\BaseTemplate;
  */
 class Large extends BaseTemplate
 {
-
     protected function prepareResult()
     {
         /** @var Holds $model */

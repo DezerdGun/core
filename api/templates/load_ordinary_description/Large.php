@@ -46,14 +46,7 @@ class Large extends BaseTemplate
         /** @var LoadOrdinaryDescription $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_id' => $model->load_id,
-            'commodity' => $model->loadOrdinaryDescriptionRows->commodity,
-            'description' => $model->loadOrdinaryDescriptionRows->description,
-            'pieces' => $model->loadOrdinaryDescriptionRows->pieces,
-            'pallets' => $model->loadOrdinaryDescriptionRows->pallets,
-            'weight_KGs' => $model->loadOrdinaryDescriptionRows->weight_KGs,
-            'weight_LBs' => $model->loadOrdinaryDescriptionRows->weight_LBs,
+            'all' => $model->loadOrdinaryDescriptionRows,
             'Total' => [
                 'pallet_size' => $model->pallet_size,
                 'pallets' => $model->pallets,

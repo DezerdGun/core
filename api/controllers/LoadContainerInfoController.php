@@ -8,6 +8,7 @@ use api\templates\containerinfo\Small;
 use api\templates\load\Large;
 use common\models\LoadContainerInfo;
 use common\models\Load;
+use common\models\LoadReferenceNumber;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
@@ -66,19 +67,19 @@ class LoadContainerInfoController extends BaseController
      *              description="1 => NSA",
      *              ),
      *         @OA\Property(
-     *              property="LoadContainerInfo[vessel_name]",
+     *              property="LoadReferenceNumber[vessel_name]",
      *              type="string",
      *              example="Omega",
      *              description="Omega",
      *              ),
      *         @OA\Property(
-     *              property="LoadContainerInfo[mbl]",
+     *              property="LoadReferenceNumber[mbl]",
      *              type="string",
      *              example="235",
      *              description="235",
      *              ),
      *         @OA\Property(
-     *              property="LoadContainerInfo[hbl]",
+     *              property="LoadReferenceNumber[hbl]",
      *              type="string",
      *              example="523",
      *              description="523",
@@ -87,7 +88,7 @@ class LoadContainerInfoController extends BaseController
      *                     "LoadContainerInfo[size]",
      *                     "LoadContainerInfo[container_number]",
      *                     "LoadContainerInfo[owner_id]",
-     *                     "LoadContainerInfo[mbl]",
+     *                     "LoadReferenceNumber[mbl]",
      *              }
      *            )
      *         )
@@ -118,27 +119,33 @@ class LoadContainerInfoController extends BaseController
     public function actionCreate(): array
     {
         $model = new LoadContainerInfo();
-        $model->load_reference_number = rand(1000000,9999999);
         $role = \Yii::$app->user->id;
         $subbroker = \Yii::$app->user->identity->findByRoleBroker($role);
         $masterBroker = \Yii::$app->user->identity->findByRoleMaster($role);
         $carrier = \Yii::$app->user->identity->findByRoleCarrier($role);
         $empty = \Yii::$app->user->identity->findByRoleEmpty($role);
-        if ($masterBroker && !$subbroker && !$carrier && !$empty){
-            $this->feedUp($model);
-            return $this->success($model->getAsArray(Small::class));
-        }elseif(!$masterBroker && $subbroker && !$carrier && !$empty){
-            $this->feedUp($model);
-            return $this->success($model->getAsArray(Small::class));
+        $loadReferenceNumber = new LoadReferenceNumber();
+        if ($loadReferenceNumber->load(\Yii::$app->request->post()) && $loadReferenceNumber->validate()) {
+            if ($masterBroker && !$subbroker && !$carrier && !$empty) {
+                $this->feedUp($model,$loadReferenceNumber);
+                return $this->success($model->getAsArray(Small::class));
+            } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
+                $this->feedUp($model,$loadReferenceNumber);
+                return $this->success($model->getAsArray(Small::class));
+            } else {
+                throw new HttpException(400, 'You are not Broker');
+            }
         }else {
-            throw new HttpException(400, 'You are not Broker');
+            throw new HttpException(404, [$loadReferenceNumber->formName() => $loadReferenceNumber->getErrors()]);
         }
     }
 
-    private function feedUp($model)
+    private function feedUp($model,$loadReferenceNumber)
     {
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $model->save();
+            $loadReferenceNumber->load_id = $model->id;
+            $loadReferenceNumber->save();
         } else {
             throw new HttpException(400,
                 [$model->formName() => $model->getErrors()]);

@@ -24,6 +24,10 @@ use yii\helpers\ArrayHelper;
      *         type="integer"
      *     ),
      *     @OA\Property(
+     *         property="load_id",
+     *         type="integer"
+     *     ),
+     *     @OA\Property(
      *         property="equipment_need_id",
      *         type="integer"
      *     ),
@@ -127,8 +131,20 @@ class Small extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'port_id' => $model->origin_id,
-            'destination_id' => $model->destination_id,
+            'load_id' => $model->load_reference_number,
+            'loadStatus' => $model->status,
+            'origin' => $model->origin->name,
+            'destinationCity' => $model->origin->address->city,
+            'destinationStateCode' => $model->origin->address->state_code,
+            'consignee' => $model->destination->name,
+            'portCity' =>  $model->destination->address->city,
+            'portStateCode' => $model->destination->address->state_code,
+            'customer' => $model->customer->company_name,
+            'created_by' => [
+                'name' => $model->user->name,
+                "email" =>  $model->user->email,
+                'role' =>  $model->user->role,
+            ],
             'ordinary_need' => ArrayHelper::getColumn(ArrayHelper::toArray($model->ordinaryNeededs, [
                 'common\models\OrdinaryNeeded' => [
                     'id',
@@ -144,7 +160,6 @@ class Small extends BaseTemplate
                 'overweight' => $model->loadOrdinaryAdditionalInfos->overweight,
                 'overweight_description' => $model->loadOrdinaryAdditionalInfos->overweight_description,
                 'weight_in_LBs' => $model->loadOrdinaryAdditionalInfos->weight_in_LBs,
-                'weight_in_LBs_description' => $model->loadOrdinaryAdditionalInfos->weight_in_LBs_description,
                 'reefer' => $model->loadOrdinaryAdditionalInfos->reefer,
                 'reefer_description' => $model->loadOrdinaryAdditionalInfos->reefer_description,
                 'alcohol' => $model->loadOrdinaryAdditionalInfos->alcohol,
@@ -153,13 +168,8 @@ class Small extends BaseTemplate
                 'urgent_description' => $model->loadOrdinaryAdditionalInfos->urgent_description,
                 'note' => $model->loadOrdinaryAdditionalInfos->note,
             ],
-            'LoadOrdinaryDescription'  => [
-                'load_id' => $model->loadOrdinaryDescriptions->load_id,
-                'pallets' => $model->loadOrdinaryDescriptions->pallets,
-                'weight_LBs' => $model->loadOrdinaryDescriptions->weight_LBs,
-                'pallets_size' => $model->loadOrdinaryDescriptions->pallet_size
-            ]
+              'LoadOrdinaryDescriptionsOverall' =>  $model->loadOrdinaryDescriptions,
+             'LoadOrdinaryDescriptionsRows' =>   $model->loadOrdinaryDescriptions->loadOrdinaryDescriptionRows,
         ];
     }
 }
-

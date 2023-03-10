@@ -45,10 +45,11 @@ class LoadChassisLocationsService implements ServiceInterface
         $this->chassisLocationsRepository->delete($model);
     }
 
+
     /**
      * @throws StaleObjectException
-     * @throws InvalidConfigException
      * @throws HttpException
+     * @throws InvalidConfigException
      */
     public function update($id)
     {
@@ -56,6 +57,8 @@ class LoadChassisLocationsService implements ServiceInterface
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
             $this->chassisLocationsRepository->update($model);
-        } else throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        } else{
+            throw new HttpException(400, [$model->formName() => $model->getErrors()]);
+        }
     }
 }

@@ -33,10 +33,10 @@ class LoadAdditionalInfo extends BaseLoadAdditionalInfo
                 ['hazmat_description', 'required', 'when' => function($model) {
                     return $model->hazmat == 'yes';
                 }],
-                ['weight_in_lbs', 'required', 'when' => function($model) {
+                ['overweight_description', 'required', 'when' => function($model) {
                     return $model->overweight == 'yes';
                 }],
-                ['temp_in_f', 'required', 'when' => function($model) {
+                ['reefer_description', 'required', 'when' => function($model) {
                     return $model->reefer == 'yes';
                 }],
                 ['alcohol_description', 'required', 'when' => function($model) {

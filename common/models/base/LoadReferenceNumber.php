@@ -11,8 +11,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $load_id
- * @property string $master_bill_of_loading
- * @property string $house_bill_of_loading
+ * @property string $mbl
+ * @property string $hbl
  * @property string $seal
  * @property string $vessel_name
  * @property string $voyage
@@ -23,7 +23,7 @@ use Yii;
  * @property string $return
  * @property string $reservation
  *
- * @property \common\models\Load $load
+ * @property \common\models\LoadContainerInfo $load
  * @property string $aliasModel
  */
 abstract class LoadReferenceNumber extends \yii\db\ActiveRecord
@@ -47,8 +47,8 @@ abstract class LoadReferenceNumber extends \yii\db\ActiveRecord
         return [
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
-            [['master_bill_of_loading', 'house_bill_of_loading', 'seal', 'vessel_name', 'voyage', 'purchase_order', 'shipment', 'pick_up', 'appointment', 'return', 'reservation'], 'string', 'max' => 32],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['mbl', 'hbl', 'seal', 'vessel_name', 'voyage', 'purchase_order', 'shipment', 'pick_up', 'appointment', 'return', 'reservation'], 'string', 'max' => 32],
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadContainerInfo::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
 
@@ -60,8 +60,8 @@ abstract class LoadReferenceNumber extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'load_id' => 'Load ID',
-            'master_bill_of_loading' => 'Master Bill Of Loading',
-            'house_bill_of_loading' => 'House Bill Of Loading',
+            'mbl' => 'Mbl',
+            'hbl' => 'Hbl',
             'seal' => 'Seal',
             'vessel_name' => 'Vessel Name',
             'voyage' => 'Voyage',
@@ -79,7 +79,7 @@ abstract class LoadReferenceNumber extends \yii\db\ActiveRecord
      */
     public function getLoad()
     {
-        return $this->hasOne(\common\models\Load::className(), ['id' => 'load_id']);
+        return $this->hasOne(\common\models\LoadContainerInfo::className(), ['id' => 'load_id']);
     }
 
 

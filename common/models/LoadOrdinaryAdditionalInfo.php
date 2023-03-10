@@ -36,9 +36,7 @@ class LoadOrdinaryAdditionalInfo extends BaseLoadOrdinaryAdditionalInfo
                 ['overweight_description', 'required', 'when' => function($model) {
                     return $model->overweight == 'yes';
                 }],
-                ['weight_in_LBs_description', 'required', 'when' => function($model) {
-                    return $model->weight_in_LBs == 'yes';
-                }],
+
                 ['reefer_description', 'required', 'when' => function($model) {
                     return $model->reefer == 'yes';
                 }],

@@ -20,6 +20,7 @@ use Yii;
  * @property string $pick_up_to
  * @property string $delivery_from
  * @property string $delivery_to
+ * @property integer $load_reference_number
  *
  * @property \common\models\Location $consignee
  * @property \common\models\Customer $customer
@@ -83,6 +84,7 @@ abstract class Load extends \yii\db\ActiveRecord
             'pick_up_to' => 'Pick Up To',
             'delivery_from' => 'Delivery From',
             'delivery_to' => 'Delivery To',
+            'load_reference_number' => 'Load Reference Number',
         ];
     }
 

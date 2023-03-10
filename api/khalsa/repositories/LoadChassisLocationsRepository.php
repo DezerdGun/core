@@ -2,10 +2,12 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\Chassis_locations;
 use yii\db\StaleObjectException;
+use yii\web\NotFoundHttpException;
 
 class LoadChassisLocationsRepository implements RepositoryInterface
 {
@@ -13,7 +15,8 @@ class LoadChassisLocationsRepository implements RepositoryInterface
     public function getById($id): Chassis_locations
     {
         if (!$model = Chassis_locations::findOne(['id' => $id])) {
-            throw new NotFoundException('ChassisLocation is not found.');
+            throw new HttpException(400, 'ChassisLocation is not found.');
+
         }
         return $model;
     }

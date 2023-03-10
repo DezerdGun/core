@@ -7,6 +7,7 @@ use api\khalsa\services\LoadOrdinaryReferenceNumberService;
 use api\khalsa\services\LoadOrdinaryService;
 use api\templates\ordinaryload\Large;
 use api\templates\ordinaryload\Small;
+use common\enums\LoadStatus;
 use common\models\Load;
 use common\models\OrdinaryLoad;
 use common\models\OrdinaryNeeded;
@@ -15,6 +16,7 @@ use common\models\User;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
 use yii\db\Exception;
+use yii\db\StaleObjectException;
 use yii\web\NotFoundHttpException;
 
 class OrdinaryLoadController extends BaseController
@@ -263,6 +265,14 @@ class OrdinaryLoadController extends BaseController
      *              type="integer",
      *         )
      *     ),
+     *    @OA\Parameter(
+     *         name="SearchLoadOrdinary[load_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
      *      @OA\Parameter(
      *         name="SearchLoadOrdinary[equipmentNeed][]",
      *         in="query",
@@ -314,7 +324,7 @@ class OrdinaryLoadController extends BaseController
      *         in="query",
      *         required=false,
      *         @OA\Schema(
-     *              type="string",
+     *              type="integer",
      *         )
      *     ),
      *     @OA\Parameter(
@@ -371,7 +381,7 @@ class OrdinaryLoadController extends BaseController
      * )
      */
 
-    public function actionIndex($page = 0, $pageSize = 10): array
+    public function actionIndex($page = 0, $page_size = 10)
     {
         $SearchLoadOrdinary = new SearchLoadOrdinary();
         $SearchLoadOrdinary->load(\Yii::$app->request->queryParams);
@@ -380,8 +390,131 @@ class OrdinaryLoadController extends BaseController
         } else {
             throw new HttpException(400, ['SearchLoadOrdinary' => $SearchLoadOrdinary->getErrors()]);
         }
-        return $this->index($query, $page, $pageSize, Small::class);
+        return $this->index($query, $page, $page_size, Small::class);
 
+    }
+
+    /**
+     * @OA\Patch (
+     *     path="/ordinary-load/status/{id}",
+     *     tags={"ordinary-load"},
+     *     operationId="changeOrdinaryLoadId",
+     *     summary="changeOrdinaryLoadId",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                  @OA\Property(
+     *                      property="UpdateStatusForm[status]",
+     *                      type="string",
+     *                      enum={"pending","in_progress", "completed","cancelled"}
+     *                  ),
+     *                  required={
+     *                      "UpdateStatusForm[status]",
+     *                  }
+     *            )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                          example=" Cancelled -> CANCELLED,Completed -> COMPLETED,   in_Progress -> IN_PROGRESS ,Pending -> PENDING"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+
+    public function actionReassign($id): array
+    {
+        $condition = ['id' => $id];
+        $model = OrdinaryLoad::findOne($condition);
+        if ($model) {
+            $model->load(\Yii::$app->getRequest()->post(), 'UpdateStatusForm') && $model->validate();
+            $model->save();
+        }
+        return $this->success($model);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/ordinary-load/{id}",
+     *     tags={"ordinary-load"},
+     *     operationId="deleteOrdinaryLoad",
+     *     summary="deleteOrdinaryLoad",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *     }
+     * )
+     * @throws NotFoundHttpException
+     * @throws StaleObjectException
+     */
+
+    public function actionDelete($id): array
+    {
+        $model = $this->findModel($id);
+        $model->status = LoadStatus::ARCHIVED;
+        $model->update();
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    private function findModel($id): OrdinaryLoad
+    {
+        $con = ['id' => $id];
+        $model = OrdinaryLoad::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\LoadOrdinaryReferenceNumber;
@@ -12,7 +13,7 @@ class LoadOrdinaryReferenceNumberRepository implements RepositoryInterface
     public function getById($id): LoadOrdinaryReferenceNumber
     {
         if (!$model = LoadOrdinaryReferenceNumber::findOne(['id' => $id])) {
-            throw new NotFoundException('Hold is not found.');
+            throw new HttpException(400, 'Hold is not found.');
         }
         return $model;
     }

@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\Container_return;
@@ -13,7 +14,7 @@ class LoadContainerReturnRepository implements RepositoryInterface
     public function getById($id): Container_return
     {
         if (!$model = Container_return::findOne(['id' => $id])) {
-            throw new NotFoundException('ContainerReturn is not found.');
+            throw new HttpException(400, 'ContainerReturn is not found.');
         }
         return $model;
     }

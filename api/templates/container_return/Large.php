@@ -52,7 +52,7 @@ class Large extends BaseTemplate
             'load_id' => $model->load_id,
             'container_return' =>[
                 'name' => $model->containerReturn->name,
-                'address_id' => $model->containerReturn->address_id,
+                'address' => $model->containerReturn->address,
                 'location_type' => $model->containerReturn->location_type
         ],
             'return_from' => $model->return_from,

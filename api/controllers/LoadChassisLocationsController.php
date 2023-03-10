@@ -6,14 +6,21 @@ use api\components\HttpException;
 use api\khalsa\services\LoadChassisLocationsService;
 use api\khalsa\services\LoadContainerReturnService;
 use api\templates\chassis_locations\Large;
+use common\models\base\Location;
+use common\models\Chassis_locations;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
 use yii\db\StaleObjectException;
 use yii\web\NotFoundHttpException;
 
 class LoadChassisLocationsController extends BaseController
 {
     public $chassisLocation;
+    /**
+     * @var mixed
+     */
+
 
     public function __construct($id, $module, $config = [],
                                 LoadChassisLocationsService $chassisLocation
@@ -144,13 +151,9 @@ class LoadChassisLocationsController extends BaseController
 
     public function actionUpdate($id): array
     {
-        try {
+
             $this->chassisLocation->update($id);
-        } catch (HttpException $e) {
-        } catch (InvalidConfigException $e) {
-        } catch (StaleObjectException $e) {
-        }
-        return $this->success();
+            return $this->success();
     }
 
     /**
@@ -192,5 +195,77 @@ class LoadChassisLocationsController extends BaseController
     {
         $this->chassisLocation->delete($id);
         return $this->success();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/load-chassis-locations/{id}",
+     *     tags={"chassis-locations"},
+     *     operationId="getChassisLocationsId",
+     *     summary="getChassisLocationsId",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="load_id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="chassis_pickup",
+     *                         type="date"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="chassis_termination",
+     *                         type="date"
+     *                     ),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     * @throws NotFoundHttpException
+     */
+
+
+    public function actionShow($id): array
+    {
+        $model = $this->list($id);
+        return $this->success($model->getAsArray(Large::class));
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    private function list($id): Chassis_locations
+    {
+        $con = ['id' => $id];
+        $model = Chassis_locations::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
     }
 }
