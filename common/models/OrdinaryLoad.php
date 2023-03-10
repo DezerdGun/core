@@ -3,7 +3,6 @@
 namespace common\models;
 
 use common\models\traits\Template;
-use Yii;
 use \common\models\base\OrdinaryLoad as BaseOrdinaryLoad;
 use yii\helpers\ArrayHelper;
 
@@ -13,12 +12,6 @@ use yii\helpers\ArrayHelper;
 class   OrdinaryLoad extends BaseOrdinaryLoad
 {
     use Template;
-
-    const PENDING = 'pending';
-    const IN_PROGRESS = 'in_progress';
-    const COMPLETED = 'completed';
-    const CANCELLED = 'cancelled';
-
     public function behaviors(): array
     {
         return ArrayHelper::merge(

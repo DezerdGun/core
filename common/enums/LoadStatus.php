@@ -14,4 +14,5 @@ class LoadStatus extends Enum
     const ARCHIVED = 'archived';
     const HIDDEN = 'hidden';
     const ACTIVE = 'active';
+    const EMPTY = null;
 }

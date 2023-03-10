@@ -5,6 +5,7 @@ namespace api\khalsa\services;
 use api\components\HttpException;
 use api\khalsa\interfaces\ServiceInterface;
 use api\khalsa\repositories\LoadOrdinaryRepository;
+use common\enums\LoadStatus;
 use common\models\Holds;
 use common\models\LoadOrdinaryDescriptionRows;
 use common\models\OrdinaryLoad;
@@ -34,7 +35,7 @@ class LoadOrdinaryService implements ServiceInterface
         $model = new OrdinaryLoad();
         $model->load_reference_number = rand(1000000,9999999);
         $model->user_id = \Yii::$app->user->id;
-        $model->status = OrdinaryLoad::PENDING;
+        $model->status =  LoadStatus::PENDING;
         $model->load(\Yii::$app->request->post(),'OrdinaryLoad');
         $form = new OrdinaryNeeded();
         if ($model->validate()) {

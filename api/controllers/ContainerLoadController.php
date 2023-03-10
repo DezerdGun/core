@@ -473,7 +473,7 @@ class ContainerLoadController extends BaseController
         $model = new Load();
         $model->load_reference_number = rand(1000000,9999999);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->status = $model::PENDING;
+            $model->status =  LoadStatus::PENDING;
             $role = Yii::$app->user->id;
             $subbroker = Yii::$app->user->identity->findByRoleBroker($role);
             $masterBroker = Yii::$app->user->identity->findByRoleMaster($role);
