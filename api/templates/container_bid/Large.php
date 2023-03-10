@@ -15,8 +15,14 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
         for ($i = 0; $i < count($model->containerBidDetail); $i++) {
             $bid_description[] = [
                 'bid_detail_id' => $model->containerBidDetail[$i]->id,
-                'charge_name' => $model->containerBidDetail[$i]->charge->name,
-                'measure_name' => $model->containerBidDetail[$i]->measure->name,
+                'charge' => [
+                    'charge_id' => $model->containerBidDetail[$i]->charge->id,
+                    'charge_name' => $model->containerBidDetail[$i]->charge->name
+                ],
+                'measure' => [
+                    'measure_id' => $model->containerBidDetail[$i]->measure->id,
+                    'measure_name' => $model->containerBidDetail[$i]->measure->name,
+                ],
                 'price' => $model->containerBidDetail[$i]->price,
                 'free_unit' => $model->containerBidDetail[$i]->free_unit
             ];

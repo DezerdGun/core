@@ -182,17 +182,32 @@ class ContainerBidController extends BaseController
      *                                  type="integer"
      *                              ),
      *                              @OA\Property (
-     *                                  property="charge_name",
-     *                                  type="string"
+     *                                  property="charge",
+     *                                  type="object",
+     *                                  @OA\Property (
+     *                                      property="id",
+     *                                      type="integer"
+     *                                  ),
+     *                                  @OA\Property (
+     *                                      property="charge_name",
+     *                                      type="string"
+     *                                  )
      *                              ),
      *                              @OA\Property (
-     *                                  property="measure_name",
-     *                                  type="string"
+     *                                  property="measure",
+     *                                  type="object",
+     *                                  @OA\Property (
+     *                                      property="id",
+     *                                      type="integer"
+     *                                  ),
+     *                                  @OA\Property (
+     *                                      property="measure_name",
+     *                                      type="string"
+     *                                  ),
      *                              ),
      *                              @OA\Property (
      *                                  property="price",
-     *                                  type="number",
-     *                                  format="float"
+     *                                  type="string"
      *                              ),
      *                              @OA\Property (
      *                                  property="free_unit",

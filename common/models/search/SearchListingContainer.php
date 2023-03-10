@@ -5,15 +5,15 @@ namespace common\models\search;
 use common\enums\ListingStatus;
 use common\models\Address;
 use common\models\Container;
+use common\models\ContainerBid;
 use common\models\ListingContainer;
 use common\models\ListingContainerAdditionalInfo;
 use common\models\ListingContainerInfo;
 use common\models\Location;
 use common\models\State;
-use common\models\User;
 use yii\base\Model;
 use yii\db\ActiveQuery;
-
+use common\enums\UserRole;
 class SearchListingContainer extends Model
 {
     public $id;
@@ -74,10 +74,13 @@ class SearchListingContainer extends Model
             },
             'additionalInfo' => function (ActiveQuery $query) {
                 $query->from(['additionalInfo' => ListingContainerAdditionalInfo::tableName()]);
+            },
+            'containerBid' => function(ActiveQuery $query) {
+                $query->from(['containerBid' => ContainerBid::tableName()]);
             }
         ]);
 
-        if (\Yii::$app->user->identity->role == User::SUB_BROKER) {
+        if (\Yii::$app->user->identity->role == UserRole::SUB_BROKER) {
             $query->filterWhere(['user_id' => \Yii::$app->user->id]);
         }
 
