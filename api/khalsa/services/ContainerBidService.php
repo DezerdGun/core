@@ -9,19 +9,26 @@ use common\models\ContainerBid;
 use common\models\search\SearchContainerBid;
 use yii\base\InvalidConfigException;
 
-class ContainerBidService implements \api\khalsa\interfaces\ServiceInterface
+class ContainerBidService
 {
-    public $containerBidDetailService;
+
     public $containerBidRepository;
+    public $containerBidDetailService;
+    public $containerBidDetailRepository;
+    public $containerBidLogService;
 
     public function __construct
     (
-        ContainerBidRepository    $containerBidRepository,
+        ContainerBidRepository $containerBidRepository,
         ContainerBidDetailService $containerBidDetailService
+//        ContainerBidDetailRepository $containerBidDetailRepository,
+//        ContainerBidLogService $containerBidLogService
     )
     {
         $this->containerBidRepository = $containerBidRepository;
         $this->containerBidDetailService = $containerBidDetailService;
+//        $this->containerBidDetailRepository = $containerBidDetailRepository;
+//        $this->containerBidLogService = $containerBidLogService;
     }
 
     public function index()
@@ -66,7 +73,7 @@ class ContainerBidService implements \api\khalsa\interfaces\ServiceInterface
     public function update($id)
     {
        $model = $this->containerBidRepository->getById($id);
-       if ($model->edit_counting <= BidEditCount::TWO) {
+       if ($model->edit_counting < BidEditCount::TWO) {
            if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
                $this->containerBidRepository->update($model);
                $this->containerBidDetailService->update($model->id);
@@ -74,7 +81,7 @@ class ContainerBidService implements \api\khalsa\interfaces\ServiceInterface
                throw new HttpException(400, $model->errors);
            }
        } else {
-           throw new HttpException(400, 'You can only 2 times.');
+           throw new HttpException(400, 'You can edit only 2 times.');
        }
 
     }
@@ -93,4 +100,9 @@ class ContainerBidService implements \api\khalsa\interfaces\ServiceInterface
         }
     }
 
+    public function editCount(ContainerBid $model)
+    {
+        $model->edit_counting = $model->edit_counting + 1;
+        $this->containerBidRepository->update($model);
+    }
 }

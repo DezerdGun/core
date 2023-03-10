@@ -40,7 +40,7 @@ abstract class Log extends \yii\db\ActiveRecord
             [['user_id', 'action_id', 'action_date'], 'default', 'value' => null],
             [['user_id', 'action_id', 'action_date'], 'integer'],
             [['action_date', 'detail'], 'required'],
-            [['detail'], 'string', 'max' => 255],
+            [['detail'], 'string', 'max' => 2000],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
     }

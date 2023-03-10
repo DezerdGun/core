@@ -4,10 +4,10 @@ namespace api\khalsa\repositories;
 
 use api\components\HttpException;
 use common\models\Action;
-use common\models\Log;
 
 class ActionRepository
 {
+
     /**
      * @throws HttpException
      */
@@ -19,13 +19,4 @@ class ActionRepository
         return $model;
     }
 
-    /**
-     * @throws HttpException
-     */
-    public function create(Log $model)
-    {
-        if (!$model->save()) {
-            throw new HttpException(500, 'Saving error.');
-        }
-    }
 }

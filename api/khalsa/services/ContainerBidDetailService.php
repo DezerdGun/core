@@ -3,6 +3,7 @@
 namespace api\khalsa\services;
 use api\components\HttpException;
 use api\khalsa\repositories\ContainerBidDetailRepository;
+use common\enums\BidEditCount;
 use common\models\base\ContainerBidDetail as ContainerBidDetailAlias;
 use common\models\ContainerBidDetail;
 use Yii;
@@ -10,7 +11,11 @@ use Yii;
 class ContainerBidDetailService
 {
     public $containerBidDetailRepository;
-    public function __construct(ContainerBidDetailRepository $containerBidDetailRepository)
+
+    public function __construct
+    (
+        ContainerBidDetailRepository $containerBidDetailRepository
+    )
     {
         $this->containerBidDetailRepository = $containerBidDetailRepository;
     }
@@ -39,11 +44,12 @@ class ContainerBidDetailService
     {
         $model = new ContainerBidDetail();
         $ids = explode(',', $id);
+        $containerBidDetail = $this->containerBidDetailRepository->getById($ids[0]);
+        $model->container_bid_id = $containerBidDetail->container_bid_id;
+        if ($containerBidDetail->containerBid->edit_counting < BidEditCount::TWO) {
+            $model->load(Yii::$app->request->post());
 
-        $model->container_bid_id = $this->containerBidDetailRepository->getById($ids[0])->container_bid_id;
-        $model->load(Yii::$app->request->post());
-
-        $transaction = Yii::$app->db->beginTransaction();
+            $transaction = Yii::$app->db->beginTransaction();
             for ($i = 0; $i < count($ids); $i++) {
                 $bid_detail = $this->containerBidDetailRepository->getById($ids[$i]);
                 $bid_detail->setScenario(ContainerBidDetail::SCENARIO_UPDATE);
@@ -53,12 +59,22 @@ class ContainerBidDetailService
                 $bid_detail->free_unit = $model->free_unit[$i];
                 $this->containerBidDetailRepository->update($bid_detail);
             }
-        $transaction->commit();
+            $transaction->commit();
+        } else {
+            throw new HttpException(400, "You can edit only 2 times.");
+        }
+
     }
 
     public function delete($ids)
     {
         $container_bid_detail_ids = explode(',', $ids); //array from string ex. 1,2,3 to [1,2,3]
-        $this->containerBidDetailRepository->delete($container_bid_detail_ids);
+        $containerBid = $this->containerBidDetailRepository->getById($container_bid_detail_ids[0])->containerBid;
+        if ($containerBid->edit_counting < BidEditCount::TWO) {
+            $this->containerBidDetailRepository->delete($container_bid_detail_ids);
+        } else {
+            throw new HttpException(400, "You can change bids only 2 times.");
+        }
+
     }
 }
