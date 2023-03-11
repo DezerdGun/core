@@ -277,6 +277,26 @@ class OrdinaryLoadController extends BaseController
      *              type="integer",
      *         )
      *     ),
+     *    @OA\Parameter(
+     *         name="SearchLoadOrdinary[customer_id]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="integer",
+     *         )
+     *     ),
+     *    @OA\Parameter(
+     *         name="SearchLoadOrdinary[status][]",
+     *         in="query",
+     *         required=false,
+     *         description="pending, in_progress, completed,cancelled,archived",
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                  type="string"
+     *             ),
+     *         )
+     *     ),
      *      @OA\Parameter(
      *         name="SearchLoadOrdinary[equipmentNeed][]",
      *         in="query",

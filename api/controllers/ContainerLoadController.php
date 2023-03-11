@@ -164,7 +164,6 @@ class ContainerLoadController extends BaseController
      *         name="status",
      *         in="query",
      *         required=false,
-     *
      *         description="Pending,in_Progress,Completed,Cancelled",
      *         example="Pending",
      *         @OA\Schema(
@@ -243,7 +242,7 @@ class ContainerLoadController extends BaseController
      *         name="SearchLoadContainer[status][]",
      *         in="query",
      *         required=false,
-     *         description="Pending, in_Progress, Completed,Cancelled,archived",
+     *         description="pending, in_progress, completed,cancelled,archived",
      *         @OA\Schema(
      *             type="array",
      *             @OA\Items(

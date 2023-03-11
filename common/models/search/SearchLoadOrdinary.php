@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\enums\LoadStatus;
 use common\models\Address;
 use common\models\Company;
 use common\models\Date;
@@ -33,16 +34,18 @@ class SearchLoadOrdinary extends Model
     public $owner_id;
     public $origin_id;
     public $load_id;
-
+    public $status;
     public $port_state_code;
     public $destination_state_code;
+    public $customer_id;
 
 
     public function rules(): array
     {
        return[
-           [['id','port_id','destination_id','load_id','pallets','owner_id'],'integer'],
+           [['id','port_id','destination_id','load_id','pallets','owner_id','customer_id'],'integer'],
            [['pallet_size','weight_LBs','pick_up_date'],'string'],
+           [['status'], 'each', 'rule' => ['in', 'range' => LoadStatus::getEnums()]],
            [['equipmentNeed'], 'each', 'rule' => ['exist', 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipmentNeed' => 'code']]],
            [['port_state_code', 'destination_state_code'], 'each', 'rule' => ['string']],
            [['port_state_code'], 'each', 'rule' => ['exist', 'targetClass' => State::className(), 'targetAttribute' => ['port_state_code' => 'state_code']]],
@@ -98,6 +101,10 @@ class SearchLoadOrdinary extends Model
             $query->andWhere(['container.id'=> $this->id ]);
         }
 
+        if ($this->customer_id) {
+            $query->andFilterWhere(['customer_id' => $this->customer_id]);
+        }
+
         if ($this->port_id) {
             $query->andFilterWhere(['origin_id' => $this->port_id]);
         }
@@ -112,6 +119,10 @@ class SearchLoadOrdinary extends Model
 
         if ($this->pick_up_date_from && $this->pick_up_date_to) {
             $query->andFilterWhere(['between', 'pick_up_date', $this->pick_up_date_from, $this->pick_up_date_to]);
+        }
+
+        if ($this->status) {
+            $query->andFilterWhere(['in', 'status', $this->status]);
         }
 
         if ($this->equipmentNeed) {
