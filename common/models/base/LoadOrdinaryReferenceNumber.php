@@ -42,8 +42,9 @@ abstract class LoadOrdinaryReferenceNumber extends \yii\db\ActiveRecord
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
             [['seal', 'pick_up', 'appointment', 'reservation'], 'string', 'max' => 32],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']]
-        ];
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
+            ['load_id', 'unique'],
+            ];
     }
 
     /**

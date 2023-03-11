@@ -49,7 +49,8 @@ abstract class LoadOrdinaryAdditionalInfo extends \yii\db\ActiveRecord
             [['load_id'], 'integer'],
             [['note'], 'string'],
             [['hazmat', 'hazmat_description', 'overweight', 'overweight_description', 'reefer', 'reefer_description', 'alcohol', 'alcohol_description', 'urgent', 'urgent_description'], 'string', 'max' => 255],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']],
+            ['load_id', 'unique'],
         ];
     }
 

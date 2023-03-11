@@ -55,7 +55,8 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
             [['chassis_type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['chassis_type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner_id' => 'id']],
-            [['chassis_owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['chassis_owner_id' => 'id']]
+            [['chassis_owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['chassis_owner_id' => 'id']],
+            ['load_id', 'unique'],
         ];
     }
 

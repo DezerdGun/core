@@ -42,7 +42,8 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
             [['load_id', 'pallets'], 'integer'],
             [['weight_LBs'], 'number'],
             [['pallet_size'], 'string', 'max' => 255],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']],
+            ['load_id', 'unique'],
         ];
     }
 
