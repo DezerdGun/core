@@ -48,7 +48,8 @@ abstract class LoadReferenceNumber extends \yii\db\ActiveRecord
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
             [['mbl', 'hbl', 'seal', 'vessel_name', 'voyage', 'purchase_order', 'shipment', 'pick_up', 'appointment', 'return', 'reservation'], 'string', 'max' => 32],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadContainerInfo::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\LoadContainerInfo::className(), 'targetAttribute' => ['load_id' => 'id']],
+            ['load_id', 'unique'],
         ];
     }
 

@@ -51,7 +51,8 @@ abstract class LoadAdditionalInfo extends \yii\db\ActiveRecord
             [['hazmat', 'overweight'], 'string', 'max' => 132],
             [['reefer', 'alcohol', 'urgent'], 'string', 'max' => 32],
             [['hazmat_description', 'alcohol_description', 'urgent_description', 'overweight_description', 'reefer_description'], 'string', 'max' => 255],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
+            ['load_id', 'unique'],
         ];
     }
 

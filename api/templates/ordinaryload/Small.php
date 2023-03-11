@@ -135,7 +135,7 @@ class Small extends BaseTemplate
             'consignee' => $model->destination->name,
             'portCity' =>  $model->destination->address->city,
             'portStateCode' => $model->destination->address->state_code,
-            'customer' => $model->customer,
+            'customer' => $model->customer->company_name,
             'created_by' => [
                 'name' => $model->user->name,
                 "email" =>  $model->user->email,

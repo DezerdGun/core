@@ -12,7 +12,9 @@ use Yii;
  * @property integer $id
  * @property string $name
  *
- * @property \common\models\ContainerInfo[] $containerInfos
+ * @property \common\models\ListingContainerInfo[] $listingContainerInfos
+ * @property \common\models\LoadContainerInfo[] $loadContainerInfos
+ * @property \common\models\LoadContainerInfo[] $loadContainerInfos0
  * @property string $aliasModel
  */
 abstract class Owner extends \yii\db\ActiveRecord
@@ -53,9 +55,25 @@ abstract class Owner extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getContainerInfos()
+    public function getListingContainerInfos()
     {
-        return $this->hasMany(\common\models\ContainerInfo::className(), ['owner' => 'id']);
+        return $this->hasMany(\common\models\ListingContainerInfo::className(), ['owner_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadContainerInfos()
+    {
+        return $this->hasMany(\common\models\LoadContainerInfo::className(), ['owner_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadContainerInfos0()
+    {
+        return $this->hasMany(\common\models\LoadContainerInfo::className(), ['chassis_owner_id' => 'id']);
     }
 
 
