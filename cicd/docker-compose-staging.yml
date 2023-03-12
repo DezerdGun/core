@@ -1,12 +1,26 @@
 version: "3.9"
    
 services:
+  db:
+    image: postgis/postgis:12-3.3
+    volumes:
+      - dbvolume-12:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=tms2_staging
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
   app:
     image: tms2/app:staging
     env_file: staging.env
+    depends_on:
+      - db
     volumes:
       - /home/ubuntu/tms2/api/web/uploads:/var/www/app/api/web/uploads
       - /home/ubuntu/tms2/vendor:/var/www/app/vendor
       - /home/ubuntu/tms2/cdn/web:/var/www/app/cdn/web
     ports:
       - "100:80"
+
+volumes:
+  dbvolume-12:
