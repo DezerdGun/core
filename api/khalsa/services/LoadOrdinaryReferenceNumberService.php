@@ -5,7 +5,9 @@ namespace api\khalsa\services;
 use api\components\HttpException;
 use api\khalsa\interfaces\ServiceInterface;
 use api\khalsa\repositories\LoadOrdinaryReferenceNumberRepository;
+use common\enums\LoadStatus;
 use common\models\LoadOrdinaryReferenceNumber;
+use common\models\OrdinaryLoad;
 use yii\base\InvalidConfigException;
 
 class LoadOrdinaryReferenceNumberService implements  ServiceInterface
@@ -26,6 +28,7 @@ class LoadOrdinaryReferenceNumberService implements  ServiceInterface
         $model = new LoadOrdinaryReferenceNumber();
         $model->setAttributes(\Yii::$app->request->post());
         if ($model->validate()) {
+
             $this->loadOrdinaryReferenceNumberRepository->create($model);
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
@@ -35,7 +38,8 @@ class LoadOrdinaryReferenceNumberService implements  ServiceInterface
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $model = $this->loadOrdinaryReferenceNumberRepository->getById($id);
+        $this->loadOrdinaryReferenceNumberRepository->delete($model);
     }
 
     /**

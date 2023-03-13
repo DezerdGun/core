@@ -4,6 +4,7 @@ namespace common\models\search;
 
 use common\enums\LoadStatus;
 use common\models\Address;
+use common\models\Customer;
 use common\models\Company;
 use common\models\Date;
 use common\models\Equipment;
@@ -85,15 +86,10 @@ class SearchLoadOrdinary extends Model
                 'loadOrdinaryDescriptions' => function (ActiveQuery $query) {
                     $query->from(['loadOrdinaryDescriptions' => LoadOrdinaryDescription::tableName()]);
                 },
-                'customer' => function (ActiveQuery $query) {
-                    $query->from(['customer' => Company::tableName()]);
-                },
-                'ordinaryNeededs' => function (ActiveQuery $query) {
-                    $query->from(['ordinaryNeededs' => OrdinaryNeeded::tableName()]);
-                }
+
             ]);
 
-        if (\Yii::$app->user->identity->role == User::MASTER_BROKER) {
+        if (\Yii::$app->user->identity->role == User::SUB_BROKER) {
             $query->filterWhere(['user_id' => \Yii::$app->user->id]);
         }
 
