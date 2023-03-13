@@ -16,7 +16,7 @@ use Yii;
  * @property string $appointment
  * @property string $reservation
  *
- * @property \common\models\Load $load
+ * @property \common\models\OrdinaryLoad $load
  * @property string $aliasModel
  */
 abstract class LoadOrdinaryReferenceNumber extends \yii\db\ActiveRecord
@@ -42,9 +42,9 @@ abstract class LoadOrdinaryReferenceNumber extends \yii\db\ActiveRecord
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
             [['seal', 'pick_up', 'appointment', 'reservation'], 'string', 'max' => 32],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']],
             ['load_id', 'unique'],
-            ];
+        ];
     }
 
     /**
@@ -67,7 +67,7 @@ abstract class LoadOrdinaryReferenceNumber extends \yii\db\ActiveRecord
      */
     public function getLoad()
     {
-        return $this->hasOne(\common\models\Load::className(), ['id' => 'load_id']);
+        return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'load_id']);
     }
 
 

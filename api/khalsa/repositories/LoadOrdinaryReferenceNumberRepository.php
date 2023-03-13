@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use api\khalsa\NotFoundException;
 use common\models\LoadOrdinaryReferenceNumber;
+use yii\db\StaleObjectException;
 
 class LoadOrdinaryReferenceNumberRepository implements RepositoryInterface
 {
@@ -13,7 +14,7 @@ class LoadOrdinaryReferenceNumberRepository implements RepositoryInterface
     public function getById($id): LoadOrdinaryReferenceNumber
     {
         if (!$model = LoadOrdinaryReferenceNumber::findOne(['id' => $id])) {
-            throw new HttpException(400, 'Hold is not found.');
+            throw new HttpException(400, 'LoadOrdinaryReferenceNumber is not found.');
         }
         return $model;
     }
@@ -29,6 +30,16 @@ class LoadOrdinaryReferenceNumberRepository implements RepositoryInterface
     {
         if (!$model->save()) {
             throw new \RuntimeException('Updating error.');
+        }
+    }
+
+    /**
+     * @throws StaleObjectException
+     */
+    public function delete(LoadOrdinaryReferenceNumber $model)
+    {
+        if (!$model->delete()) {
+            throw new \RuntimeException('delete error.');
         }
     }
 }

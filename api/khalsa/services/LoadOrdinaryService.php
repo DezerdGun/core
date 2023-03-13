@@ -6,8 +6,6 @@ use api\components\HttpException;
 use api\khalsa\interfaces\ServiceInterface;
 use api\khalsa\repositories\LoadOrdinaryRepository;
 use common\enums\LoadStatus;
-use common\models\Holds;
-use common\models\LoadOrdinaryDescriptionRows;
 use common\models\OrdinaryLoad;
 use common\models\OrdinaryNeeded;
 use yii\base\InvalidConfigException;
@@ -40,6 +38,7 @@ class LoadOrdinaryService implements ServiceInterface
         $form = new OrdinaryNeeded();
         if ($model->validate()) {
             $model->save();
+            $model->load_reference_number($model);
             $form->load(\Yii::$app->request->post(),'OrdinaryNeeded');
             if ($model->validate()){
                 $rows = [];

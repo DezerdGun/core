@@ -7,6 +7,7 @@ use api\khalsa\services\LoadOrdinaryReferenceNumberService;
 use api\templates\load_ordinary_reference_number\Large;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 class OrdinaryLoadReferenceNumberController extends BaseController
 {
@@ -98,7 +99,7 @@ class OrdinaryLoadReferenceNumberController extends BaseController
     /**
      * @OA\Patch (
      *     path="/ordinary-load-reference-number/{id}",
-     *     tags={"ordinary-load"},
+     *     tags={"ordinary-load-reference-number"},
      *     operationId="updateOrdinaryLoadReferenceNumber",
      *     summary="updateOrdinaryLoadReferenceNumber",
      *     @OA\Parameter(
@@ -166,10 +167,43 @@ class OrdinaryLoadReferenceNumberController extends BaseController
 
     public function actionUpdate($id): array
     {
-        try {
-            $this->loadOrdinaryReferenceNumber->update($id);
-        } catch (HttpException $e) {
-        }
+
+        $this->loadOrdinaryReferenceNumber->update($id);
+        return $this->success();
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/ordinary-load-reference-number/{id}",
+     *     tags={"ordinary-load-reference-number"},
+     *     operationId="deleteOrdinaryLoadReferenceNumber",
+     *     summary="deleteOrdinaryLoadReferenceNumber",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *      {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+
+    public function actionDelete($id): array
+    {
+        $this->loadOrdinaryReferenceNumber->delete($id);
         return $this->success();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\enums\LoadStatus;
 use common\models\traits\Template;
 use \common\models\base\OrdinaryLoad as BaseOrdinaryLoad;
 use yii\helpers\ArrayHelper;
@@ -30,5 +31,16 @@ class   OrdinaryLoad extends BaseOrdinaryLoad
                 # custom validation rules
             ]
         );
+    }
+
+    public function load_reference_number($model)
+    {
+        $models = new LoadOrdinaryReferenceNumber();
+        $models->load_id = $model->id;
+        $models->seal = LoadStatus::EMPTY;
+        $models->pick_up = LoadStatus::EMPTY;
+        $models->appointment = LoadStatus::EMPTY;
+        $models->reservation = LoadStatus::EMPTY;
+        $models->save();
     }
 }

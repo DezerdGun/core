@@ -16,9 +16,9 @@ use Yii;
  * @property string $pick_up_date
  * @property integer $user_id
  * @property string $status
- *  @property integer $load_reference_number
+ * @property integer $load_reference_number
  *
- * @property \common\models\Company $customer
+ * @property \common\models\Customer $customer
  * @property \common\models\Location $destination
  * @property \common\models\LoadOrdinaryAdditionalInfo $loadOrdinaryAdditionalInfos
  * @property \common\models\LoadOrdinaryDescription $loadOrdinaryDescriptions
@@ -46,12 +46,12 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'origin_id', 'destination_id', 'user_id'], 'default', 'value' => null],
-            [['customer_id', 'origin_id', 'destination_id', 'user_id'], 'integer'],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'default', 'value' => null],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'integer'],
             [['pick_up_date'], 'safe'],
             [['user_id'], 'required'],
             [['status'], 'string', 'max' => 32],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Company::className(), 'targetAttribute' => ['customer_id' => 'id']],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['origin_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['origin_id' => 'id']],
             [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['destination_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
@@ -80,7 +80,7 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
      */
     public function getCustomer()
     {
-        return $this->hasOne(\common\models\Company::className(), ['id' => 'customer_id']);
+        return $this->hasOne(\common\models\Customer::className(), ['id' => 'customer_id']);
     }
 
     /**

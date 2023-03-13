@@ -113,6 +113,7 @@ $routes = [
     'POST /load-ordinary-description' => 'load-ordinary-description/create',
     'POST /ordinary-load-reference-number' => 'ordinary-load-reference-number/create',
     'PATCH /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/update',
+    'DELETE /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/delete',
     'PATCH /ordinary-load/status/<id:\d+>' => 'ordinary-load/reassign',
     'DELETE /ordinary-load/<id:\d+>' => 'ordinary-load/delete',
 

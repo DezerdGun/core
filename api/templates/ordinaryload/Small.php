@@ -27,6 +27,10 @@ use yii\helpers\ArrayHelper;
      *         property="load_id",
      *         type="integer"
      *     ),
+     *      @OA\Property(
+     *         property="customer_id",
+     *         type="integer"
+     *     ),
      *     @OA\Property(
      *         property="equipment_need_id",
      *         type="integer"
@@ -135,7 +139,7 @@ class Small extends BaseTemplate
             'consignee' => $model->destination->name,
             'portCity' =>  $model->destination->address->city,
             'portStateCode' => $model->destination->address->state_code,
-            'customer' => $model->customer->company_name,
+            'customer' => $model->customer->company->company_name,
             'created_by' => [
                 'name' => $model->user->name,
                 "email" =>  $model->user->email,
