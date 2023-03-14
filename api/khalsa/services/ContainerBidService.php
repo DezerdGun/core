@@ -76,9 +76,8 @@ class ContainerBidService
        if ($model->edit_counting < BidEditCount::TWO) {
            if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
                $this->containerBidRepository->update($model);
-               $this->containerBidDetailService->update($model->id);
            } else {
-               throw new HttpException(400, $model->errors);
+               throw new HttpException(400, [$model->formName() => $model->errors]);
            }
        } else {
            throw new HttpException(400, 'You can edit only 2 times.');
