@@ -9,6 +9,8 @@ services:
       - POSTGRES_DB=tms2_staging
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - 108:5432
 
   app:
     image: tms2/app:staging
