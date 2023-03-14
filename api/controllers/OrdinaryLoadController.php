@@ -231,7 +231,9 @@ class OrdinaryLoadController extends BaseController
                     LoadStatus::CANCELLED,
                     LoadStatus::IN_PROGRESS,
                     LoadStatus::PENDING,
-                    LoadStatus::COMPLETED],
+                    LoadStatus::COMPLETED,
+                    LoadStatus::ARCHIVED
+                ],
             ])
             ->groupBy(['status'])
             ->asArray()

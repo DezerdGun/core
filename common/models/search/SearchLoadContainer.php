@@ -145,7 +145,7 @@ class SearchLoadContainer extends Model
         }
 
         $query->orderBy([
-            'id' => 'SORT_ASC'
+            'id' => SORT_DESC
         ]);
 
         return $query;
