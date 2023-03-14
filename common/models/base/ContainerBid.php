@@ -59,7 +59,7 @@ abstract class ContainerBid extends \yii\db\ActiveRecord
     {
         return [
             ['id', 'integer'],
-            [['listing_container_id', 'user_id'], 'required'],
+            [['listing_container_id', 'user_id', 'quantity'], 'required'],
             [['is_favorite'], 'default', 'value' => false],
             [['listing_container_id', 'quantity', 'edit_counting', 'user_id'], 'default', 'value' => null],
             [['listing_container_id', 'quantity', 'edit_counting', 'user_id'], 'integer'],

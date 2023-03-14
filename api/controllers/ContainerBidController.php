@@ -320,6 +320,9 @@ class ContainerBidController extends BaseController
      *                      property="ContainerBid[note]",
      *                      type="string"
      *                  ),
+     *                  required={
+     *                      "ContainerBid[quantity]"
+     *                  }
      *              )
      *         )
      *     ),
