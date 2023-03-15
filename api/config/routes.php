@@ -115,6 +115,7 @@ $routes = [
     'PATCH /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/update',
     'DELETE /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/delete',
     'PATCH /ordinary-load/status/<id:\d+>' => 'ordinary-load/reassign',
+    'PATCH /ordinary-load/<id:\d+>' => 'ordinary-load/update-load-info',
     'DELETE /ordinary-load/<id:\d+>' => 'ordinary-load/delete',
 
     'POST /customer' => 'customer/create',

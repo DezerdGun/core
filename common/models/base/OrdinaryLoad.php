@@ -17,6 +17,10 @@ use Yii;
  * @property integer $user_id
  * @property string $status
  * @property integer $load_reference_number
+ * @property string $pick_up_from
+ * @property string $pick_up_to
+ * @property string $delivery_from
+ * @property string $delivery_to
  *
  * @property \common\models\Customer $customer
  * @property \common\models\Location $destination
@@ -48,7 +52,7 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'default', 'value' => null],
             [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'integer'],
-            [['pick_up_date'], 'safe'],
+            [['pick_up_date', 'pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to'], 'safe'],
             [['user_id'], 'required'],
             [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
@@ -72,6 +76,10 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'status' => 'Status',
             'load_reference_number' => 'Load Reference Number',
+            'pick_up_from' => 'Pick Up From',
+            'pick_up_to' => 'Pick Up To',
+            'delivery_from' => 'Delivery From',
+            'delivery_to' => 'Delivery To',
         ];
     }
 
@@ -105,6 +113,14 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function getLoadOrdinaryDescriptions()
     {
         return $this->hasOne(\common\models\LoadOrdinaryDescription::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoadOrdinaryReferenceNumbers()
+    {
+        return $this->hasMany(\common\models\LoadOrdinaryReferenceNumber::className(), ['load_id' => 'id']);
     }
 
     /**

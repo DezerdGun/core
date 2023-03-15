@@ -465,7 +465,7 @@ class OrdinaryLoadController extends BaseController
      *                 @OA\Items(
      *                     @OA\Property(
      *                         property="id",
-     *                         type="string"
+     *                         type="integer"
      *                     ),
      *                     @OA\Property(
      *                         property="description",
@@ -492,6 +492,144 @@ class OrdinaryLoadController extends BaseController
             $model->save();
         }
         return $this->success($model);
+    }
+
+    /**
+     * @OA\Patch (
+     *     path="/ordinary-load/{id}",
+     *     tags={"ordinary-load"},
+     *     operationId="changeOrdinaryLoadInfoId",
+     *     summary="changeOrdinaryLoadInfoId",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *         @OA\Property(
+     *              property="OrdinaryLoad[customer_id]",
+     *              type="integer",
+     *              example="1",
+     *              format="Number{ForeignKey}",
+     *              description="OrdinaryLoad[ForeignKey]TO[Company]"
+     *              ),
+     *          @OA\Property(
+     *              property="OrdinaryLoad[origin_id]",
+     *              type="integer",
+     *              format="Number{ForeignKey}",
+     *              example="1",
+     *              description="Origin[ForeignKey]TO[Location]"
+     *              ),
+     *          @OA\Property(
+     *              property="OrdinaryLoad[destination_id]",
+     *              type="integer",
+     *              format="Number{ForeignKey}",
+     *              example="1",
+     *              description="Destination[ForeignKey]TO[Location]"
+     *              ),
+     *         @OA\Property(
+     *              property="OrdinaryLoad[pick_up_from]",
+     *              type="date",
+     *              example="2022-08-17 08:16:06",
+     *              ),
+     *         @OA\Property(
+     *              property="OrdinaryLoad[pick_up_to]",
+     *              type="date",
+     *              format="date-time",
+     *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+     *              example="2022-08-17 08:16:06",
+     *              description="2022-09-17T10:40:52Z"
+     *              ),
+     *         @OA\Property(
+     *              property="OrdinaryLoad[delivery_from]",
+     *              type="date",
+     *              format="date-time",
+     *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+     *              example="2022-08-17 08:16:06",
+     *              description="2022-09-17T10:40:52Z"
+     *              ),
+     *         @OA\Property(
+     *              property="OrdinaryLoad[delivery_to]",
+     *              type="date",
+     *              format="date-time",
+     *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+     *              example="2022-08-17 08:16:06",
+     *              description="2022-09-17T10:40:52Z"
+     *              ),
+     *                  required={
+     *                      "OrdinaryLoad[customer_id]",
+     *                      "OrdinaryLoad[origin_id]",
+     *                  }
+     *            )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="customer_id",
+     *                         type="integer",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="origin_id",
+     *                         type="integer",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="destination_id",
+     *                         type="integer",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="pick_up_from",
+     *                         type="date",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="pick_up_to",
+     *                         type="date",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="delivery_from",
+     *                         type="date",
+     *                     ),
+     *                    @OA\Property(
+     *                         property="delivery_to",
+     *                         type="date",
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+
+    public function actionUpdateLoadInfo($id): array
+    {
+        $this->loadOrdinaryService->update($id);
+        return $this->success();
     }
 
     /**
