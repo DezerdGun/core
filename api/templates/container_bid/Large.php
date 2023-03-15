@@ -32,8 +32,8 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
             'broker_name' => $model->listingContainer->user->name,
             'vessel_eta' => $model->listingContainer->vessel_eta,
             'quantity' => $model->quantity,
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at,
+            'created_at' => date('c', $model->created_at),
+            'updated_at' => date('c', $model->updated_at),
             'note_from_carrier' => $model->note,
             'is_favorite' => $model->is_favorite,
             'container_info' => [

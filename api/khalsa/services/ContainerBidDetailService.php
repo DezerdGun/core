@@ -46,6 +46,7 @@ class ContainerBidDetailService
         $ids = explode(',', $id);
         $containerBidDetail = $this->containerBidDetailRepository->getById($ids[0]);
         $model->container_bid_id = $containerBidDetail->container_bid_id;
+        $model->scenario = ContainerBidDetail::SCENARIO_VALIDATE_ARRAY;
         if ($containerBidDetail->containerBid->edit_counting < BidEditCount::TWO) {
             $model->load(Yii::$app->request->post());
 

@@ -58,7 +58,6 @@ abstract class ContainerBid extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['id', 'integer'],
             [['listing_container_id', 'user_id', 'quantity'], 'required'],
             [['is_favorite'], 'default', 'value' => false],
             [['listing_container_id', 'quantity', 'edit_counting', 'user_id'], 'default', 'value' => null],
