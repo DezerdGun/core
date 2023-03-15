@@ -64,8 +64,15 @@ class LoadOrdinaryService implements ServiceInterface
         // TODO: Implement delete() method.
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws HttpException
+     */
     public function update($id)
     {
-        // TODO: Implement update() method.
+        $model = $this->LoadOrdinaryRepository->getById($id);
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $this->LoadOrdinaryRepository->update($model);
+        } else throw new HttpException(400, [$model->formName() => $model->getErrors()]);
     }
 }
