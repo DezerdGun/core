@@ -391,11 +391,6 @@ class ContainerBidController extends BaseController
         return $this->success();
     }
 
-    public function actionView()
-    {
-
-    }
-
     /**
      * @OA\Patch (
      *     path="/container/bid/favorite/{id}",
