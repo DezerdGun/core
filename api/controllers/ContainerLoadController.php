@@ -427,7 +427,7 @@ class ContainerLoadController extends BaseController
      *              example="1",
      *              ),
      *          @OA\Property(
-     *              property="Date[vessel_eta]",
+     *              property="Load[vessel_eta]",
      *              type="date",
      *              format="date-time",
      *              pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -438,7 +438,7 @@ class ContainerLoadController extends BaseController
      *                     "Load[customer_id]",
      *                     "Load[port_id]",
      *                     "Load[consignee_id]",
-     *                     "Date[vessel_eta]",
+     *                     "Load[vessel_eta]",
      *              }
      *            )
      *         )
@@ -478,21 +478,20 @@ class ContainerLoadController extends BaseController
             $masterBroker = Yii::$app->user->identity->findByRoleMaster($role);
             $carrier = Yii::$app->user->identity->findByRoleCarrier($role);
             $empty = Yii::$app->user->identity->findByRoleEmpty($role);
-            $date = new Date();
-            if ($date->load(Yii::$app->request->post()) && $date->validate()) {
-                $date->save();
                 if ($masterBroker && !$subbroker && !$carrier && !$empty) {
                     $model->user_id = $masterBroker->id;
-                    $model->vessel_eta = $date->id;
                     $model->save();
+                    $model->reference_number($model);
+                    $model->dates($model);
                     $model->chassisLocation($model);
                     $model->containerReturn($model);
                     $model->hold($model);
                     return $this->success($model->getAsArray(Large::class));
                 } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
                     $model->user_id = $subbroker->id;
-                    $model->vessel_eta = $date->id;
                     $model->save();
+                    $model->reference_number($model);
+                    $model->dates($model);
                     $model->chassisLocation($model);
                     $model->containerReturn($model);
                     $model->hold($model);
@@ -501,9 +500,6 @@ class ContainerLoadController extends BaseController
                     throw new HttpException(400, 'You are not Broker');
                 }
             } else {
-                throw new HttpException(404, [$date->formName() => $date->getErrors()]);
-            }
-        } else {
             throw new HttpException(400,
                 [$model->formName() => $model->getErrors()]);
         }

@@ -97,13 +97,13 @@ class HoldsLoadContainerInfoController extends BaseController
 
     /**
      * @OA\Patch (
-     *     path="/holds-load-container-info/{load_id}",
+     *     path="/holds-load-container-info/{id}",
      *     tags={"holds-load-info"},
      *     operationId="updateHoldsLoadsInfo",
      *     summary="updateHoldsLoadsInfo",
      *     @OA\Parameter(
      *         in="path",
-     *         name="load_id",
+     *         name="id",
      *         required=true,
      *         @OA\Schema(
      *          type="integer"
@@ -159,20 +159,20 @@ class HoldsLoadContainerInfoController extends BaseController
      *  )
      */
 
-    public function actionUpdate($load_id): array
+    public function actionUpdate($id): array
     {
-        $this->holdsLoadContainerInfo->update($load_id);
+        $this->holdsLoadContainerInfo->update($id);
         return $this->success();
     }
 
     /**
      * @OA\Get(
-     *     path="/holds-load-container-info/{load_id}",
+     *     path="/holds-load-container-info/{id}",
      *     tags={"holds-load-info"},
      *     operationId="getHoldsLoadsInfoId",
      *     summary="getHoldsLoadsInfoId",
      *     @OA\Parameter(
-     *         name="load_id",
+     *         name="id",
      *         in="path",
      *         required=true,
      *     ),
@@ -203,18 +203,18 @@ class HoldsLoadContainerInfoController extends BaseController
      *     }
      * )
      */
-    public function actionShow($load_id): array
+    public function actionShow($id): array
     {
-        $model = $this->list($load_id);
+        $model = $this->list($id);
         return $this->success($model->getAsArray(Large::class));
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    private function list($load_id)
+    private function list($id)
     {
-        $con = ['load_id' => $load_id];
+        $con = ['load_id' => $id];
         $model = Holds::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();

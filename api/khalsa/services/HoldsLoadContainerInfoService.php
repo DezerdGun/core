@@ -43,10 +43,10 @@ class HoldsLoadContainerInfoService implements ServiceInterface
      * @throws InvalidConfigException
      * @throws HttpException
      */
-    public function update($load_id)
+    public function update($id)
     {
         $name = \Yii::$app->user->identity->username;
-        $model = $this->holdsLoadContainerInfoRepository->getById($load_id);
+        $model = $this->holdsLoadContainerInfoRepository->getById($id);
         $model->setAttributes(\Yii::$app->request->post());
         $model->changeWriterHolds($model,$name);
          if ($model->validate()) {

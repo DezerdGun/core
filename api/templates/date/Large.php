@@ -17,10 +17,6 @@ use TRS\RestResponse\templates\BaseTemplate;
  *         type="integer"
  *     ),
  *      @OA\Property(
- *         property="vessel_eta",
- *         type="date"
- *     ),
- *      @OA\Property(
  *         property="last_free_day",
  *         type="date"
  *     ),
@@ -53,7 +49,6 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
-            'vessel_eta' => $model->vessel_eta,
             'last_free_day' => $model->last_free_day,
             'discharged_date' => $model->discharged_date,
             'outgate_date' => $model->outgate_date,

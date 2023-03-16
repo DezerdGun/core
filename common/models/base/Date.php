@@ -10,7 +10,6 @@ use Yii;
  * This is the base-model class for table "date".
  *
  * @property integer $id
- * @property string $vessel_eta
  * @property string $last_free_day
  * @property string $discharged_date
  * @property string $outgate_date
@@ -18,8 +17,7 @@ use Yii;
  * @property string $ingate_ate
  * @property integer $load_id
  *
- * @property \common\models\OrdinaryLoad $load
- * @property \common\models\Load[] $loads
+ * @property \common\models\Load $load
  * @property string $aliasModel
  */
 abstract class Date extends \yii\db\ActiveRecord
@@ -41,10 +39,10 @@ abstract class Date extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vessel_eta', 'last_free_day', 'discharged_date', 'outgate_date', 'empty_date', 'ingate_ate'], 'safe'],
+            [['last_free_day', 'discharged_date', 'outgate_date', 'empty_date', 'ingate_ate'], 'safe'],
             [['load_id'], 'default', 'value' => null],
             [['load_id'], 'integer'],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
 
@@ -55,7 +53,6 @@ abstract class Date extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'vessel_eta' => 'Vessel Eta',
             'last_free_day' => 'Last Free Day',
             'discharged_date' => 'Discharged Date',
             'outgate_date' => 'Outgate Date',
@@ -70,15 +67,7 @@ abstract class Date extends \yii\db\ActiveRecord
      */
     public function getLoad()
     {
-        return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'load_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLoads()
-    {
-        return $this->hasMany(\common\models\Load::className(), ['vessel_eta' => 'id']);
+        return $this->hasOne(\common\models\Load::className(), ['id' => 'load_id']);
     }
 
 

@@ -59,4 +59,16 @@ class Load extends BaseLoad
         $container->container_return = \common\enums\LoadStatus::EMPTY;
         $container->save();
     }
+
+    public function dates(Load $model)
+    {
+        $date = new Date();
+        $date->load_id = $model->id;
+        $date->discharged_date = \common\enums\LoadStatus::EMPTY;
+        $date->outgate_date = \common\enums\LoadStatus::EMPTY;
+        $date->empty_date = \common\enums\LoadStatus::EMPTY;
+        $date->ingate_ate = \common\enums\LoadStatus::EMPTY;
+        $date->save();
+    }
+
 }

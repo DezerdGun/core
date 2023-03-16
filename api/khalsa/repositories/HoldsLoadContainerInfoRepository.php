@@ -10,10 +10,10 @@ use common\models\Holds;
 class holdsLoadContainerInfoRepository implements RepositoryInterface
 {
 
-    public function getById($load_id): Holds
+    public function getById($id): Holds
     {
 
-        if (!$model = Holds::findOne(['load_id' => $load_id])) {
+        if (!$model = Holds::findOne(['load_id' => $id])) {
             throw new HttpException(400, 'Holds Load_Id is not found.');
         }
         return $model;

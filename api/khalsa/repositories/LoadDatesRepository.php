@@ -13,7 +13,7 @@ class LoadDatesRepository implements RepositoryInterface
 
     public function getById($id): Date
     {
-        if (!$model = Date::findOne(['id' => $id])) {
+        if (!$model = Date::findOne(['load_id' => $id])) {
             throw new HttpException(400, 'Date is not found.');
         }
         return $model;
