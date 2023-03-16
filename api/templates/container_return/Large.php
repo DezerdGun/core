@@ -48,13 +48,10 @@ class Large extends BaseTemplate
         /** @var Container_return $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_id' => $model->load_id,
-            'container_return' =>[
+            'id' => $model->load_id,
                 'name' => $model->containerReturn->name,
                 'address' => $model->containerReturn->address,
-                'location_type' => $model->containerReturn->location_type
-        ],
+                'location_type' => $model->containerReturn->location_type,
             'return_from' => $model->return_from,
             'return_to' => $model->return_from,
 

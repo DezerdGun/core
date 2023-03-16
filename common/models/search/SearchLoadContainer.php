@@ -82,9 +82,6 @@ class SearchLoadContainer extends Model
                 'loadAdditionalInfos' => function (ActiveQuery $query) {
                     $query->from(['loadAdditionalInfos' => LoadAdditionalInfo::tableName()]);
                 },
-                'date' => function (ActiveQuery $query) {
-                    $query->from(['date' => Date::tableName()]);
-                },
             ]);
 
         if (\Yii::$app->user->identity->role == User::SUB_BROKER) {
@@ -141,7 +138,7 @@ class SearchLoadContainer extends Model
         }
 
         if ($this->vessel_eta_from && $this->vessel_eta_to) {
-            $query->andFilterWhere(['between', 'date.vessel_eta', $this->vessel_eta_from, $this->vessel_eta_to]);
+            $query->andFilterWhere(['between', 'vessel_eta', $this->vessel_eta_from, $this->vessel_eta_to]);
         }
 
         $query->orderBy([

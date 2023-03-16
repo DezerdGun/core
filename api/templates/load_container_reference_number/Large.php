@@ -4,6 +4,7 @@ namespace api\templates\load_container_reference_number;
 
 
 
+use common\models\LoadContainerInfo;
 use common\models\LoadReferenceNumber;
 use OpenApi\Annotations as OA;
 use TRS\RestResponse\templates\BaseTemplate;
@@ -70,8 +71,7 @@ class Large extends BaseTemplate
         /** @var LoadReferenceNumber $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_id' => $model->load_id,
+            'id' => $model->load->load_id,
             'mbl' => $model->mbl,
             'hbl' => $model->hbl,
             'seal' => $model->seal,
