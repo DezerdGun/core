@@ -67,7 +67,7 @@ class ContainerBidService
     public function update($id)
     {
        $model = $this->containerBidRepository->getById($id);
-       if ($model->edit_counting < BidEditCount::TWO) {
+       if ($model->edit_counting <= BidEditCount::TWO) {
            if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
                $this->containerBidRepository->update($model);
            } else {

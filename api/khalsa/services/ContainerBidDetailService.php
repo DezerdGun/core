@@ -26,12 +26,16 @@ class ContainerBidDetailService
         $model->setScenario(ContainerBidDetail::SCENARIO_CREATE);
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
-            $rows = [];
-            for ($i = 0; $i < count($model->charge_id); $i++) {
-                $rows[] = [$model->container_bid_id, $model->charge_id[$i], $model->measure_id[$i], $model->price[$i], $model->free_unit[$i]];
-            }
+            if ($model->containerBid->edit_counting <= BidEditCount::TWO) {
+                $rows = [];
+                for ($i = 0; $i < count($model->charge_id); $i++) {
+                    $rows[] = [$model->container_bid_id, $model->charge_id[$i], $model->measure_id[$i], $model->price[$i], $model->free_unit[$i]];
+                }
 
-            $this->containerBidDetailRepository->create($rows);
+                $this->containerBidDetailRepository->create($rows);
+            } else {
+                throw new HttpException(400, "You can change only 2 times.");
+            }
         } else {
             throw new HttpException(400, [$model->formName() => $model->getErrors()]);
         }
@@ -47,7 +51,7 @@ class ContainerBidDetailService
         $containerBidDetail = $this->containerBidDetailRepository->getById($ids[0]);
         $model->container_bid_id = $containerBidDetail->container_bid_id;
         $model->scenario = ContainerBidDetail::SCENARIO_VALIDATE_ARRAY;
-        if ($containerBidDetail->containerBid->edit_counting < BidEditCount::TWO) {
+        if ($containerBidDetail->containerBid->edit_counting <= BidEditCount::TWO) {
             $model->load(Yii::$app->request->post());
 
             $transaction = Yii::$app->db->beginTransaction();
@@ -71,7 +75,7 @@ class ContainerBidDetailService
     {
         $container_bid_detail_ids = explode(',', $ids); //array from string ex. 1,2,3 to [1,2,3]
         $containerBid = $this->containerBidDetailRepository->getById($container_bid_detail_ids[0])->containerBid;
-        if ($containerBid->edit_counting < BidEditCount::TWO) {
+        if ($containerBid->edit_counting <= BidEditCount::TWO) {
             $this->containerBidDetailRepository->delete($container_bid_detail_ids);
         } else {
             throw new HttpException(400, "You can change bids only 2 times.");

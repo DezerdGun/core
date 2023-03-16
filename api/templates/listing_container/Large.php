@@ -123,7 +123,7 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
             'assigned' => $model->user->name,
             'contacts' => $model->user->mobile_number,
             'email' => $model->user->email,
-            'is_bid_sent' => (bool)$model->containerBid,
+            'is_bid_sent' => (bool)$model->isBidSent(),
             'container_info' => [
                 'quantity' => $model->containerInfo->quantity,
                 'container_code' => $model->containerInfo->container_code,

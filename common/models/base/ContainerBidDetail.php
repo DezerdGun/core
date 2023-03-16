@@ -40,7 +40,7 @@ abstract class ContainerBidDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['container_bid_id', 'charge_id'], 'required'],
+            [['container_bid_id', 'charge_id', 'measure_id', 'price'], 'required'],
             [['container_bid_id', 'charge_id', 'measure_id'], 'default', 'value' => null],
             [['container_bid_id'], 'integer'],
         ];

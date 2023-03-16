@@ -41,7 +41,7 @@ class ContainerBidLogService
     public function create($container_bid_id)
     {
         $containerBid = $this->containerBidRepository->getById($container_bid_id);
-        if ($containerBid->edit_counting < BidEditCount::TWO) {
+        if ($containerBid->edit_counting <= BidEditCount::TWO) {
             $rows = [];
             $bid_details = $this->containerBidDetailRepository->getByContainerBidId($container_bid_id);
             foreach ($bid_details as $bid_detail) {
