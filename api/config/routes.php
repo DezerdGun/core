@@ -162,6 +162,7 @@ $routes = [
     'PATCH /container/bid/favorite/<id:\d+>' => 'container-bid/favorite',
     'DELETE /container/bid/<id:\d+>' => 'container-bid/delete',
     'PATCH /container/bid/<id:\d+>' => 'container-bid/update',
+    'GET /container/bid/<listing_container_id:\d+>' => 'container-bid/view',
 
     'POST /container/bid/log/<id:\d+>' => 'container-bid-log/create',
     'GET /container/bid/log/<id:\d+>' => 'container-bid-log/index',

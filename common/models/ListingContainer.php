@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\enums\UserRole;
 use common\models\traits\Template;
 use Yii;
 use \common\models\base\ListingContainer as BaseListingContainer;
@@ -28,11 +29,18 @@ class ListingContainer extends BaseListingContainer
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                ['user_id', 'roleValidate']
             ]
         );
     }
 
+    public function roleValidate()
+    {
+        $user = User::findOne(['id' => $this->user_id]);
+        if ($user->role == UserRole::CARRIER) {
+            $this->addError('user_id', 'Carrier cannot do this action.');
+        }
+    }
     public static function count(): array
     {
         $query = self::find()

@@ -32,7 +32,7 @@ class Small extends BaseTemplate
 {
     protected function prepareResult()
     {
-        /** @var Company $model */
+        /* @var Company $model */
         $model = $this->model;
         $this->result = [
             'id' => $model->id,
