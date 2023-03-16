@@ -38,14 +38,14 @@ $routes = [
     'GET /lists/measure' => 'measure/index',
 
     'POST /load-container-return' => 'load-container-return/create',
-    'PATCH /load-container-return/<load_id:\d+>' => 'load-container-return/update',
-    'DELETE /load-container-return/<load_id:\d+>' => 'load-container-return/delete',
-    'GET /load-container-return/<load_id:\d+>' => 'load-container-return/show',
+    'PATCH /load-container-return/<id:\d+>' => 'load-container-return/update',
+    'DELETE /load-container-return/<id:\d+>' => 'load-container-return/delete',
+    'GET /load-container-return/<id:\d+>' => 'load-container-return/show',
 
     'POST /load-chassis-locations' => 'load-chassis-locations/create',
-    'PATCH /load-chassis-locations/<load_id:\d+>' => 'load-chassis-locations/update',
-    'DELETE /load-chassis-locations/<load_id:\d+>' => 'load-chassis-locations/delete',
-    'GET /load-chassis-locations/<load_id:\d+>' => 'load-chassis-locations/show',
+    'PATCH /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/update',
+    'DELETE /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/delete',
+    'GET /load-chassis-locations/<id:\d+>' => 'load-chassis-locations/show',
 
     'PATCH /load-dates/<id:\d+>' => 'load-dates/update',
     'DELETE /load-dates/<id:\d+>' => 'load-dates/delete',
@@ -70,8 +70,8 @@ $routes = [
     'GET /load-reference-number/<id:\d+>' => 'load-reference-number/show',
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
-    'PATCH /holds-load-container-info/<load_id:\d+>' => 'holds-load-container-info/update',
-    'GET /holds-load-container-info/<load_id:\d+>' => 'holds-load-container-info/show',
+    'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
+    'GET /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/show',
     'GET /holds-load-container-info' => 'holds-load-container-info/index',
 
 
@@ -162,7 +162,6 @@ $routes = [
     'PATCH /container/bid/favorite/<id:\d+>' => 'container-bid/favorite',
     'DELETE /container/bid/<id:\d+>' => 'container-bid/delete',
     'PATCH /container/bid/<id:\d+>' => 'container-bid/update',
-    'GET /container/bid/<listing_container_id:\d+>' => 'container-bid/view',
 
     'POST /container/bid/log/<id:\d+>' => 'container-bid-log/create',
     'GET /container/bid/log/<id:\d+>' => 'container-bid-log/index',

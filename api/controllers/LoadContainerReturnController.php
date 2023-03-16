@@ -94,13 +94,13 @@ class LoadContainerReturnController extends BaseController
 
     /**
      * @OA\Patch (
-     *     path="/load-container-return/{load_id}",
+     *     path="/load-container-return/{id}",
      *     tags={"container-return"},
      *     operationId="updateContainerReturn",
      *     summary="updateContainerReturn",
      *     @OA\Parameter(
      *         in="path",
-     *         name="load_id",
+     *         name="id",
      *         required=true,
      *         @OA\Schema(
      *          type="integer"
@@ -152,20 +152,20 @@ class LoadContainerReturnController extends BaseController
      *  )
      */
 
-    public function actionUpdate($load_id): array
+    public function actionUpdate($id): array
     {
-        $this->containerReturn->update($load_id);
+        $this->containerReturn->update($id);
         return $this->success();
     }
 
     /**
      * @OA\Delete(
-     *     path="/load-container-return/{load_id}",
+     *     path="/load-container-return/{id}",
      *     tags={"container-return"},
      *     operationId="deleteContainerReturn",
      *     summary="deleteContainerReturn",
      *     @OA\Parameter(
-     *         name="load_id",
+     *         name="id",
      *         in="path",
      *         required=true
      *     ),
@@ -188,20 +188,20 @@ class LoadContainerReturnController extends BaseController
      * @throws StaleObjectException
      */
 
-    public function actionDelete($load_id): array
+    public function actionDelete($id): array
     {
-        $this->containerReturn->delete($load_id);
+        $this->containerReturn->delete($id);
         return $this->success();
     }
 
     /**
      * @OA\Get(
-     *     path="/load-container-return/{load_id}",
+     *     path="/load-container-return/{id}",
      *     tags={"container-return"},
      *     operationId="getContainerReturnID",
      *     summary="getContainerReturnID",
      *         @OA\Parameter(
-     *         name="load_id",
+     *         name="id",
      *         in="path",
      *         required=true,
      *     ),
@@ -249,18 +249,18 @@ class LoadContainerReturnController extends BaseController
      * )
      */
 
-    public function actionShow($load_id): array
+    public function actionShow($id): array
     {
-        $model = $this->list($load_id);
+        $model = $this->list($id);
         return $this->success($model->getAsArray(Large::class));
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    private function list($load_id): Container_return
+    private function list($id): Container_return
     {
-        $con = ['load_id' => $load_id];
+        $con = ['load_id' => $id];
         $model = container_return::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();

@@ -43,10 +43,6 @@ class LoadDatesController extends BaseController
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                  @OA\Property(
-     *                     property="vessel_eta",
-     *                     type="integer"
-     *                 ),
-     *                  @OA\Property(
      *                     property="last_free_day",
      *                     type="date",
      *                     format="date-time",
@@ -174,10 +170,6 @@ class LoadDatesController extends BaseController
      *                         type="integer"
      *                     ),
      *                     @OA\Property(
-     *                         property="vessel_eta",
-     *                         type="date"
-     *                     ),
-     *                     @OA\Property(
      *                         property="last_free_day",
      *                         type="date"
      *                     ),
@@ -210,7 +202,7 @@ class LoadDatesController extends BaseController
     public function actionIndex(): array
     {
         $equipment = Date::find()
-            ->select('id,vessel_eta,last_free_day,discharged_date,outgate_date,empty_date,ingate_ate')
+            ->select('id,last_free_day,discharged_date,outgate_date,empty_date,ingate_ate')
             ->all();
         return $this->success($equipment);
     }
@@ -264,7 +256,7 @@ class LoadDatesController extends BaseController
      */
     private function list($id)
     {
-        $con = ['id' => $id];
+        $con = ['load_id' => $id];
         $model = Date::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();

@@ -158,7 +158,7 @@ class Large extends BaseTemplate
             'destinationCity' => $model->consignee->address->city,
             'destinationStateCode' => $model->consignee->address->state_code,
             'customer' => $model->customer->company->company_name,
-            'vessel_eta' =>$model->date->vessel_eta,
+            'vessel_eta' =>$model->vessel_eta,
             'created_by' => [
                 'name' => $model->user->name,
                 "email" =>  $model->user->email,

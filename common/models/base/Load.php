@@ -15,14 +15,16 @@ use Yii;
  * @property integer $consignee_id
  * @property integer $user_id
  * @property string $status
- * @property integer $vessel_eta
  * @property string $pick_up_from
  * @property string $pick_up_to
  * @property string $delivery_from
  * @property string $delivery_to
  * @property integer $load_reference_number
+ * @property string $vessel_eta
  *
+ * @property \common\models\ChassisLocations[] $chassisLocations
  * @property \common\models\Location $consignee
+ * @property \common\models\ContainerReturn[] $containerReturns
  * @property \common\models\Customer $customer
  * @property \common\models\LoadAdditionalInfo $loadAdditionalInfos
  * @property \common\models\LoadBid[] $loadBs
@@ -33,7 +35,6 @@ use Yii;
  * @property \common\models\LoadTracking[] $loadTrackings
  * @property \common\models\Location $port
  * @property \common\models\User $user
- * @property \common\models\Date $date
  * @property string $aliasModel
  */
 abstract class Load extends \yii\db\ActiveRecord
@@ -55,12 +56,11 @@ abstract class Load extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'vessel_eta'], 'default', 'value' => null],
-            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'vessel_eta'], 'integer'],
-            [['pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to'], 'safe'],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number'], 'integer'],
+            [['pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to', 'vessel_eta'], 'safe'],
             [['status'], 'string', 'max' => 32],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['vessel_eta'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Date::className(), 'targetAttribute' => ['vessel_eta' => 'id']],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
             [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['consignee_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
@@ -79,13 +79,21 @@ abstract class Load extends \yii\db\ActiveRecord
             'consignee_id' => 'Consignee ID',
             'user_id' => 'User ID',
             'status' => 'Status',
-            'vessel_eta' => 'Vessel Eta',
             'pick_up_from' => 'Pick Up From',
             'pick_up_to' => 'Pick Up To',
             'delivery_from' => 'Delivery From',
             'delivery_to' => 'Delivery To',
             'load_reference_number' => 'Load Reference Number',
+            'vessel_eta' => 'Vessel Eta',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChassisLocations()
+    {
+        return $this->hasMany(\common\models\ChassisLocations::className(), ['load_id' => 'id']);
     }
 
     /**
@@ -99,9 +107,41 @@ abstract class Load extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getContainerReturns()
+    {
+        return $this->hasMany(\common\models\ContainerReturn::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCustomer()
     {
         return $this->hasOne(\common\models\Customer::className(), ['id' => 'customer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDates()
+    {
+        return $this->hasMany(\common\models\Date::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHolds()
+    {
+        return $this->hasMany(\common\models\Holds::className(), ['load_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHoldsHistories()
+    {
+        return $this->hasMany(\common\models\HoldsHistory::className(), ['load_id' => 'id']);
     }
 
     /**
@@ -174,14 +214,6 @@ abstract class Load extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDate()
-    {
-        return $this->hasOne(\common\models\Date::className(), ['id' => 'vessel_eta']);
     }
 
 
