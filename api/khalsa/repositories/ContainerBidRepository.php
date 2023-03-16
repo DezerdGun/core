@@ -2,7 +2,6 @@
 
 namespace api\khalsa\repositories;
 
-use api\forms\container_bid\ContainerBidForm;
 use common\models\ContainerBid;
 use api\components\HttpException;
 use yii\db\StaleObjectException;
@@ -24,6 +23,7 @@ class ContainerBidRepository
         }
         return $model;
     }
+
     public function create(ContainerBid $model)
     {
         if (!$model->save()) {
@@ -48,6 +48,9 @@ class ContainerBidRepository
         }
     }
 
+    /**
+     * @throws HttpException
+     */
     public function update(ContainerBid $model)
     {
         if (!$model->save()) {

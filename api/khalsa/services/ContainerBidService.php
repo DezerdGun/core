@@ -14,21 +14,15 @@ class ContainerBidService
 
     public $containerBidRepository;
     public $containerBidDetailService;
-    public $containerBidDetailRepository;
-    public $containerBidLogService;
 
     public function __construct
     (
         ContainerBidRepository $containerBidRepository,
         ContainerBidDetailService $containerBidDetailService
-//        ContainerBidDetailRepository $containerBidDetailRepository,
-//        ContainerBidLogService $containerBidLogService
     )
     {
         $this->containerBidRepository = $containerBidRepository;
         $this->containerBidDetailService = $containerBidDetailService;
-//        $this->containerBidDetailRepository = $containerBidDetailRepository;
-//        $this->containerBidLogService = $containerBidLogService;
     }
 
     public function index()
@@ -103,5 +97,18 @@ class ContainerBidService
     {
         $model->edit_counting = $model->edit_counting + 1;
         $this->containerBidRepository->update($model);
+    }
+
+    public function view($listing_container_id)
+    {
+        $model = new SearchContainerBid();
+        $model->listing_container_id = $listing_container_id;
+        $model->load(\Yii::$app->request->queryParams);
+        if ($model->validate()) {
+            $query = $model->search();
+        } else {
+            throw new HttpException(400, ['SearchContainerBid' => $model->getErrors()]);
+        }
+        return $query;
     }
 }

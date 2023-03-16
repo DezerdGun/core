@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories\listing;
 
+use api\components\HttpException;
 use api\forms\listing\ListingContainerForm;
 use common\models\ListingContainer;
 
@@ -11,7 +12,7 @@ class ContainerRepository implements \api\khalsa\interfaces\RepositoryInterface
     public function getById($id): ListingContainer
     {
         if (!$model = ListingContainer::findOne(['id' => $id])) {
-            throw new NotFoundException('Listing container is not found.');
+            throw new HttpException(404,'Listing container is not found.');
         }
         return $model;
     }
@@ -19,14 +20,14 @@ class ContainerRepository implements \api\khalsa\interfaces\RepositoryInterface
     public function create(ListingContainer $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 
     public function update(ListingContainer $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500,'Updating error.');
         }
     }
 

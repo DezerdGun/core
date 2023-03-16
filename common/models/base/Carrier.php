@@ -4,7 +4,6 @@
 
 namespace common\models\base;
 
-use common\enums\UserRole;
 use common\models\Company;
 use common\models\User;
 use yii\behaviors\TimestampBehavior;
@@ -33,7 +32,6 @@ use yii\behaviors\TimestampBehavior;
  */
 abstract class Carrier extends \yii\db\ActiveRecord
 {
-    public $role = UserRole::CARRIER;
 
     /**
      * @inheritdoc

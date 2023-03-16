@@ -13,7 +13,7 @@ use Yii;
  * @property integer $container_bid_id
  * @property integer $charge_id
  * @property integer $measure_id
- * @property string $price
+ * @property float $price
  * @property string $free_unit
  * @property integer $created_at
  * @property integer $updated_at

@@ -30,11 +30,6 @@ use yii\behaviors\TimestampBehavior;
  */
 abstract class ListingContainer extends \yii\db\ActiveRecord
 {
-    public $user_id;
-    public function __construct()
-    {
-        $this->user_id = Yii::$app->user->id;
-    }
 
     /**
      * @inheritdoc
@@ -62,9 +57,9 @@ abstract class ListingContainer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['port_id', 'destination_id', 'user_id', 'vessel_eta'], 'required'],
             [['port_id', 'destination_id', 'user_id'], 'default', 'value' => null],
             [['port_id', 'destination_id', 'user_id'], 'integer'],
-            ['vessel_eta', 'safe'],
             ['vessel_eta', 'date', 'format' => 'php:Y-m-d'],
             [['status'], 'string', 'max' => 255],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
@@ -132,7 +127,7 @@ abstract class ListingContainer extends \yii\db\ActiveRecord
 
     public function getContainerBid()
     {
-        return $this->hasOne(\common\models\ContainerBid::className(), ['listing_container_id' => 'id', 'user_id' => 'user_id']);
+        return $this->hasOne(\common\models\ContainerBid::className(), ['listing_container_id' => 'id']);
     }
 
 

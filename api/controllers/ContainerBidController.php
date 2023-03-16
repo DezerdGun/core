@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\khalsa\services\ContainerBidLogService;
 use api\khalsa\services\ContainerBidService;
 use api\templates\container_bid\Large;
+use api\templates\container_bid\Medium;
 use api\templates\container_bid\Small;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -389,6 +390,74 @@ class ContainerBidController extends BaseController
     {
         $this->service->delete($id);
         return $this->success();
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/container/bid/{listing_container_id}",
+     *      tags={"container-bid"},
+     *      operationId="getCustomer",
+     *      summary="getCustomer",
+     *      @OA\Parameter(
+     *          name="listing_container_id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="SearchContainerBid[carrier_name]",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              default=0
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page_size",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              ),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  ref="#/components/schemas/ContainerBidMedium"
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     * @throws HttpException
+     */
+    public function actionView($listing_container_id, $page = 0, $page_size = 10)
+    {
+        $query = $this->service->view($listing_container_id);
+        return $this->index($query, $page, $page_size, Medium::class);
     }
 
     /**
