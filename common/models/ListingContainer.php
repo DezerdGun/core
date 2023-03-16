@@ -52,4 +52,11 @@ class ListingContainer extends BaseListingContainer
         }
         return $query->all();
     }
+
+    public function isBidSent()
+    {
+        return ContainerBid::findOne([
+            'listing_container_id' => $this->id,
+            'user_id' => Yii::$app->user->id]);
+    }
 }

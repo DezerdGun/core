@@ -107,7 +107,7 @@ class Medium extends \TRS\RestResponse\templates\BaseTemplate
         }
         $this->result = [
             'id' => $model->id,
-            'user_picture' => $model->user->user_picture,
+            'user_picture' => ($model->user->user_picture) ? Yii::$app->params['CDN_URL'] . $model->user->user_picture:null,
             'name' => $model->user->name,
             'quantity' => $model->quantity,
             'mobile_number' => $model->user->mobile_number,

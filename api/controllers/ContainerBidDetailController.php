@@ -83,7 +83,9 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *                  ),
      *                  required={
      *                      "ContainerBidDetail[charge_id][]",
-     *                      "ContainerBidDetail[container_bid_id]"
+     *                      "ContainerBidDetail[container_bid_id]",
+     *                      "ContainerBidDetail[measure_id][]",
+     *                      "ContainerBidDetail[price][]"
      *                  }
      *              )
      *         )
@@ -175,7 +177,12 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *                      @OA\Items(
      *                          type="integer",
      *                      )
-     *                  )
+     *                  ),
+     *                  required={
+     *                      "ContainerBidDetail[charge_id][]",
+     *                      "ContainerBidDetail[measure_id][]",
+     *                      "ContainerBidDetail[price][]"
+     *                  }
      *              )
      *         )
      *     ),

@@ -47,16 +47,12 @@ class ContainerBidDetail extends BaseContainerBidDetail
                 [['free_unit'], 'each', 'rule' => ['integer'], 'on' => [self::SCENARIO_CREATE]],
                 ['charge_id', 'each', 'rule' => ['exist', 'targetClass' => \common\models\Charge::className(), 'targetAttribute' => ['charge_id' => 'id']], 'on' => [self::SCENARIO_CREATE]],
                 ['measure_id', 'each', 'rule' => ['exist', 'targetClass' => \common\models\Measure::className(), 'targetAttribute' => ['measure_id' => 'id']], 'on' => [self::SCENARIO_CREATE]],
-                ['charge_id', 'each', 'rule' => ['unique', 'targetClass'=> self::className(),'targetAttribute' => ['charge_id', 'container_bid_id']], 'on' => [self::SCENARIO_CREATE]],
-                ['measure_id', 'each', 'rule' => ['unique', 'targetClass'=> self::className(), 'targetAttribute' => ['measure_id', 'container_bid_id']], 'on' => [self::SCENARIO_CREATE]],
 
                 ['price', 'number', 'max' => self::MAX_PRICE, 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_VALIDATE_ARRAY]],
                 ['price', 'match', 'pattern' => '/^\d{0,8}(\.\d{1,2}?)?$/', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_VALIDATE_ARRAY]],
                 ['free_unit', 'integer',  'on' => [self::SCENARIO_UPDATE, self::SCENARIO_VALIDATE_ARRAY]],
                 ['charge_id', 'exist', 'targetClass' => \common\models\Charge::className(), 'targetAttribute' => ['charge_id' => 'id'], 'on' => [self::SCENARIO_UPDATE]],
                 ['measure_id', 'exist', 'targetClass' => \common\models\Measure::className(), 'targetAttribute' => ['measure_id' => 'id'], 'on' => [self::SCENARIO_UPDATE]],
-                ['charge_id', 'unique', 'targetClass'=> self::className(),'targetAttribute' => ['charge_id', 'container_bid_id'], 'on' => self::SCENARIO_UPDATE],
-                ['measure_id', 'unique', 'targetClass'=> self::className(), 'targetAttribute' => ['measure_id', 'container_bid_id'], 'on' => self::SCENARIO_UPDATE]
             ]
         );
     }

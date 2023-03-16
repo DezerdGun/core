@@ -75,9 +75,6 @@ class SearchListingContainer extends Model
             'additionalInfo' => function (ActiveQuery $query) {
                 $query->from(['additionalInfo' => ListingContainerAdditionalInfo::tableName()]);
             },
-            'containerBid' => function(ActiveQuery $query) {
-                $query->from(['containerBid' => ContainerBid::tableName()]);
-            }
         ]);
 
         if (\Yii::$app->user->identity->role == UserRole::SUB_BROKER) {
