@@ -5,6 +5,7 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\LoadReferenceNumberService;
 use api\templates\load_container_reference_number\Large;
+use common\models\LoadContainerInfo;
 use common\models\LoadReferenceNumber;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
@@ -198,8 +199,12 @@ class LoadReferenceNumberController extends BaseController
 
     public function actionUpdate($id): array
     {
+        $num = $this->search($id);
+        $num->setAttributes(\Yii::$app->request->post());
+        if ($num->validate()) {
+            $num->update();
+        } else throw new HttpException(400, [$num->formName() => $num->getErrors()]);
 
-         $this->loadReference->update($id);
         return $this->success();
     }
 
@@ -235,7 +240,8 @@ class LoadReferenceNumberController extends BaseController
 
     public function actionDelete($id): array
     {
-        $this->loadReference->delete($id);
+        $del = $this->search($id);
+        $del->delete();
         return $this->success();
     }
 
@@ -274,17 +280,22 @@ class LoadReferenceNumberController extends BaseController
      */
     public function actionShow($id)
     {
-        $model = $this->list($id);
+        $model = $this->search($id);
         return $this->success($model->getAsArray(Large::class));
     }
 
-    private function list($id)
+    private function search($id)
     {
-        $con = ['id' => $id];
-        $model = LoadReferenceNumber::findOne($con);
+        $con = ['load_id' => $id];
+        $model = LoadContainerInfo::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();
         }
-        return $model;
+        $refer = ['load_id' => $model->id];
+        $num = LoadReferenceNumber::findOne($refer);
+        if (!$num) {
+            throw new NotFoundHttpException();
+        }
+        return $num;
     }
 }

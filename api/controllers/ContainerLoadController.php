@@ -481,7 +481,6 @@ class ContainerLoadController extends BaseController
                 if ($masterBroker && !$subbroker && !$carrier && !$empty) {
                     $model->user_id = $masterBroker->id;
                     $model->save();
-                    $model->reference_number($model);
                     $model->dates($model);
                     $model->chassisLocation($model);
                     $model->containerReturn($model);
@@ -490,7 +489,6 @@ class ContainerLoadController extends BaseController
                 } elseif (!$masterBroker && $subbroker && !$carrier && !$empty) {
                     $model->user_id = $subbroker->id;
                     $model->save();
-                    $model->reference_number($model);
                     $model->dates($model);
                     $model->chassisLocation($model);
                     $model->containerReturn($model);

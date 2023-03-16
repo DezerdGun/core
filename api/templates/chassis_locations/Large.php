@@ -40,8 +40,7 @@ class Large extends BaseTemplate
         /** @var Chassis_locations $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_id' => $model->load_id,
+            'id' => $model->load_id,
             'chassis_pickup' => $model->chassisPickup,
             'chassis_termination' => $model->chassisTermination,
         ];

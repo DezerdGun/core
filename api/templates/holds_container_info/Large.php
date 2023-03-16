@@ -39,8 +39,7 @@ class Large extends BaseTemplate
         /** @var Holds $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
-            'load_id' => $model->load_id,
+            'id' => $model->load_id,
             'freight_hold' => $model->freight_hold,
             'customer_hold' => $model->customer_hold,
             'carrier_hold' => $model->carrier_hold,
