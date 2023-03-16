@@ -14,6 +14,7 @@ use Yii;
  * @property integer $pallets
  * @property string $weight_LBs
  * @property string $pallet_size
+ * @property string $genset
  *
  * @property \common\models\OrdinaryLoad $load
  * @property \common\models\LoadOrdinaryDescriptionRows[] $loadOrdinaryDescriptionRows
@@ -42,8 +43,8 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
             [['load_id', 'pallets'], 'integer'],
             [['weight_LBs'], 'number'],
             [['pallet_size'], 'string', 'max' => 255],
-            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']],
-            ['load_id', 'unique'],
+            [['genset'], 'string', 'max' => 32],
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
 
@@ -58,6 +59,7 @@ abstract class LoadOrdinaryDescription extends \yii\db\ActiveRecord
             'pallets' => 'Pallets',
             'weight_LBs' => 'Weight L Bs',
             'pallet_size' => 'Pallet Size',
+            'genset' => 'Genset',
         ];
     }
 
