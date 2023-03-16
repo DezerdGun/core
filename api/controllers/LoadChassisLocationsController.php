@@ -94,13 +94,13 @@ class LoadChassisLocationsController extends BaseController
 
     /**
      * @OA\Patch (
-     *     path="/load-chassis-locations/{id}",
+     *     path="/load-chassis-locations/{load_id}",
      *     tags={"chassis-locations"},
      *     operationId="updateChassisLocations",
      *     summary="updateChassisLocations",
      *     @OA\Parameter(
      *         in="path",
-     *         name="id",
+     *         name="load_id",
      *         required=true,
      *         @OA\Schema(
      *          type="integer"
@@ -149,21 +149,21 @@ class LoadChassisLocationsController extends BaseController
      *  )
      */
 
-    public function actionUpdate($id): array
+    public function actionUpdate($load_id): array
     {
 
-            $this->chassisLocation->update($id);
+            $this->chassisLocation->update($load_id);
             return $this->success();
     }
 
     /**
      * @OA\Delete(
-     *     path="/load-chassis-locations/{id}",
+     *     path="/load-chassis-locations/{load_id}",
      *     tags={"chassis-locations"},
      *     operationId="deleteChassisLocations",
      *     summary="deleteChassisLocations",
      *     @OA\Parameter(
-     *         name="id",
+     *         name="load_id",
      *         in="path",
      *         required=true
      *     ),
@@ -191,20 +191,20 @@ class LoadChassisLocationsController extends BaseController
      * @throws StaleObjectException
      */
 
-    public function actionDelete($id): array
+    public function actionDelete($load_id): array
     {
-        $this->chassisLocation->delete($id);
+        $this->chassisLocation->delete($load_id);
         return $this->success();
     }
 
     /**
      * @OA\Get(
-     *     path="/load-chassis-locations/{id}",
+     *     path="/load-chassis-locations/{load_id}",
      *     tags={"chassis-locations"},
      *     operationId="getChassisLocationsId",
      *     summary="getChassisLocationsId",
      *     @OA\Parameter(
-     *         name="id",
+     *         name="load_id",
      *         in="path",
      *         required=true,
      *     ),
@@ -250,18 +250,18 @@ class LoadChassisLocationsController extends BaseController
      */
 
 
-    public function actionShow($id): array
+    public function actionShow($load_id): array
     {
-        $model = $this->list($id);
+        $model = $this->list($load_id);
         return $this->success($model->getAsArray(Large::class));
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    private function list($id): Chassis_locations
+    private function list($load_id): Chassis_locations
     {
-        $con = ['id' => $id];
+        $con = ['load_id' => $load_id];
         $model = Chassis_locations::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();

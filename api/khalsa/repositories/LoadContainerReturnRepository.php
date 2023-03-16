@@ -11,9 +11,9 @@ use yii\db\StaleObjectException;
 class LoadContainerReturnRepository implements RepositoryInterface
 {
 
-    public function getById($id): Container_return
+    public function getById($load_id): Container_return
     {
-        if (!$model = Container_return::findOne(['id' => $id])) {
+        if (!$model = Container_return::findOne(['load_id' => $load_id])) {
             throw new HttpException(400, 'ContainerReturn is not found.');
         }
         return $model;

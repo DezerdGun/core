@@ -16,7 +16,9 @@ use Yii;
  * @property string $outgate_date
  * @property string $empty_date
  * @property string $ingate_ate
+ * @property integer $load_id
  *
+ * @property \common\models\OrdinaryLoad $load
  * @property \common\models\Load[] $loads
  * @property string $aliasModel
  */
@@ -39,7 +41,10 @@ abstract class Date extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vessel_eta', 'last_free_day', 'discharged_date', 'outgate_date', 'empty_date', 'ingate_ate'], 'safe']
+            [['vessel_eta', 'last_free_day', 'discharged_date', 'outgate_date', 'empty_date', 'ingate_ate'], 'safe'],
+            [['load_id'], 'default', 'value' => null],
+            [['load_id'], 'integer'],
+            [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\OrdinaryLoad::className(), 'targetAttribute' => ['load_id' => 'id']]
         ];
     }
 
@@ -56,7 +61,16 @@ abstract class Date extends \yii\db\ActiveRecord
             'outgate_date' => 'Outgate Date',
             'empty_date' => 'Empty Date',
             'ingate_ate' => 'Ingate Ate',
+            'load_id' => 'Load ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoad()
+    {
+        return $this->hasOne(\common\models\OrdinaryLoad::className(), ['id' => 'load_id']);
     }
 
     /**

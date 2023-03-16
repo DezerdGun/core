@@ -167,12 +167,12 @@ class HoldsLoadContainerInfoController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/holds-load-container-info/{id}",
+     *     path="/holds-load-container-info/{load_id}",
      *     tags={"holds-load-info"},
      *     operationId="getHoldsLoadsInfoId",
      *     summary="getHoldsLoadsInfoId",
      *     @OA\Parameter(
-     *         name="id",
+     *         name="load_id",
      *         in="path",
      *         required=true,
      *     ),
@@ -203,18 +203,18 @@ class HoldsLoadContainerInfoController extends BaseController
      *     }
      * )
      */
-    public function actionShow($id): array
+    public function actionShow($load_id): array
     {
-        $model = $this->list($id);
+        $model = $this->list($load_id);
         return $this->success($model->getAsArray(Large::class));
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    private function list($id)
+    private function list($load_id)
     {
-        $con = ['id' => $id];
+        $con = ['load_id' => $load_id];
         $model = Holds::findOne($con);
         if (!$model) {
             throw new NotFoundHttpException();

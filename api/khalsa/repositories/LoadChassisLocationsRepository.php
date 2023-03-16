@@ -12,9 +12,9 @@ use yii\web\NotFoundHttpException;
 class LoadChassisLocationsRepository implements RepositoryInterface
 {
 
-    public function getById($id): Chassis_locations
+    public function getById($load_id): Chassis_locations
     {
-        if (!$model = Chassis_locations::findOne(['id' => $id])) {
+        if (!$model = Chassis_locations::findOne(['load_id' => $load_id])) {
             throw new HttpException(400, 'ChassisLocation is not found.');
 
         }
