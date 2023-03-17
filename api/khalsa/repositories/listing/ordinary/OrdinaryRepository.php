@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories\listing\ordinary;
 
+use api\components\HttpException;
 use api\forms\listing\ordinary\UpdateStatusForm;
 use common\models\ListingOrdinary;
 
@@ -10,7 +11,7 @@ class OrdinaryRepository implements \api\khalsa\interfaces\RepositoryInterface
     public function getById($id): ListingOrdinary
     {
         if (!$model = ListingOrdinary::findOne(['id' => $id])) {
-            throw new NotFoundException('Listing ordinary is not found.');
+            throw new HttpException(404,'Listing ordinary is not found.');
         }
         return $model;
     }
@@ -18,7 +19,7 @@ class OrdinaryRepository implements \api\khalsa\interfaces\RepositoryInterface
     public function create(ListingOrdinary $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500, [$model->formName() => $model->errors]);
         }
     }
 
@@ -30,7 +31,7 @@ class OrdinaryRepository implements \api\khalsa\interfaces\RepositoryInterface
     public function update(ListingOrdinary $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500, [$model->formName() => $model->errors]);
         }
     }
 }

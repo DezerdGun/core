@@ -3,9 +3,11 @@
 namespace api\khalsa\repositories;
 
 use api\components\HttpException;
+use common\models\base\ContainerBid;
 use common\models\Container;
 use common\models\ContainerBidLog;
 use common\models\Log;
+use Yii;
 use yii\db\ActiveQuery;
 
 class ContainerBidLogRepository
@@ -16,9 +18,14 @@ class ContainerBidLogRepository
             ->joinWith([
                 'log' => function(ActiveQuery $query) {
                     $query->from(['log' => Log::tableName()]);
+                },
+                'containerBid' => function(ActiveQuery $query) {
+                    $query->from(['containerBid' => ContainerBid::tableName()]);
                 }
             ]);
-        $query->where(['container_bid_id' => $container_bid_id]);
+        $query->where([
+            'container_bid_id' => $container_bid_id,
+            'containerBid.user_id' => Yii::$app->user->id]);
         $query->orderBy([
             'id' => SORT_ASC
         ]);

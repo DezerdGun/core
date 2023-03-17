@@ -1,12 +1,13 @@
 <?php
 
-namespace api\templates\container_bid;
-use common\models\ContainerBid;
+namespace api\templates\ordinary_bid;
+
+use common\models\OrdinaryBid;
 use Yii;
 
 /**
  * @OA\Schema (
- *      schema="ContainerBidMedium",
+ *      schema="OrdinaryBidMedium",
  *      @OA\Property (
  *          property="id",
  *          type="integer"
@@ -18,10 +19,6 @@ use Yii;
  *      @OA\Property (
  *          property="name",
  *          type="string"
- *      ),
- *      @OA\Property (
- *          property="quantity",
- *          type="integer"
  *      ),
  *      @OA\Property (
  *          property="mobile_number",
@@ -88,29 +85,28 @@ class Medium extends \TRS\RestResponse\templates\BaseTemplate
 
     protected function prepareResult()
     {
-        /* @var ContainerBid $model */
+        /* @var OrdinaryBid $model */
         $model = $this->model;
 
         $bid_description = [];
-        for ($i = 0; $i < count($model->containerBidDetail); $i++) {
+        for ($i = 0; $i < count($model->ordinaryBidDetail); $i++) {
             $bid_description[] = [
                 'charge' => [
-                    'charge_id' => $model->containerBidDetail[$i]->charge_id,
-                    'charge_name' => $model->containerBidDetail[$i]->charge->name,
+                    'charge_id' => $model->ordinaryBidDetail[$i]->charge_id,
+                    'charge_name' => $model->ordinaryBidDetail[$i]->charge->name,
                 ],
                 'measure' => [
-                    'measure_id' => $model->containerBidDetail[$i]->measure_id,
-                    'measure_name' => $model->containerBidDetail[$i]->measure->name,
+                    'measure_id' => $model->ordinaryBidDetail[$i]->measure_id,
+                    'measure_name' => $model->ordinaryBidDetail[$i]->measure->name,
                 ],
-                'price' => $model->containerBidDetail[$i]->price,
-                'free_unit' => $model->containerBidDetail[$i]->free_unit
+                'price' => $model->ordinaryBidDetail[$i]->price,
+                'free_unit' => $model->ordinaryBidDetail[$i]->free_unit
             ];
         }
         $this->result = [
             'id' => $model->id,
             'user_picture' => ($model->user->user_picture) ? Yii::$app->params['CDN_URL'] . $model->user->user_picture:null,
             'name' => $model->user->name,
-            'quantity' => $model->quantity,
             'mobile_number' => $model->user->mobile_number,
             'email' => $model->user->email,
             'note_from_carrier' => $model->note,

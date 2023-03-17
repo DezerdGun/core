@@ -19,8 +19,7 @@ class m230302_165951_create_action_table extends Migration
             'description' => $this->string(200)
         ]);
         $this->insert('{{%action}}',
-            ['name' => Action::CONTAINER_BID_EDIT, 'description' => 'Container bid editing bids'],
-            ['name' => Action::ORDINARY_BID_EDIT, 'description' => 'Ordinary bid editing']
+            ['name' => Action::CONTAINER_BID_EDIT, 'description' => 'Container bid editing bids']
         );
 
     }
