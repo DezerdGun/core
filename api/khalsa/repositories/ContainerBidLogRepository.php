@@ -3,6 +3,7 @@
 namespace api\khalsa\repositories;
 
 use api\components\HttpException;
+use common\enums\UserRole;
 use common\models\base\ContainerBid;
 use common\models\Container;
 use common\models\ContainerBidLog;
@@ -23,9 +24,10 @@ class ContainerBidLogRepository
                     $query->from(['containerBid' => ContainerBid::tableName()]);
                 }
             ]);
-        $query->where([
-            'container_bid_id' => $container_bid_id,
-            'containerBid.user_id' => Yii::$app->user->id]);
+        $query->where(['container_bid_id' => $container_bid_id]);
+        if (Yii::$app->user->identity->role == UserRole::CARRIER) {
+            $query->andWhere(['containerBid.user_id' => Yii::$app->user->id]);
+        }
         $query->orderBy([
             'id' => SORT_ASC
         ]);
