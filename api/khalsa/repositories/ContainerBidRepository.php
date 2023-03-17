@@ -27,14 +27,14 @@ class ContainerBidRepository
     public function create(ContainerBid $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 
     public function favorite(ContainerBid $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 
@@ -44,7 +44,7 @@ class ContainerBidRepository
     public function delete(ContainerBid $model)
     {
         if (!$model->delete()) {
-            throw new \RuntimeException('Deleting error.');
+            throw new HttpException(500,'Deleting error.');
         }
     }
 

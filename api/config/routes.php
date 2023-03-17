@@ -163,13 +163,29 @@ $routes = [
     'DELETE /container/bid/<id:\d+>' => 'container-bid/delete',
     'PATCH /container/bid/<id:\d+>' => 'container-bid/update',
     'GET /container/bid/<listing_container_id:\d+>' => 'container-bid/view',
+    'GET /container/bid/count/' => 'container-bid/count',
+
     'POST /container/bid/log/<id:\d+>' => 'container-bid-log/create',
     'GET /container/bid/log/<id:\d+>' => 'container-bid-log/index',
 
-    'POST /container/bid/detail' =>'container-bid-detail/create',
+    'POST /container/bid/detail' => 'container-bid-detail/create',
     'PATCH /container/bid/detail/<id:>' => 'container-bid-detail/update',
-    'DELETE /container/bid/detail/<id:>' => 'container-bid-detail/delete'
+    'DELETE /container/bid/detail/<id:>' => 'container-bid-detail/delete',
 
+    'POST /ordinary/bid' => 'ordinary-bid/create',
+    'GET /ordinary/bid' => 'ordinary-bid/index',
+    'PATCH /ordinary/bid/favorite/<id:\d+>' => 'ordinary-bid/favorite',
+    'DELETE /ordinary/bid/<id:\d+>' => 'ordinary-bid/delete',
+    'PATCH /ordinary/bid/<id:\d+>' => 'ordinary-bid/update',
+    'GET /ordinary/bid/<listing_ordinary_id:\d+>' => 'ordinary-bid/view',
+    'GET /ordinary/bid/count/' => 'ordinary-bid/count',
+
+    'POST /ordinary/bid/detail' => 'ordinary-bid-detail/create',
+    'PATCH /ordinary/bid/detail/<id:>' => 'ordinary-bid-detail/update',
+    'DELETE /ordinary/bid/detail/<id:>' => 'ordinary-bid-detail/delete',
+
+    'POST /ordinary/bid/log/<id:\d+>' => 'ordinary-bid-log/create',
+    'GET /ordinary/bid/log/<id:\d+>' => 'ordinary-bid-log/index',
     ];
 
 return $routes;

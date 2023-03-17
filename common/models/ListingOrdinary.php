@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\enums\UserRole;
 use common\models\traits\Template;
 
 use \common\models\base\ListingOrdinary as BaseListingOrdinary;
@@ -29,11 +30,17 @@ class ListingOrdinary extends BaseListingOrdinary
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                ['user_id', 'roleValidate']
             ]
         );
     }
-
+    public function roleValidate()
+    {
+        $user = User::findOne(['id' => $this->user_id]);
+        if ($user->role == UserRole::CARRIER) {
+            $this->addError('user_id', 'Carrier cannot do this action.');
+        }
+    }
     public static function count(): array
     {
         $query = self::find()
@@ -44,5 +51,12 @@ class ListingOrdinary extends BaseListingOrdinary
             $query->filterWhere(['user_id' => Yii::$app->user->id]);
         }
         return $query->all();
+    }
+
+    public function isBidSent()
+    {
+        return OrdinaryBid::findOne([
+            'listing_ordinary_id' => $this->id,
+            'user_id' => Yii::$app->user->id]);
     }
 }

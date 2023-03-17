@@ -3,16 +3,16 @@
 namespace common\models;
 
 use common\models\traits\Template;
-use \common\models\base\ContainerBid as BaseContainerBid;
+use \common\models\base\OrdinaryBid as BaseOrdinaryBid;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "container_bid".
+ * This is the model class for table "ordinary_bid".
  */
-class ContainerBid extends BaseContainerBid
+class OrdinaryBid extends BaseOrdinaryBid
 {
     use Template;
-    const SCENARIO_MAKE_FAVORITE = 'make_favorite';
+
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -23,15 +23,15 @@ class ContainerBid extends BaseContainerBid
         );
     }
 
+
     public function rules()
     {
         return ArrayHelper::merge(
             parent::rules(),
             [
-
-               ['is_favorite', 'boolean', 'trueValue' => true, 'falseValue' => false, 'strict' => false],
+                ['is_favorite', 'boolean', 'trueValue' => true, 'falseValue' => false, 'strict' => false],
                 ['is_favorite', 'changeType'],
-                [['user_id'], 'unique', 'targetAttribute' => ['user_id', 'listing_container_id']]
+                [['user_id'], 'unique', 'targetAttribute' => ['user_id', 'listing_ordinary_id']]
             ]
         );
     }

@@ -3,18 +3,20 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\khalsa\services\ContainerBidLogService;
-use api\templates\container_bid_log\Large;
+use api\khalsa\services\OrdinaryBidLogService;
+use api\templates\ordinary_bid_log\Large;
 use Yii;
+use yii\db\Exception;
 
-class ContainerBidLogController extends \api\controllers\BaseController
+class OrdinaryBidLogController extends \api\controllers\BaseController
 {
     public $service;
     public function __construct(
         $id,
         $module,
         $config = [],
-        ContainerBidLogService $service
+        OrdinaryBidLogService $service
+
     )
     {
         parent::__construct($id, $module, $config);
@@ -23,12 +25,12 @@ class ContainerBidLogController extends \api\controllers\BaseController
 
     /**
      * @OA\Get(
-     *     path="/container/bid/log/{container_bid_id}",
-     *     tags={"container-bid-log"},
-     *     operationId="getContainerBidLog",
-     *     summary="getContainerBidLog",
+     *     path="/ordinary/bid/log/{ordinary_bid_id}",
+     *     tags={"ordinary-bid-log"},
+     *     operationId="getordinaryBidLog",
+     *     summary="getOrdinaryBidLog",
      *     @OA\Parameter(
-     *         name="container_bid_id",
+     *         name="ordinary_bid_id",
      *         in="path",
      *         required=true,
      *         @OA\Schema(
@@ -84,10 +86,6 @@ class ContainerBidLogController extends \api\controllers\BaseController
      *                          @OA\Property (
      *                              property="note_from_carrier",
      *                              type="string"
-     *                          ),
-     *                          @OA\Property (
-     *                              property="quantity",
-     *                              type="integer"
      *                          )
      *                      )
      *                  )
@@ -99,22 +97,22 @@ class ContainerBidLogController extends \api\controllers\BaseController
      *      {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
      * @throws \Exception
      */
-    public function actionIndex($id, $page = 0, $page_size = 10): array
+    public function actionIndex($id, $page = 0, $page_size = 10)
     {
         $query = $this->service->index($id);
         return $this->index($query, $page, $page_size, Large::class);
     }
+
     /**
      * @OA\Post(
-     *     path="/container/bid/log/{container_bid_id}",
-     *     tags={"container-bid-log"},
-     *     operationId="logContainerBid",
-     *     summary="logContainerBid",
+     *     path="/ordinary/bid/log/{ordinary_bid_id}",
+     *     tags={"ordinary-bid-log"},
+     *     operationId="logOrdinaryBid",
+     *     summary="logOrdinaryBid",
      *     @OA\Parameter(
-     *         name="container_bid_id",
+     *         name="ordinary_bid_id",
      *         in="path",
      *         required=true,
      *         @OA\Schema(
@@ -137,7 +135,7 @@ class ContainerBidLogController extends \api\controllers\BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
+     * @throws HttpException|Exception
      */
     public function actionCreate($id): array
     {
@@ -146,5 +144,4 @@ class ContainerBidLogController extends \api\controllers\BaseController
         $transaction->commit();
         return $this->success();
     }
-
 }

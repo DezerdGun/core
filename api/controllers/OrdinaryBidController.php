@@ -3,40 +3,37 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\khalsa\services\ContainerBidService;
-use api\templates\container_bid\Large;
-use api\templates\container_bid\Medium;
-use api\templates\container_bid\Small;
-use common\models\ContainerBid;
+use api\khalsa\services\OrdinaryBidService;
+use api\templates\ordinary_bid\Large;
+use api\templates\ordinary_bid\Medium;
+use api\templates\ordinary_bid\Small;
+use common\models\OrdinaryBid;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\Exception;
 
-class ContainerBidController extends BaseController
+class OrdinaryBidController extends \api\controllers\BaseController
 {
     public $service;
-
     public function __construct
     (
         $id,
         $module,
         $config = [],
-        ContainerBidService $service
-
+        OrdinaryBidService $service
     )
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
     }
-
     /**
      * @OA\Get(
-     *     path="/container/bid",
-     *     tags={"container-bid"},
-     *     operationId="getContainerBid",
-     *     summary="getContainerBid",
+     *     path="/ordinary/bid",
+     *     tags={"ordinary-bid"},
+     *     operationId="getOrindaryBid",
+     *     summary="getOrdinaryBid",
      *     @OA\Parameter(
-     *         name="SearchContainerBid[is_favorite]",
+     *         name="SearchOrdinaryBid[is_favorite]",
      *         in="query",
      *         required=false,
      *         @OA\Schema(
@@ -83,12 +80,8 @@ class ContainerBidController extends BaseController
      *                          type="string"
      *                      ),
      *                      @OA\Property(
-     *                          property="vessel_eta",
+     *                          property="pick_up",
      *                          type="string"
-     *                      ),
-     *                      @OA\Property(
-     *                          property="quantity",
-     *                          type="integer"
      *                      ),
      *                      @OA\Property(
      *                          property="created_at",
@@ -107,14 +100,14 @@ class ContainerBidController extends BaseController
      *                          type="boolean"
      *                      ),
      *                      @OA\Property(
-     *                          property="container_info",
+     *                          property="ordinary_info",
      *                          type="object",
      *                          @OA\Property(
-     *                              property="port_city",
+     *                              property="origin_city",
      *                              type="string"
      *                          ),
      *                          @OA\Property(
-     *                              property="port_state_code",
+     *                              property="origin_state_code",
      *                              type="string"
      *                          ),
      *                          @OA\Property(
@@ -126,12 +119,8 @@ class ContainerBidController extends BaseController
      *                              type="string"
      *                          ),
      *                          @OA\Property(
-     *                              property="container_code",
-     *                              type="string"
-     *                          ),
-     *                          @OA\Property(
      *                              property="size",
-     *                              type="integer"
+     *                              type="string"
      *                          ),
      *                          @OA\Property(
      *                              property="weight",
@@ -227,7 +216,7 @@ class ContainerBidController extends BaseController
      * )
      * @throws HttpException
      */
-    public function actionIndex($page = 0, $page_size = 10): array
+    public function actionIndex($page = 0, $page_size = 10)
     {
         $query = $this->service->index();
         return $this->index($query, $page, $page_size, Large::class);
@@ -235,30 +224,25 @@ class ContainerBidController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/container/bid",
-     *     tags={"container-bid"},
-     *     operationId="createContainerBid",
-     *     summary="createContainerBid",
+     *     path="/ordinary/bid",
+     *     tags={"ordinary-bid"},
+     *     operationId="createOrdinaryBid",
+     *     summary="createOrdinaryBid",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  @OA\Property(
-     *                      property="ContainerBid[quantity]",
-     *                      type="integer",
-     *                  ),
-     *                  @OA\Property(
-     *                      property="ContainerBid[listing_container_id]",
+     *                      property="OrdinaryBid[listing_ordinary_id]",
      *                      type="integer"
      *                  ),
      *                  @OA\Property(
-     *                      property="ContainerBid[note]",
+     *                      property="OrdinaryBid[note]",
      *                      type="string"
      *                  ),
      *                  required={
-     *                      "ContainerBid[quantity]",
-     *                      "ContainerBid[listing_container_id]",
+     *                      "OrdinaryBid[listing_ordinary_id]",
      *                  }
      *              )
      *         )
@@ -275,7 +259,7 @@ class ContainerBidController extends BaseController
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 ref="#/components/schemas/ContainerBidSmall"
+     *                 ref="#/components/schemas/OrdinaryBidSmall"
      *             )
      *         )
      *     ),
@@ -284,7 +268,6 @@ class ContainerBidController extends BaseController
      *     {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException|Exception
      */
     public function actionCreate(): array
     {
@@ -293,13 +276,12 @@ class ContainerBidController extends BaseController
         $transaction->commit();
         return $this->success($model->getAsArray(Small::class));
     }
-
     /**
      * @OA\Patch (
-     *     path="/container/bid/{id}",
-     *     tags={"container-bid"},
-     *     operationId="updateContainerBid",
-     *     summary="updateContainerBid",
+     *     path="/ordinary/bid/{id}",
+     *     tags={"ordinary-bid"},
+     *     operationId="updateOrdinaryBid",
+     *     summary="updateOrdinaryBid",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -314,15 +296,10 @@ class ContainerBidController extends BaseController
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  @OA\Property(
-     *                      property="ContainerBid[quantity]",
-     *                      type="integer",
-     *                  ),
-     *                  @OA\Property(
-     *                      property="ContainerBid[note]",
+     *                      property="OrdinaryBid[note]",
      *                      type="string"
      *                  ),
      *                  required={
-     *                      "ContainerBid[quantity]"
      *                  }
      *              )
      *         )
@@ -353,13 +330,12 @@ class ContainerBidController extends BaseController
         $transaction->commit();
         return $this->success();
     }
-
     /**
      * @OA\Delete(
-     *     path="/container/bid/{id}",
-     *     tags={"container-bid"},
-     *     operationId="deleteContainerBid",
-     *     summary="deleteContainerBid",
+     *     path="/ordinary/bid/{id}",
+     *     tags={"ordinary-bid"},
+     *     operationId="deleteOrdinaryBid",
+     *     summary="deleteOrdinaryBid",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -384,22 +360,20 @@ class ContainerBidController extends BaseController
      *      {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
      */
     public function actionDelete($id): array
     {
         $this->service->delete($id);
         return $this->success();
     }
-
     /**
      * @OA\Get(
-     *      path="/container/bid/{listing_container_id}",
-     *      tags={"container-bid"},
-     *      operationId="getContainerBidBroker",
-     *      summary="getContainerBidBroker",
+     *      path="/ordinary/bid/{listing_ordinary_id}",
+     *      tags={"ordinary-bid"},
+     *      operationId="getOrdinaryBidBroker",
+     *      summary="getOrdinaryBidBroker",
      *      @OA\Parameter(
-     *          name="listing_container_id",
+     *          name="listing_ordinary_id",
      *          in="path",
      *          required=true,
      *          @OA\Schema(
@@ -407,7 +381,7 @@ class ContainerBidController extends BaseController
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="SearchContainerBid[carrier_name]",
+     *          name="SearchOrdinaryBid[carrier_name]",
      *          in="query",
      *          @OA\Schema(
      *              type="string"
@@ -443,7 +417,7 @@ class ContainerBidController extends BaseController
      *              @OA\Property(
      *                  property="data",
      *                  type="object",
-     *                  ref="#/components/schemas/ContainerBidMedium"
+     *                  ref="#/components/schemas/OrdinaryBidMedium"
      *              )
      *          )
      *      ),
@@ -454,18 +428,17 @@ class ContainerBidController extends BaseController
      *  )
      * @throws HttpException
      */
-    public function actionView($listing_container_id, $page = 0, $page_size = 10)
+    public function actionView($listing_ordinary_id, $page = 0, $page_size = 10): array
     {
-        $query = $this->service->view($listing_container_id);
+        $query = $this->service->view($listing_ordinary_id);
         return $this->index($query, $page, $page_size, Medium::class);
     }
-
     /**
      * @OA\Patch (
-     *     path="/container/bid/favorite/{id}",
-     *     tags={"container-bid"},
-     *     operationId="makeContainerBidFavorite",
-     *     summary="makeContainerBidFavorite",
+     *     path="/ordinary/bid/favorite/{id}",
+     *     tags={"ordinary-bid"},
+     *     operationId="makeOrdinaryBidFavorite",
+     *     summary="makeOrdinaryBidFavorite",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -475,17 +448,17 @@ class ContainerBidController extends BaseController
      *         )
      *     ),
      *     @OA\RequestBody(
-     *         request="ContainerBidFavorite",
+     *         request="OrdinaryBidFavorite",
      *         required=true,
      *         @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  @OA\Property (
-     *                      property="ContainerBid[is_favorite]",
+     *                      property="OrdinaryBid[is_favorite]",
      *                      type="boolean"
      *                  ),
      *                  required={
-     *                      "ContainerBid[is_favorite]"
+     *                      "OrdinaryBid[is_favorite]"
      *                  }
      *              )
      *         )
@@ -516,10 +489,10 @@ class ContainerBidController extends BaseController
     }
     /**
      * @OA\Get(
-     *     path="/container/bid/count",
-     *     tags={"container-bid"},
-     *     operationId="countContainerBid",
-     *     summary="countContainerBid",
+     *     path="/ordinary/bid/count",
+     *     tags={"ordinary-bid"},
+     *     operationId="countOrdinaryBid",
+     *     summary="countOrdinaryBid",
      *     @OA\Response(
      *         response=200,
      *         description="successfull operation",
@@ -553,7 +526,7 @@ class ContainerBidController extends BaseController
      */
     public function actionCount()
     {
-        $data = ContainerBid::countBids();
+        $data = OrdinaryBid::countBids();
         return $this->success($data);
     }
 }

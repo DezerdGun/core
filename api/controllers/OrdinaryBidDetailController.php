@@ -3,18 +3,20 @@
 namespace api\controllers;
 
 use api\components\HttpException;
-use api\khalsa\services\ContainerBidDetailService;
+use api\khalsa\services\OrdinaryBidDetailService;
 use Yii;
 use yii\db\Exception;
 
-class ContainerBidDetailController extends \api\controllers\BaseController
+
+class OrdinaryBidDetailController extends \api\controllers\BaseController
 {
     public $service;
-    public function __construct(
+    public function __construct
+    (
         $id,
         $module,
         $config = [],
-        ContainerBidDetailService $service
+        OrdinaryBidDetailService $service
     )
     {
         parent::__construct($id, $module, $config);
@@ -27,49 +29,49 @@ class ContainerBidDetailController extends \api\controllers\BaseController
     }
     /**
      * @OA\Post(
-     *     path="/container/bid/detail",
-     *     tags={"container-bid-detail"},
-     *     operationId="createContainerBidDetail",
-     *     summary="createContainerBidDetail",
+     *     path="/ordinary/bid/detail",
+     *     tags={"ordinary-bid-detail"},
+     *     operationId="createOrdinartuBidDetail",
+     *     summary="createOrdinaryBidDetail",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              encoding={
-     *                  "ContainerBidDetail[charge_id][]": {
+     *                  "OrdinaryBidDetail[charge_id][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[measure_id][]": {
+     *                  "OrdinaryBidDetail[measure_id][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[price][]": {
+     *                  "OrdinaryBidDetail[price][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[free_unit][]": {
+     *                  "OrdinaryBidDetail[free_unit][]": {
      *                      "explode": true
      *                  },
      *              },
      *              @OA\Schema(
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[container_bid_id]",
+     *                      property="OrdinaryBidDetail[ordinary_bid_id]",
      *                      type="integer"
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[charge_id][]",
+     *                      property="OrdinaryBidDetail[charge_id][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer"
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[measure_id][]",
+     *                      property="OrdinaryBidDetail[measure_id][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer"
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[price][]",
+     *                      property="OrdinaryBidDetail[price][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="number",
@@ -77,17 +79,17 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[free_unit][]",
+     *                      property="OrdinaryBidDetail[free_unit][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer",
      *                      )
      *                  ),
      *                  required={
-     *                      "ContainerBidDetail[charge_id][]",
-     *                      "ContainerBidDetail[container_bid_id]",
-     *                      "ContainerBidDetail[measure_id][]",
-     *                      "ContainerBidDetail[price][]"
+     *                      "OrdinaryBidDetail[charge_id][]",
+     *                      "OrdinaryBidDetail[ordinary_bid_id]",
+     *                      "OrdinaryBidDetail[measure_id][]",
+     *                      "OrdinaryBidDetail[price][]"
      *                  }
      *              )
      *         )
@@ -109,18 +111,17 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *     }
      * )
      */
-    public function actionCreate()
+    public function actionCreate(): array
     {
         $this->service->create();
         return $this->success();
     }
-
     /**
      * @OA\Patch (
-     *     path="/container/bid/detail/{id}",
-     *     tags={"container-bid-detail"},
-     *     operationId="updateContainerBidDetail",
-     *     summary="updateContainerBidDetail",
+     *     path="/ordinary/bid/detail/{id}",
+     *     tags={"ordinary-bid-detail"},
+     *     operationId="updateOrdinaryBidDetail",
+     *     summary="updateOrdinaryBidDetail",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -137,36 +138,36 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *         @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              encoding={
-     *                  "ContainerBidDetail[charge_id][]": {
+     *                  "OrdinaryBidDetail[charge_id][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[measure_id][]": {
+     *                  "OrdinaryBidDetail[measure_id][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[price][]": {
+     *                  "OrdinaryBidDetail[price][]": {
      *                      "explode": true
      *                  },
-     *                  "ContainerBidDetail[free_unit][]": {
+     *                  "OrdinaryBidDetail[free_unit][]": {
      *                      "explode": true
      *                  },
      *              },
      *              @OA\Schema(
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[charge_id][]",
+     *                      property="OrdinaryBidDetail[charge_id][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer"
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[measure_id][]",
+     *                      property="OrdinaryBidDetail[measure_id][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer"
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[price][]",
+     *                      property="OrdinaryBidDetail[price][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="number",
@@ -174,16 +175,16 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *                      )
      *                  ),
      *                  @OA\Property (
-     *                      property="ContainerBidDetail[free_unit][]",
+     *                      property="OrdinaryBidDetail[free_unit][]",
      *                      type="array",
      *                      @OA\Items(
      *                          type="integer",
      *                      )
      *                  ),
      *                  required={
-     *                      "ContainerBidDetail[charge_id][]",
-     *                      "ContainerBidDetail[measure_id][]",
-     *                      "ContainerBidDetail[price][]"
+     *                      "OrdinaryBidDetail[charge_id][]",
+     *                      "OrdinaryBidDetail[measure_id][]",
+     *                      "OrdinaryBidDetail[price][]"
      *                  }
      *              )
      *         )
@@ -204,20 +205,19 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *          {"ClientCredentials":{}}
      *      }
      *  )
-     * @throws HttpException
      */
-    public function actionUpdate($id): array
+    public function actionUpdate($id)
     {
         $this->service->update($id);
         return $this->success();
-
     }
+
     /**
      * @OA\Delete(
-     *     path="/container/bid/detail/{id}",
-     *     tags={"container-bid-detail"},
-     *     operationId="deleteContainerBidDetail",
-     *     summary="deleteContainerBidDetail",
+     *     path="/ordinary/bid/detail/{id}",
+     *     tags={"ordinary-bid-detail"},
+     *     operationId="deleteOrdinaryBidDetail",
+     *     summary="deleteOrdinaryBidDetail",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -245,8 +245,7 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *      {"ClientCredentials":{}}
      *     }
      * )
-     * @throws HttpException
-     * @throws Exception
+     * @throws Exception|HttpException
      */
     public function actionDelete($id): array
     {
@@ -255,4 +254,5 @@ class ContainerBidDetailController extends \api\controllers\BaseController
         $transaction->commit();
         return $this->success();
     }
+
 }

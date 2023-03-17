@@ -50,6 +50,10 @@ use yii\helpers\ArrayHelper;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="is_bid_sent",
+ *          type="boolean"
+ *      ),
+ *      @OA\Property(
  *          property="equipment_code",
  *          type="array",
  *          @OA\Items(
@@ -120,6 +124,7 @@ class Large extends \TRS\RestResponse\templates\BaseTemplate
             'assigned' => $model->user->name,
             'contacts' => $model->user->mobile_number,
             'email' => $model->user->email,
+            'is_bid_sent' => (bool)$model->isBidSent(),
             'equipment_code' => ArrayHelper::getColumn(ArrayHelper::toArray($model->ordinaryEquipments, [
                 'common\models\OrdinaryEquipment' => [
                     'equipment_code'

@@ -5,16 +5,20 @@ namespace api\khalsa\repositories;
 use api\components\HttpException;
 use common\models\ContainerBidDetail;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\Exception;
+use yii\db\StaleObjectException;
 
 class ContainerBidDetailRepository
 {
     /**
      * @throws HttpException
      */
-    public function getById($id)
+    public function getById($id): ContainerBidDetail
     {
-        if (!$model = ContainerBidDetail::findOne(['id' => $id])) {
+
+        if (!$model = ContainerBidDetail::findOne(['id' => $id]))
+        {
             throw new HttpException(404, 'Container bid detail is not found.');
         }
         return $model;
@@ -45,8 +49,15 @@ class ContainerBidDetailRepository
         }
     }
 
-    public function delete(Array $ids)
+    /**
+     * @throws StaleObjectException
+     * @throws InvalidConfigException
+     * @throws HttpException
+     */
+    public function delete(ContainerBidDetail $model)
     {
-        ContainerBidDetail::deleteAll(['in', 'id', $ids]);
+        if (!$model->delete()) {
+            throw new HttpException(400, [$model->formName() => $model->errors]);
+        }
     }
 }

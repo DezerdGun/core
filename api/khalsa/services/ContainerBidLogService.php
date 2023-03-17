@@ -55,9 +55,9 @@ class ContainerBidLogService
             }
 
             $log_data = [
-                'broker_name' => $containerBid->listingContainer->user->name,
                 'container_bid_detail' => $rows,
-                'note_from_carrier' => $containerBid->note
+                'note_from_carrier' => $containerBid->note,
+                'quantity' => $containerBid->quantity
             ];
             $log = $this->logService->create($log_data, Action::CONTAINER_BID_EDIT);
 
