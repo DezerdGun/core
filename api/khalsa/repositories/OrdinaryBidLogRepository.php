@@ -3,9 +3,11 @@
 namespace api\khalsa\repositories;
 
 use api\components\HttpException;
+use common\enums\UserRole;
 use common\models\Log;
 use common\models\OrdinaryBid;
 use common\models\OrdinaryBidLog;
+use Yii;
 use yii\db\ActiveQuery;
 
 class OrdinaryBidLogRepository
@@ -21,10 +23,10 @@ class OrdinaryBidLogRepository
                     $query->from(['ordinaryBid' => OrdinaryBid::tableName()]);
                 }
             ]);
-        $query->where([
-            'ordinary_bid_id' => $ordinary_bid_id,
-            'ordinaryBid.user_id' => \Yii::$app->user->id
-        ]);
+        $query->where(['ordinary_bid_id' => $ordinary_bid_id]);
+        if (Yii::$app->user->identity->role == UserRole::CARRIER) {
+            $query->andWhere(['ordinaryBid.user_id' => Yii::$app->user->id]);
+        }
         $query->orderBy([
             'id' => SORT_ASC
         ]);
