@@ -110,6 +110,8 @@ class Medium extends \TRS\RestResponse\templates\BaseTemplate
             'mobile_number' => $model->user->mobile_number,
             'email' => $model->user->email,
             'note_from_carrier' => $model->note,
+            'created_at' => date('c', $model->created_at),
+            'updated_at' => date('c', $model->updated_at),
             'bid_detail' => $bid_description
 
         ];
