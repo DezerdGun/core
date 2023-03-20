@@ -48,7 +48,8 @@ class Large extends BaseTemplate
         /** @var Date $model */
         $model = $this->model;
         $this->result = [
-            'id' => $model->id,
+            'id' => $model->load_id,
+            'vessel_eta' => $model->load->vessel_eta,
             'last_free_day' => $model->last_free_day,
             'discharged_date' => $model->discharged_date,
             'outgate_date' => $model->outgate_date,

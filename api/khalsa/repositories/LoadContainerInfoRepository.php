@@ -13,7 +13,7 @@ class LoadContainerInfoRepository implements RepositoryInterface
 
     public function getById($id): LoadContainerInfo
     {
-        if (!$model = LoadContainerInfo::findOne(['id' => $id])) {
+        if (!$model = LoadContainerInfo::findOne(['load_id' => $id])) {
             throw new HttpException(400, 'LoadContainerInfo is not found.');
         }
         return $model;

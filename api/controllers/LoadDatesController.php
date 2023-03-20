@@ -6,6 +6,7 @@ use api\components\HttpException;
 use api\khalsa\services\LoadDatesService;
 use api\templates\date\Large;
 use common\models\Date;
+use common\models\Load;
 use OpenApi\Annotations as OA;
 use yii\base\InvalidConfigException;
 use yii\db\StaleObjectException;
@@ -42,8 +43,16 @@ class LoadDatesController extends BaseController
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="Load[vessel_eta]",
+     *                     type="date",
+     *                     format="date-time",
+     *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+     *                     example="12-12-2021 21:39:00",
+     *                     description="12-12-2021 21:39:00"
+     *              ),
      *                  @OA\Property(
-     *                     property="last_free_day",
+     *                     property="Date[last_free_day]",
      *                     type="date",
      *                     format="date-time",
      *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -51,7 +60,7 @@ class LoadDatesController extends BaseController
      *                     description="12-12-2021 21:39:00"
      *              ),
      *                 @OA\Property(
-     *                     property="discharged_date",
+     *                     property="Date[discharged_date]",
      *                     type="date",
      *                     format="date-time",
      *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -59,7 +68,7 @@ class LoadDatesController extends BaseController
      *                     description="12-12-2021 06:39:00"
      *              ),
      *                  @OA\Property(
-     *                     property="outgate_date",
+     *                     property="Date[outgate_date]",
      *                     type="date",
      *                     format="date-time",
      *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -67,7 +76,7 @@ class LoadDatesController extends BaseController
      *                     description="12-12-2021 06:39:00"
      *              ),
      *                  @OA\Property(
-     *                     property="empty_date",
+     *                     property="Date[empty_date]",
      *                     type="date",
      *                     format="date-time",
      *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -75,7 +84,7 @@ class LoadDatesController extends BaseController
      *                     description="12-12-2021 06:39:00"
      *              ),
      *                   @OA\Property(
-     *                     property="ingate_ate",
+     *                     property="Date[ingate_ate]",
      *                     type="date",
      *                     format="date-time",
      *                     pattern="/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
@@ -106,6 +115,14 @@ class LoadDatesController extends BaseController
     public function actionUpdate($id): array
     {
 
+        $condition = ['id' => $id];
+        $model = Load::findOne($condition);
+        if ($model) {
+            $model->load(\Yii::$app->getRequest()->post(), 'Load');
+            $model->update();
+        }else {
+            throw new HttpException(400, \Yii::t('app', 'Load is not found!'));
+        }
         $this->loadDatesService->update($id);
         return $this->success();
     }

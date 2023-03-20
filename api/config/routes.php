@@ -68,6 +68,7 @@ $routes = [
     'PATCH /load-container-info/<id:\d+>' => 'load-container-info/update',
     'DELETE /load-reference-number/<id:\d+>' => 'load-reference-number/delete',
     'GET /load-reference-number/<id:\d+>' => 'load-reference-number/show',
+    'PATCH /container-load/<id:\d+>' => 'container-load/update',
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
     'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',

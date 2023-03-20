@@ -41,7 +41,7 @@ class LoadDatesService implements ServiceInterface
     public function update($id)
     {
         $model = $this->loadDatesRepository->getById($id);
-        $model->setAttributes(\Yii::$app->request->post());
+        $model->load(\Yii::$app->request->post(),'Date');
         if ($model->validate()) {
             $this->loadDatesRepository->update($model);
         } else throw new HttpException(400, [$model->formName() => $model->getErrors()]);
