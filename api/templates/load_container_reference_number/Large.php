@@ -2,9 +2,6 @@
 
 namespace api\templates\load_container_reference_number;
 
-
-
-use common\models\LoadContainerInfo;
 use common\models\LoadReferenceNumber;
 use OpenApi\Annotations as OA;
 use TRS\RestResponse\templates\BaseTemplate;
@@ -76,11 +73,13 @@ class Large extends BaseTemplate
             'hbl' => $model->hbl,
             'seal' => $model->seal,
             'vessel_name' => $model->vessel_name,
-            'voyage character' => $model->voyage,
+            'voyage' => $model->voyage,
             'purchase_order' => $model->purchase_order,
             'shipment' => $model->shipment,
             'pick_up' => $model->pick_up,
             'appointment' => $model->appointment,
+            'reservation' => $model->reservation,
+            'return' => $model->return
 
         ];
     }

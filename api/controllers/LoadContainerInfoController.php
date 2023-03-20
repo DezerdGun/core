@@ -235,6 +235,11 @@ class LoadContainerInfoController extends BaseController
      *                  type="string",
      *                  example="success"
      *              ),
+     *              @OA\Property(
+     *                  property="description",
+     *                  type="string",
+     *                  example="1) create container-load 2) create container-info, then You can update container info"
+     *              ),
      *          )
      *      ),
      *      security={

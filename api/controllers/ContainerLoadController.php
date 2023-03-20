@@ -23,6 +23,99 @@ class ContainerLoadController extends BaseController
 
     /**
      * @OA\Patch (
+     *     path="/container-load/{id}",
+     *     tags={"container-load"},
+     *     operationId="updateLoadInfoId",
+     *     summary="updateLoadInfoId",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                  @OA\Property(
+     *                      property="LoadInfo[customer_id]",
+     *                      type="integer",
+     *                      description="update customer id"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="LoadInfo[port_id]",
+     *                      type="integer",
+     *                      description="update port_id id"
+     *                  ),
+     *                 @OA\Property(
+     *                      property="LoadInfo[consignee_id]",
+     *                      type="integer",
+     *                      description="update consignee id"
+     *                  ),
+     *                 @OA\Property(
+     *                      property="LoadInfo[pick_up_from]",
+     *                      type="date",
+     *                      example="12-12-2021 21:39:00",
+     *                      description="12-12-2021 21:39:00"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="LoadInfo[pick_up_to]",
+     *                      type="date",
+     *                      example="12-12-2021 21:39:00",
+     *                      description="12-12-2021 21:39:00"
+     *                  ),
+     *                @OA\Property(
+     *                      property="LoadInfo[deliver_from]",
+     *                      type="date",
+     *                      example="12-12-2021 21:39:00",
+     *                      description="12-12-2021 21:39:00"
+     *                  ),
+     *                 @OA\Property(
+     *                      property="LoadInfo[deliver_to]",
+     *                      type="date",
+     *                      example="12-12-2021 21:39:00",
+     *                      description="12-12-2021 21:39:00"
+     *                  ),
+     *            )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="success"
+     *              ),
+     *          )
+     *      ),
+     *      security={
+     *          {"main":{}},
+     *          {"ClientCredentials":{}}
+     *      }
+     *  )
+     */
+
+    public function actionUpdate($id): array
+    {
+
+        $condition = ['id' => $id];
+        $model = Load::findOne($condition);
+        if ($model) {
+            $model->load(\Yii::$app->getRequest()->post(), 'LoadInfo');
+            $model->update();
+        } else {
+            throw new HttpException(400, \Yii::t('app', 'Load is not found!'));
+        }
+        return $this->success($model);
+    }
+
+    /**
+     * @OA\Patch (
      *     path="/container-load/status/{id}",
      *     tags={"container-load"},
      *     operationId="changeContainerLoadId",

@@ -188,6 +188,11 @@ class LoadReferenceNumberController extends BaseController
      *                  type="string",
      *                  example="success"
      *              ),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="string",
+     *                  example="Load-reference-number {fk} to load-container-info{id}"
+     *              ),
      *          )
      *      ),
      *      security={

@@ -188,6 +188,17 @@ class Large extends BaseTemplate
                 'type' => $model->loadContainerInfos->type,
                 'container_number' => $model->loadContainerInfos->container_number,
                 'size' => $model->loadContainerInfos->size,
+                'chassis' => $model->loadContainerInfos->chassis,
+                'chassis_type' => $model->loadContainerInfos->chassis_type,
+                'chassis_size' => $model->loadContainerInfos->chassis_size,
+                'chassis_genset' => $model->loadContainerInfos->chassis_genset,
+                'voyage' => $model->loadContainerInfos->loadReferenceNumbers->voyage,
+                'purchase_order' => $model->loadContainerInfos->loadReferenceNumbers->purchase_order,
+                'shipment' => $model->loadContainerInfos->loadReferenceNumbers->shipment,
+                'pick_up' => $model->loadContainerInfos->loadReferenceNumbers->pick_up,
+                'appointment' => $model->loadContainerInfos->loadReferenceNumbers->appointment,
+                'return' => $model->loadContainerInfos->loadReferenceNumbers->return,
+                'reservation' => $model->loadContainerInfos->loadReferenceNumbers->reservation,
             ]
         ];
     }
