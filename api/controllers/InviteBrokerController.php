@@ -178,7 +178,7 @@ class InviteBrokerController extends BaseController
     {
         $data = User::find()
             ->where([
-                'role' => [User::MASTER_BROKER,User::SUB_BROKER],
+                'role' => [User::STATUS_NULL],
                 'status' => User::STATUS_INACTIVE
             ])
             ->all();

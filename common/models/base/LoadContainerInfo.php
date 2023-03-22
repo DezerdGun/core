@@ -20,6 +20,7 @@ use Yii;
  * @property integer $chassis_size
  * @property integer $chassis_owner_id
  * @property string $chassis_genset
+ * @property string $weight_in_LBs
  *
  * @property \common\models\Owner $chassisOwner
  * @property \common\models\Container $chassisType
@@ -50,13 +51,14 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
         return [
             [['load_id', 'container_number', 'size', 'owner_id', 'chassis_size', 'chassis_owner_id'], 'default', 'value' => null],
             [['load_id', 'container_number', 'size', 'owner_id', 'chassis_size', 'chassis_owner_id'], 'integer'],
+            [['weight_in_LBs'], 'number'],
             [['type', 'chassis', 'chassis_type', 'chassis_genset'], 'string', 'max' => 32],
             [['type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['type' => 'code']],
             [['chassis_type'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Container::className(), 'targetAttribute' => ['chassis_type' => 'code']],
             [['load_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Load::className(), 'targetAttribute' => ['load_id' => 'id']],
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['owner_id' => 'id']],
             [['chassis_owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Owner::className(), 'targetAttribute' => ['chassis_owner_id' => 'id']],
-            ['load_id', 'unique'],
+            [['load_id'], 'unique']
         ];
     }
 
@@ -77,6 +79,7 @@ abstract class LoadContainerInfo extends \yii\db\ActiveRecord
             'chassis_size' => 'Chassis Size',
             'chassis_owner_id' => 'Chassis Owner ID',
             'chassis_genset' => 'Chassis Genset',
+            'weight_in_LBs' => 'Weight In L Bs',
         ];
     }
 
