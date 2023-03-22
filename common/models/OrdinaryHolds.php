@@ -5,21 +5,26 @@ namespace common\models;
 use common\helpers\DateTime;
 use common\models\traits\Template;
 use Yii;
-use \common\models\base\Holds as BaseHolds;
+use \common\models\base\OrdinaryHolds as BaseOrdinaryHolds;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "holds".
+ * This is the model class for table "ordinary_holds".
  */
-class Holds extends BaseHolds
+class OrdinaryHolds extends BaseOrdinaryHolds
 {
     use Template;
-    public function behaviors(): array
+    public function behaviors()
     {
-        return DateTime::setLocalTimestamp(parent::behaviors());
+        return ArrayHelper::merge(
+            parent::behaviors(),
+            [
+                # custom behaviors
+            ]
+        );
     }
 
-    public function rules(): array
+    public function rules()
     {
         return ArrayHelper::merge(
             parent::rules(),
@@ -28,6 +33,7 @@ class Holds extends BaseHolds
             ]
         );
     }
+
     public $role;
     public $_old_load_id;
     public $_old_freight_hold;
@@ -48,7 +54,7 @@ class Holds extends BaseHolds
 
     public function addNoteHistory($str)
     {
-        $note = new Holds_history();
+        $note = new OrdinaryHoldsHistory();
         $nowDate = DateTime::nowDateYMD();
         $nowTime = DateTime::nowTime();
         $note->updated_at = "{$nowDate} {$nowTime}";
@@ -96,6 +102,5 @@ class Holds extends BaseHolds
         return $model->addNoteHistory($temporary);
 
     }
-
 
 }

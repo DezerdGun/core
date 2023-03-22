@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\enums\Hold;
 use common\models\traits\Template;
 use \common\models\base\Load as BaseLoad;
 use yii\helpers\ArrayHelper;
@@ -36,10 +37,10 @@ class Load extends BaseLoad
     {
         $holds= new Holds();
         $holds->load_id = $model->id;
-        $holds->broker_hold = Holds::Fixed;
-        $holds->carrier_hold = Holds::Fixed;
-        $holds->customer_hold = Holds::Fixed;
-        $holds->freight_hold = Holds::Fixed;
+        $holds->broker_hold = Hold::Fixed;
+        $holds->carrier_hold = Hold::Fixed;
+        $holds->customer_hold = Hold::Fixed;
+        $holds->freight_hold = Hold::Fixed;
         $holds->save();
     }
 

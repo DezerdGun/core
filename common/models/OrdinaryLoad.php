@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\enums\Hold;
 use common\enums\LoadStatus;
 use common\models\traits\Template;
 use \common\models\base\OrdinaryLoad as BaseOrdinaryLoad;
@@ -42,5 +43,16 @@ class   OrdinaryLoad extends BaseOrdinaryLoad
         $models->appointment = LoadStatus::EMPTY;
         $models->reservation = LoadStatus::EMPTY;
         $models->save();
+    }
+
+    public function hold(OrdinaryLoad $model)
+    {
+        $holds= new OrdinaryHolds();
+        $holds->load_id = $model->id;
+        $holds->broker_hold = Hold::Fixed;
+        $holds->carrier_hold = Hold::Fixed;
+        $holds->customer_hold = Hold::Fixed;
+        $holds->freight_hold = Hold::Fixed;
+        $holds->save();
     }
 }

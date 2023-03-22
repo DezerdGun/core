@@ -50,6 +50,7 @@ class LoadOrdinaryService implements ServiceInterface
                 }
                 \Yii::$app->db->createCommand()->batchInsert(OrdinaryNeeded::tableName(),
                     ['equipment_needed_id','ordinary_need'], $rows)->execute();
+                $model->hold($model);
             }else{
                 throw new HttpException(400, [$form->formName() => $form->getErrors()]);
             }
