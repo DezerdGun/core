@@ -75,6 +75,9 @@ $routes = [
     'GET /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/show',
     'GET /holds-load-container-info' => 'holds-load-container-info/index',
 
+    'GET /holds-ordinary-load/<id:\d+>' => 'holds-ordinary-load/show',
+    'PATCH /holds-ordinary-load/<id:\d+>' => 'holds-ordinary-load/update',
+    'GET /holds-ordinary-load' => 'holds-ordinary-load/index',
 
     'PATCH /load-document/<id:\d+>' => 'load-document/update',
     'GET /load-document/<id:\d+>' => 'load-document/get-documents',
