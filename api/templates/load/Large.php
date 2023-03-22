@@ -199,6 +199,7 @@ class Large extends BaseTemplate
                 'appointment' => $model->loadContainerInfos->loadReferenceNumbers->appointment,
                 'return' => $model->loadContainerInfos->loadReferenceNumbers->return,
                 'reservation' => $model->loadContainerInfos->loadReferenceNumbers->reservation,
+                'weight_in_LBs' => $model->loadContainerInfos->weight_in_LBs,
             ]
         ];
     }

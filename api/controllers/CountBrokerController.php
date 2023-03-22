@@ -53,11 +53,14 @@ class CountBrokerController extends BaseController
             ->where([
                 'role' => [
                     User::MASTER_BROKER,
-                    User::SUB_BROKER],
+                    User::SUB_BROKER,
+                    User::STATUS_NULL,
+                ],
                 'status' => [
                     User::STATUS_ACTIVE,
                     User::STATUS_INACTIVE,
                     User::STATUS_DELETED,
+
                 ],
             ])
             ->groupBy(['status'])

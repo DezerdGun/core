@@ -46,6 +46,7 @@ class User extends ActiveRecord implements IdentityInterface
     const CARRIER = 'Carrier';
     const DISABLED = 'Disabled';
     const SCENARIO_USER_PICTURE = 'user_picture';
+    const STATUS_NULL = null;
 
     use Template;
 

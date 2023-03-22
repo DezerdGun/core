@@ -84,6 +84,12 @@ class LoadContainerInfoController extends BaseController
      *              example="523",
      *              description="523",
      *              ),
+     *         @OA\Property(
+     *              property="LoadContainerInfo[weight_in_LBs]",
+     *              type="integer",
+     *              example="9.000",
+     *              description="9.000",
+     *              ),
      *          required={
      *                     "LoadContainerInfo[size]",
      *                     "LoadContainerInfo[container_number]",
@@ -216,6 +222,12 @@ class LoadContainerInfoController extends BaseController
      *                      @OA\Property(
      *                          property="chassis_genset",
      *                          type="string",
+     *                 ),
+     *                      @OA\Property(
+     *                          property="weight_in_LBs",
+     *                          type="integer",
+     *                          example="9.000",
+     *                          description="decimal()",
      *                 ),
      *                       required={
      *                              "size",
