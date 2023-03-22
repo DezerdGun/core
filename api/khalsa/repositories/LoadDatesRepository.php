@@ -4,7 +4,6 @@ namespace api\khalsa\repositories;
 
 use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
-use api\khalsa\NotFoundException;
 use common\models\Date;
 use yii\db\StaleObjectException;
 
@@ -25,7 +24,7 @@ class LoadDatesRepository implements RepositoryInterface
     public function update(Date $model)
     {
         if (!$model->update()) {
-            throw new \RuntimeException('Update date error.');
+            throw new HttpException(400, [$model->formName() => $model->errors]);
         }
     }
 

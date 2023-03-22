@@ -110,6 +110,7 @@ class LoadDatesController extends BaseController
      *          {"ClientCredentials":{}}
      *      }
      *  )
+     * @throws StaleObjectException
      */
 
     public function actionUpdate($id): array
@@ -118,7 +119,7 @@ class LoadDatesController extends BaseController
         $condition = ['id' => $id];
         $model = Load::findOne($condition);
         if ($model) {
-            $model->load(\Yii::$app->getRequest()->post(), 'Load');
+            $model->load(\Yii::$app->request->post(), 'Load');
             $model->update();
         }else {
             throw new HttpException(400, \Yii::t('app', 'Load is not found!'));
@@ -219,7 +220,7 @@ class LoadDatesController extends BaseController
     public function actionIndex(): array
     {
         $equipment = Date::find()
-            ->select('id,last_free_day,discharged_date,outgate_date,empty_date,ingate_ate')
+            ->select('load_id,last_free_day,discharged_date,outgate_date,empty_date,ingate_ate')
             ->all();
         return $this->success($equipment);
     }
