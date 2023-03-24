@@ -420,6 +420,20 @@ class OrdinaryLoadController extends BaseController
 
     }
 
+    public function actionAssignCarrier($id)
+    {
+        $load = $this->findModels($id);
+        $carrier_id = \Yii::$app->request->getBodyParam('carrier_id');
+
+        if (!empty($carrier_id)) {
+            $load->carrier_id = $carrier_id;
+            $load->save();
+            return $this->success($load);
+        } else {
+            throw new HttpException(400, 'Carrier ID field is required');
+        }
+    }
+
     /**
      * @OA\Patch (
      *     path="/ordinary-load/status/{id}",

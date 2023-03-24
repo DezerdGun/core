@@ -21,7 +21,9 @@ use Yii;
  * @property string $pick_up_to
  * @property string $delivery_from
  * @property string $delivery_to
+ * @property integer $carrier_id
  *
+ * @property \common\models\Carrier $carrier
  * @property \common\models\Customer $customer
  * @property \common\models\Location $destination
  * @property \common\models\LoadOrdinaryAdditionalInfo $loadOrdinaryAdditionalInfos
@@ -50,11 +52,12 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'default', 'value' => null],
-            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number'], 'integer'],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'carrier_id'], 'default', 'value' => null],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'carrier_id'], 'integer'],
             [['pick_up_date', 'pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to'], 'safe'],
             [['user_id'], 'required'],
             [['status'], 'string', 'max' => 32],
+            [['carrier_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Carrier::className(), 'targetAttribute' => ['carrier_id' => 'id']],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['origin_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['origin_id' => 'id']],
             [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['destination_id' => 'id']],
@@ -80,7 +83,16 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
             'pick_up_to' => 'Pick Up To',
             'delivery_from' => 'Delivery From',
             'delivery_to' => 'Delivery To',
+            'carrier_id' => 'Carrier ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCarrier()
+    {
+        return $this->hasOne(\common\models\Carrier::className(), ['id' => 'carrier_id']);
     }
 
     /**

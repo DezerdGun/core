@@ -6,8 +6,12 @@ use api\components\HttpException;
 use api\forms\user\UserCreateForm;
 use api\khalsa\services\CarrierService;
 use api\templates\carrier\Large;
+use api\templates\ordinaryload\Small;
+use common\models\search\SearchCarrier;
+use common\models\search\SearchLoadOrdinary;
 use common\models\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 
 
 class CarrierController extends BaseController
@@ -25,9 +29,19 @@ class CarrierController extends BaseController
         $this->carrierService = $carrierService;
     }
 
-    public function actionIndex()
+
+    public function actionIndex($page = 0, $page_size = 10)
     {
-        return $this->render('index');
+        $searchCarrier = new SearchCarrier();
+        $searchCarrier->load(Yii::$app->request->queryParams);
+        if ( !$searchCarrier->validate()) {
+            throw new HttpException(400, ['SearchCarrier' => $searchCarrier->getErrors()]);
+        }
+
+        return new ActiveDataProvider([
+            'query' => $searchCarrier->searchQuery(),
+            'pagination' => ['pageSize' => $page_size, 'page' => $page],
+        ]);
     }
 
     /**
