@@ -5,7 +5,9 @@ $routes = [
 
     'GET /doc' => '/doc',
     'GET /' => '/',
+
     'POST /carrier' => 'carrier/create',
+    'GET /carrier' => 'carrier/index',
     'POST /carrier/company' => 'carrier/create-company',
     'GET /carrier/my-account' => 'carrier/show',
     'PATCH /carrier/my-account' => 'carrier/update',
@@ -69,6 +71,7 @@ $routes = [
     'DELETE /load-reference-number/<id:\d+>' => 'load-reference-number/delete',
     'GET /load-reference-number/<id:\d+>' => 'load-reference-number/show',
     'PATCH /container-load/<id:\d+>' => 'container-load/update',
+    'PATCH /container-load/assign-carrier/<id:\d+>' => 'container-load/assign-carrier',
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
     'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
@@ -120,6 +123,7 @@ $routes = [
     'PATCH /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/update',
     'DELETE /ordinary-load-reference-number/<id:\d+>' => 'ordinary-load-reference-number/delete',
     'PATCH /ordinary-load/status/<id:\d+>' => 'ordinary-load/reassign',
+    'PATCH /ordinary-load/assign-carrier/<id:\d+>' => 'ordinary-load/assign-carrier',
     'PATCH /ordinary-load/<id:\d+>' => 'ordinary-load/update-load-info',
     'DELETE /ordinary-load/<id:\d+>' => 'ordinary-load/delete',
 
