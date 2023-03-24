@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 
 class LoadOrdinaryDescriptionRepository implements RepositoryInterface
@@ -15,7 +16,7 @@ class LoadOrdinaryDescriptionRepository implements RepositoryInterface
     public function create($model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\helpers\DateTime;
+use common\models\traits\Template;
 use Yii;
 use \common\models\base\Holds_history as BaseHolds_history;
 use yii\helpers\ArrayHelper;
@@ -12,7 +13,7 @@ use yii\helpers\ArrayHelper;
  */
 class Holds_history extends BaseHolds_history
 {
-
+    use Template;
     public function behaviors()
     {
         return DateTime::setLocalTimestamp(parent::behaviors());

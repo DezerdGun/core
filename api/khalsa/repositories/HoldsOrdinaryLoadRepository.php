@@ -18,10 +18,13 @@ class HoldsOrdinaryLoadRepository implements RepositoryInterface
         return $model;
     }
 
+    /**
+     * @throws HttpException
+     */
     public function update(OrdinaryHolds $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 }
