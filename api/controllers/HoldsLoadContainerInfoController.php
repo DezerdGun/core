@@ -5,7 +5,6 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\HoldsLoadContainerInfoService;
 use api\templates\holds_container_info\Large;
-use common\models\Date;
 use common\models\Holds;
 use common\models\Holds_history;
 use OpenApi\Annotations as OA;
@@ -167,7 +166,7 @@ class HoldsLoadContainerInfoController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/holds-load-container-info/{id}",
+     *     path="/holds-load-container-infos/{id}",
      *     tags={"holds-load-info"},
      *     operationId="getHoldsLoadsInfoId",
      *     summary="getHoldsLoadsInfoId",
@@ -221,6 +220,64 @@ class HoldsLoadContainerInfoController extends BaseController
         }
         return $model;
     }
+
+    /**
+     * @OA\Get(
+     *     path="/holds-load-container-info/{id}",
+     *     tags={"holds-load-info"},
+     *     operationId="getHoldsHistoryLoadsInfoId",
+     *     summary="getHoldsHistoryLoadsInfoId",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *     {"ClientCredentials":{}}
+     *     }
+     * )
+     */
+    public function actionHistory($id): array
+    {
+        $model = $this->lists($id);
+        return $this->success($model->getAsArray(\api\templates\hold_history\Large::class));
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    private function lists($id)
+    {
+        $con = ['load_id' => $id];
+        $model = Holds_history::findOne($con);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
+    }
+
     /**
      * @OA\Get(
      *     path="/holds-load-container-info",

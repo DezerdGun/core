@@ -22,7 +22,7 @@ class LoadReferenceNumberRepository implements RepositoryInterface
     public function create($model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Create error.');
+            throw new HttpException(500,'Create error.');
         }
     }
 
@@ -31,8 +31,8 @@ class LoadReferenceNumberRepository implements RepositoryInterface
      */
     public function update(LoadReferenceNumber $model)
     {
-        if (!$model->update()) {
-            throw new \RuntimeException('Update error.');
+        if (!$model->save()) {
+            throw new HttpException(500,'Saving error.');
         }
     }
 

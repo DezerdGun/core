@@ -72,7 +72,8 @@ $routes = [
 
     'POST /holds-load-container-info' => 'holds-load-container-info/create',
     'PATCH /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/update',
-    'GET /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/show',
+    'GET /holds-load-container-infos/<id:\d+>' => 'holds-load-container-info/show',
+    'GET /holds-load-container-info/<id:\d+>' => 'holds-load-container-info/history',
     'GET /holds-load-container-info' => 'holds-load-container-info/index',
 
     'GET /holds-ordinary-load/<id:\d+>' => 'holds-ordinary-load/show',

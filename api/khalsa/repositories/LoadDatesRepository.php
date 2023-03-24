@@ -19,12 +19,12 @@ class LoadDatesRepository implements RepositoryInterface
     }
 
     /**
-     * @throws StaleObjectException
+     * @throws HttpException
      */
     public function update(Date $model)
     {
-        if (!$model->update()) {
-            throw new HttpException(400, [$model->formName() => $model->errors]);
+        if (!$model->save()) {
+            throw new HttpException(500,'Saving error.');
         }
     }
 

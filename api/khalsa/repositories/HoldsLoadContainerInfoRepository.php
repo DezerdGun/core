@@ -19,10 +19,13 @@ class holdsLoadContainerInfoRepository implements RepositoryInterface
         return $model;
     }
 
+    /**
+     * @throws HttpException
+     */
     public function create(Holds $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 

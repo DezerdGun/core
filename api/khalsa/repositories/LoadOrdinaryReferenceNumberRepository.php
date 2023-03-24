@@ -29,7 +29,7 @@ class LoadOrdinaryReferenceNumberRepository implements RepositoryInterface
     public function update(LoadOrdinaryReferenceNumber $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500,'Saving error.');
         }
     }
 

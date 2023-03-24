@@ -24,8 +24,8 @@ class LoadOrdinaryRepository implements RepositoryInterface
      */
     public function update(OrdinaryLoad $model)
     {
-        if (!$model->update()) {
-            throw new \RuntimeException('Update error.');
+        if (!$model->save()) {
+            throw new HttpException(500,'Saving error.');
         }
     }
 }

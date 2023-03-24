@@ -30,11 +30,12 @@ class LoadChassisLocationsRepository implements RepositoryInterface
 
     /**
      * @throws StaleObjectException
+     * @throws HttpException
      */
     public function update(Chassis_locations $model)
     {
-        if (!$model->update()) {
-            throw new \RuntimeException('Update error.');
+        if (!$model->save()) {
+            throw new HttpException(500,'Saving error.');
         }
     }
 
