@@ -68,13 +68,13 @@ class ContainerLoadController extends BaseController
      *                      description="12-12-2021 21:39:00"
      *                  ),
      *                @OA\Property(
-     *                      property="LoadInfo[deliver_from]",
+     *                      property="LoadInfo[delivery_from]",
      *                      type="date",
      *                      example="12-12-2021 21:39:00",
      *                      description="12-12-2021 21:39:00"
      *                  ),
      *                 @OA\Property(
-     *                      property="LoadInfo[deliver_to]",
+     *                      property="LoadInfo[delivery_to]",
      *                      type="date",
      *                      example="12-12-2021 21:39:00",
      *                      description="12-12-2021 21:39:00"

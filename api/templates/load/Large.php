@@ -151,13 +151,32 @@ class Large extends BaseTemplate
             'id' => $model->id,
             'load_id' => $model->load_reference_number,
             'loadStatus' => $model->status,
-            'consignee' => $model->port->name,
-            'portCity' =>  $model->port->address->city,
-            'portStateCode' => $model->port->address->state_code,
-            'port' => $model->consignee->name,
-            'destinationCity' => $model->consignee->address->city,
-            'destinationStateCode' => $model->consignee->address->state_code,
-            'customer' => $model->customer->company->company_name,
+            'port' => [
+                $model->port
+            ],
+            'portAddress' =>[
+                $model->port->address
+            ],
+            'destination' => [
+                $model->consignee
+            ],
+            'destinationAddress' => $model->consignee->address,
+            'date' => [
+               'id' => $model->dates->id,
+                'last_free_day' =>  $model->dates->last_free_day,
+                'discharged_date' =>  $model->dates->discharged_date,
+                'outgate_date' => $model->dates->outgate_date,
+                'empty_date' => $model->dates->empty_date,
+                'ingate_ate' => $model->dates->ingate_ate,
+            ],
+            'customer' => [
+               'id' => $model->customer->id,
+               'type' => $model->customer->type,
+               'contact_name' => $model->customer->contact_name,
+               'job_title' => $model->customer->job_title,
+
+                ],
+            'company_name' => $model->customer->company->company_name,
             'vessel_eta' =>$model->vessel_eta,
             'created_by' => [
                 'name' => $model->user->name,

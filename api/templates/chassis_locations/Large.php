@@ -41,8 +41,20 @@ class Large extends BaseTemplate
         $model = $this->model;
         $this->result = [
             'id' => $model->load_id,
-            'chassis_pickup' => $model->chassisPickup,
-            'chassis_termination' => $model->chassisTermination,
+            'chassis_pickup' =>[
+               'id' => $model->chassisPickup->id,
+                'name' =>  $model->chassisPickup->name,
+                'street_address' => $model->chassisPickup->address->street_address,
+                'city' => $model->chassisPickup->address->city,
+                'location_type' =>  $model->chassisPickup->location_type,
+            ],
+            'chassis_termination' => [
+                'id' => $model->chassisPickup->id,
+                'name' =>  $model->chassisPickup->name,
+                'street_address' => $model->chassisPickup->address->street_address,
+                'city' => $model->chassisPickup->address->city,
+                'location_type' =>  $model->chassisPickup->location_type,
+            ]
         ];
     }
 }
