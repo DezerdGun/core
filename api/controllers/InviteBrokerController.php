@@ -61,6 +61,7 @@ class InviteBrokerController extends BaseController
      *         )
      *     ),
      *     security={
+     *      {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )
@@ -334,6 +335,7 @@ class InviteBrokerController extends BaseController
      *         )
      *     ),
      *     security={
+     *      {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )

@@ -88,6 +88,7 @@ class LoadAdditionalInfoController extends BaseController
      *         )
      *     ),
      *     security={
+     *      {"main":{}},
      *     {"ClientCredentials":{}}
      *     }
      * )

@@ -24,10 +24,13 @@ use Yii;
  * @property integer $carrier_id
  *
  * @property \common\models\Carrier $carrier
- * @property \common\models\ChassisLocations[] $chassisLocations
+ * @property \common\models\Chassis_locations[] $chassisLocations
  * @property \common\models\Location $consignee
- * @property \common\models\ContainerReturn[] $containerReturns
+ * @property \common\models\Container_return[] $containerReturns
  * @property \common\models\Customer $customer
+ * @property \common\models\Date $dates
+ * @property \common\models\Holds[] $holds
+ * @property \common\models\Holds_history[] $holdsHistories
  * @property \common\models\LoadAdditionalInfo $loadAdditionalInfos
  * @property \common\models\LoadBid[] $loadBs
  * @property \common\models\LoadContainerInfo $loadContainerInfos
