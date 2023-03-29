@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use common\models\Customer;
 use api\khalsa\NotFoundException;
 use yii\db\StaleObjectException;
@@ -11,7 +12,7 @@ class CustomerRepository
     public function getById($id): Customer
     {
         if (!$model = Customer::findOne(['id' => $id])) {
-            throw new NotFoundException('Customer is not found.');
+            throw new HttpException(404, 'Customer is not found.');
         }
         return $model;
     }
@@ -19,7 +20,7 @@ class CustomerRepository
     public function create(Customer $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500, 'Saving error.');
         }
     }
 
@@ -30,7 +31,7 @@ class CustomerRepository
     {
         if (!$model->delete())
         {
-            throw new \RuntimeException('Removing error.');
+            throw new HttpException(500, 'Removing error.');
         }
     }
 
@@ -40,7 +41,7 @@ class CustomerRepository
     public function update(Customer $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500, 'Updating error.');
         }
     }
 }

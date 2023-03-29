@@ -6,6 +6,8 @@ use api\khalsa\repositories\ContainerBidDetailRepository;
 use common\enums\BidEditCount;
 use common\models\ContainerBidDetail;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 class ContainerBidDetailService
 {
@@ -70,6 +72,11 @@ class ContainerBidDetailService
 
     }
 
+    /**
+     * @throws HttpException
+     * @throws InvalidConfigException
+     * @throws StaleObjectException
+     */
     public function delete($ids)
     {
         $container_bid_detail_ids = explode(',', $ids); //array from string ex. 1,2,3 to [1,2,3]

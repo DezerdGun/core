@@ -21,6 +21,7 @@ use Yii;
  * @property string $pick_up_to
  * @property string $delivery_from
  * @property string $delivery_to
+ * @property integer $billing_id
  * @property integer $carrier_id
  *
  * @property \common\models\Carrier $carrier
@@ -52,8 +53,8 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'carrier_id'], 'default', 'value' => null],
-            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'carrier_id'], 'integer'],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'billing_id', 'carrier_id'], 'default', 'value' => null],
+            [['customer_id', 'origin_id', 'destination_id', 'user_id', 'load_reference_number', 'billing_id', 'carrier_id'], 'integer'],
             [['pick_up_date', 'pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to'], 'safe'],
             [['user_id'], 'required'],
             [['status'], 'string', 'max' => 32],
@@ -83,6 +84,7 @@ abstract class OrdinaryLoad extends \yii\db\ActiveRecord
             'pick_up_to' => 'Pick Up To',
             'delivery_from' => 'Delivery From',
             'delivery_to' => 'Delivery To',
+            'billing_id' => 'Billing ID',
             'carrier_id' => 'Carrier ID',
         ];
     }

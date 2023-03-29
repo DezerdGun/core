@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use common\models\Address;
 use yii\db\StaleObjectException;
@@ -11,7 +12,7 @@ class AddressRepository implements RepositoryInterface
     public function getById($id): Address
     {
         if (!$model = Address::findOne(['id' => $id])) {
-            throw new NotFoundException('Address is not found.');
+            throw new HttpException(404,'Address is not found.');
         }
         return $model;
     }
@@ -22,14 +23,14 @@ class AddressRepository implements RepositoryInterface
     public function delete(Address $address)
     {
         if (!$address->delete()) {
-            throw new \RuntimeException('Removing error.');
+            throw new HttpException(500,'Removing error.');
         }
     }
 
     public function create(Address $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500, 'Saving error.');
         }
     }
 
@@ -39,7 +40,7 @@ class AddressRepository implements RepositoryInterface
     public function update(Address $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500,'Updating error.');
         }
     }
 }
