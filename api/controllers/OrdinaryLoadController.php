@@ -420,6 +420,44 @@ class OrdinaryLoadController extends BaseController
 
     }
 
+    /**
+     * @OA\Patch (
+     *     path="/ordinary-load/assign-carrier/{id}",
+     *     tags={"ordinary-load"},
+     *     operationId="assignCarrierToOrdinaryLoad",
+     *     summary="Assign Carrier to Ordinary Load",
+     *     @OA\Parameter (
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          @OA\Schema (
+     *              type="integer"
+     *          ),
+     *     ),
+     *     @OA\RequestBody (
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                   @OA\Property(
+     *                       property="carrier_id",
+     *                       type="integer",
+     *                   ),
+     *                   required={
+     *                       "carrier_id",
+     *                   }
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response (
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+ *                  @OA\Schema (ref="#/components/schema/CarrierLarge")
+     *          )
+     *     )
+     * )
+     */
     public function actionAssignCarrier($id)
     {
         $load = $this->findModels($id);

@@ -2,6 +2,7 @@
 
 namespace common\models\traits;
 
+use api\templates\DefaultTemplate;
 use TRS\RestResponse\templates\BaseTemplate;
 
 trait Template
@@ -11,8 +12,10 @@ trait Template
      * @param string $template
      * @return array
     */
-    public function getAsArray($template, array $config = [])
+    public function getAsArray($template = null, array $config = [])
     {
+        $template = $template ?? DefaultTemplate::class;
+
         if (
             !class_exists($template)
             ||
