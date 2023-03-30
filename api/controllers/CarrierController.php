@@ -30,6 +30,156 @@ class CarrierController extends BaseController
     }
 
 
+    /**
+     * @OA\Get(
+     *     path="/carrier",
+     *     tags={"carrier"},
+     *     operationId="getCarriers",
+     *     summary="get the list of carriers",
+     *     @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[id]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="integer",
+     *          format="int64",
+     *       )
+     *     ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[user_id]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="integer",
+     *          format="int64",
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[w9_file]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=55,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[w9_mime_type]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=32,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[ic_file]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=55,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[ic_mime_type]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=32,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[company_id]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="integer",
+     *          format="int64",
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[scac]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=10,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[instagram]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=100,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[facebook]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=100,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[linkedin]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=100,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[w9_name]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=100,
+     *       )
+     *   ),
+     *    @OA\Parameter(
+     *       in="query",
+     *       name="SearchCarrier[ic_name]",
+     *       description="",
+     *       @OA\Schema(
+     *          type="string",
+     *          maxLength=100,
+     *       )
+     *   ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successfull operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="success"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Carrier")
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 ref="#/components/schemas/Pagination"
+     *             ),
+     *         )
+     *     ),
+     *     security={
+     *         {"main":{}},
+     *         {"ClientCredentials":{}}
+     *     }
+     * )
+     */
     public function actionIndex($page = 0, $page_size = 10)
     {
         $searchCarrier = new SearchCarrier();
@@ -38,10 +188,7 @@ class CarrierController extends BaseController
             throw new HttpException(400, ['SearchCarrier' => $searchCarrier->getErrors()]);
         }
 
-        return new ActiveDataProvider([
-            'query' => $searchCarrier->searchQuery(),
-            'pagination' => ['pageSize' => $page_size, 'page' => $page],
-        ]);
+        return $this->index($searchCarrier->searchQuery(), $page, $page_size);
     }
 
     /**

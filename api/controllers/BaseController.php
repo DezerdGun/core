@@ -104,13 +104,13 @@ abstract class BaseController extends Controller
         }
    }
 
-    protected function index(ActiveQuery $q, int $page, int $pageSize, string $template, array $templateConfig = [])
+    protected function index(ActiveQuery $q, int $page, int $pageSize, string $template = null, array $templateConfig = [])
     {
         $pagination = new Pagination(['page' => $page, 'pageSize' => $pageSize, 'totalCount' => $q->count()]);
         $rows = $q->limit($pagination->getLimit())->offset($pagination->getOffset())->all();
         $data = [];
         foreach ($rows as $row) {
-            array_push($data, $row->getAsArray($template, $templateConfig));
+            $data[] = $row->getAsArray($template, $templateConfig);
         }
         return $this->success($data, [
             'pagination' => [

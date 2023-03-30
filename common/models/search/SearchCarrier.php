@@ -9,6 +9,91 @@ use common\models\Carrier;
 /**
  * SearchCarrier represents the model behind the search form of `common\models\Carrier`.
  */
+
+/**
+ * @OA\Schema(
+ *     schema="SearchCarrier",
+ *    @OA\Property(
+ *       property="id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="user_id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="w9_file",
+ *       description="",
+ *       type="string",
+ *       maxLength=55,
+ *   ),
+ *    @OA\Property(
+ *       property="w9_mime_type",
+ *       description="",
+ *       type="string",
+ *       maxLength=32,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_file",
+ *       description="",
+ *       type="string",
+ *       maxLength=55,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_mime_type",
+ *       description="",
+ *       type="string",
+ *       maxLength=32,
+ *   ),
+ *    @OA\Property(
+ *       property="company_id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="scac",
+ *       description="",
+ *       type="string",
+ *       maxLength=10,
+ *   ),
+ *    @OA\Property(
+ *       property="instagram",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="facebook",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="linkedin",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="w9_name",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_name",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ * )
+ */
+
 class SearchCarrier extends Carrier
 {
     /**

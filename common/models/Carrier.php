@@ -10,6 +10,90 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "carrier".
  */
+/**
+ * @OA\Schema(
+ *     schema="Carrier",
+ *     required={"user_id","created_at","updated_at"},
+ *    @OA\Property(
+ *       property="id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="user_id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="w9_file",
+ *       description="",
+ *       type="string",
+ *       maxLength=55,
+ *   ),
+ *    @OA\Property(
+ *       property="w9_mime_type",
+ *       description="",
+ *       type="string",
+ *       maxLength=32,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_file",
+ *       description="",
+ *       type="string",
+ *       maxLength=55,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_mime_type",
+ *       description="",
+ *       type="string",
+ *       maxLength=32,
+ *   ),
+ *    @OA\Property(
+ *       property="company_id",
+ *       description="",
+ *       type="integer",
+ *       format="int64",
+ *   ),
+ *    @OA\Property(
+ *       property="scac",
+ *       description="",
+ *       type="string",
+ *       maxLength=10,
+ *   ),
+ *    @OA\Property(
+ *       property="instagram",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="facebook",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="linkedin",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="w9_name",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ *    @OA\Property(
+ *       property="ic_name",
+ *       description="",
+ *       type="string",
+ *       maxLength=100,
+ *   ),
+ * )
+ */
 class Carrier extends BaseCarrier
 {
     const STATUS_INACTIVE = 0;

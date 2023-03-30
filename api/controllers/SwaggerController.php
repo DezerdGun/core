@@ -48,6 +48,7 @@ class SwaggerController extends Controller
             Yii::getAlias('@api/controllers'),
             Yii::getAlias('@api/forms'),
             Yii::getAlias('@api/templates'),
+            Yii::getAlias('@common/models'),
         ];
         $openApi = \OpenApi\Generator::scan($directories);
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;

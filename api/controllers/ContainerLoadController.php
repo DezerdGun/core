@@ -20,6 +20,57 @@ use yii\web\NotFoundHttpException;
 
 class ContainerLoadController extends BaseController
 {
+    /**
+     * @OA\Patch (
+     *     path="/container-load/assign-carrier/{id}",
+     *     tags={"container-load"},
+     *     operationId="assignCarrierToContainerLoad",
+     *     summary="Assign Carrier to Container Load",
+     *     @OA\Parameter (
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          @OA\Schema (
+     *              type="integer"
+     *          ),
+     *     ),
+     *     @OA\RequestBody (
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                   @OA\Property(
+     *                       property="carrier_id",
+     *                       type="integer",
+     *                   ),
+     *                   required={
+     *                       "carrier_id",
+     *                   }
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response (
+     *          response=200,
+     *          description="successfull operation",
+     *          @OA\JsonContent(
+     *                  @OA\Schema (ref="#/components/schema/CarrierLarge")
+     *          )
+     *     )
+     * )
+     */
+    public function actionAssignCarrier($id)
+    {
+        $load = $this->findModel($id);
+        $carrier_id = \Yii::$app->request->getBodyParam('carrier_id');
+
+        if (!empty($carrier_id)) {
+            $load->carrier_id = $carrier_id;
+            $load->save();
+            return $this->success($load);
+        } else {
+            throw new HttpException(400, 'Carrier ID field is required');
+        }
+    }
 
     /**
      * @OA\Patch (
@@ -99,21 +150,6 @@ class ContainerLoadController extends BaseController
      *      }
      *  )
      */
-
-    public function actionAssignCarrier($id)
-    {
-        $load = $this->findModel($id);
-        $carrier_id = \Yii::$app->request->getBodyParam('carrier_id');
-
-        if (!empty($carrier_id)) {
-            $load->carrier_id = $carrier_id;
-            $load->save();
-            return $this->success($load);
-        } else {
-            throw new HttpException(400, 'Carrier ID field is required');
-        }
-    }
-
     public function actionUpdate($id): array
     {
 
