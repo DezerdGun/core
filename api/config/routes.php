@@ -195,6 +195,15 @@ $routes = [
 
     'POST /ordinary/bid/log/<id:\d+>' => 'ordinary-bid-log/create',
     'GET /ordinary/bid/log/<id:\d+>' => 'ordinary-bid-log/index',
+
+    'POST /billing' => 'billing/create',
+    'GET /billing/<load_id:\d+>' => 'billing/view',
+    'PATCH /billing' => 'billing/update',
+
+    'POST /billing/detail/<billing_id:>' => 'billing-detail/create',
+    'DELETE /billing/detail/<id:>' => 'billing-detail/delete',
+    'PATCH /billing/detail/<id:>' => 'billing-detail/update'
+
     ];
 
 return $routes;

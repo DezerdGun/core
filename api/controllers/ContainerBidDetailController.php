@@ -5,6 +5,7 @@ namespace api\controllers;
 use api\components\HttpException;
 use api\khalsa\services\ContainerBidDetailService;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\Exception;
 
 class ContainerBidDetailController extends \api\controllers\BaseController
@@ -246,7 +247,7 @@ class ContainerBidDetailController extends \api\controllers\BaseController
      *     }
      * )
      * @throws HttpException
-     * @throws Exception
+     * @throws Exception|InvalidConfigException
      */
     public function actionDelete($id): array
     {

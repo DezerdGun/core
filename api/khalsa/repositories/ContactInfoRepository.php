@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use common\models\ContactInfo;
 use yii\db\StaleObjectException;
 use \api\khalsa\interfaces\RepositoryInterface;
@@ -12,7 +13,7 @@ class ContactInfoRepository implements RepositoryInterface
     public function getById($id): ContactInfo
     {
         if (!$contactInfo = ContactInfo::findOne(['id' => $id])) {
-            throw new NotFoundException('Contact info is not found.');
+            throw new HttpException(404, 'Contact info is not found.');
         }
         return $contactInfo;
     }
@@ -23,21 +24,21 @@ class ContactInfoRepository implements RepositoryInterface
     public function delete(ContactInfo $contactInfo)
     {
         if (!$contactInfo->delete()) {
-            throw new \RuntimeException('Removing error.');
+            throw new HttpException(500, 'Removing error.');
         }
     }
 
     public function create(ContactInfo $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500, 'Saving error.');
         }
     }
 
     public function update(ContactInfo $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500,'Updating error.');
         }
     }
 }

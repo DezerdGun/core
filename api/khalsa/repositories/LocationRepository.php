@@ -2,6 +2,7 @@
 
 namespace api\khalsa\repositories;
 
+use api\components\HttpException;
 use api\khalsa\interfaces\RepositoryInterface;
 use common\models\Location;
 use yii\db\StaleObjectException;
@@ -13,7 +14,7 @@ class LocationRepository implements RepositoryInterface
     public function getById($id): Location
     {
         if (!$location = Location::findOne(['id' => $id])) {
-            throw new NotFoundException('Location is not found.');
+            throw new HttpException(404, 'Location is not found.');
         }
         return $location;
     }
@@ -21,14 +22,14 @@ class LocationRepository implements RepositoryInterface
     public function create(Location $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new HttpException(500, 'Saving error.');
         }
     }
 
     public function update(Location $model)
     {
         if (!$model->save()) {
-            throw new \RuntimeException('Updating error.');
+            throw new HttpException(500, 'Updating error.');
         }
     }
 
@@ -38,7 +39,7 @@ class LocationRepository implements RepositoryInterface
     public function delete(Location $location)
     {
         if (!$location->delete()) {
-            throw new \RuntimeException('Removing error.');
+            throw new HttpException(500, 'Removing error.');
         }
     }
 

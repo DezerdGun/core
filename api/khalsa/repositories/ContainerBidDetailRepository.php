@@ -57,7 +57,7 @@ class ContainerBidDetailRepository
     public function delete(ContainerBidDetail $model)
     {
         if (!$model->delete()) {
-            throw new HttpException(400, [$model->formName() => $model->errors]);
+            throw new HttpException(500, [$model->formName() => $model->errors]);
         }
     }
 }

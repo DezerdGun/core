@@ -21,6 +21,7 @@ use Yii;
  * @property string $delivery_to
  * @property integer $load_reference_number
  * @property string $vessel_eta
+ * @property integer $billing_id
  * @property integer $carrier_id
  *
  * @property \common\models\Carrier $carrier
@@ -61,15 +62,16 @@ abstract class Load extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number', 'carrier_id'], 'default', 'value' => null],
-            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number', 'carrier_id'], 'integer'],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number', 'billing_id', 'carrier_id'], 'default', 'value' => null],
+            [['customer_id', 'port_id', 'consignee_id', 'user_id', 'load_reference_number', 'billing_id', 'carrier_id'], 'integer'],
             [['pick_up_from', 'pick_up_to', 'delivery_from', 'delivery_to', 'vessel_eta'], 'safe'],
             [['status'], 'string', 'max' => 32],
             [['carrier_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Carrier::className(), 'targetAttribute' => ['carrier_id' => 'id']],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
             [['port_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['port_id' => 'id']],
             [['consignee_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Location::className(), 'targetAttribute' => ['consignee_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            ['billing_id', 'exist', 'targetClass' => \common\models\Billing::className(), 'targetAttribute' => ['billing_id' => 'id']]
         ];
     }
 
@@ -91,6 +93,7 @@ abstract class Load extends \yii\db\ActiveRecord
             'delivery_to' => 'Delivery To',
             'load_reference_number' => 'Load Reference Number',
             'vessel_eta' => 'Vessel Eta',
+            'billing_id' => 'Billing ID'
             'carrier_id' => 'Carrier ID',
         ];
     }
