@@ -5,7 +5,7 @@ services:
     image: nginx
     container_name: tmp_nginx
     ports:
-      - "80:80"
+      - "50:50"
     depends_on:
       - php
     volumes:
