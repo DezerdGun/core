@@ -60,10 +60,7 @@ return [
                 'host' => 'smtp.mailgun.org',
                 'port' => 587,
                 'encryption' => 'tls',
-                'username' => 'info@mail.therealstart.com',
-                'password' => 'e05d4d85813416b457e5ff0c1526b5ea-8845d1b1-c2fc6dc1',
             ],
-            'messageConfig' => ['from' => 'info@mail.therealstart.com']
         ],
         'request' => [
             'parsers' => [
