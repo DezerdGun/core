@@ -93,7 +93,7 @@ abstract class Load extends \yii\db\ActiveRecord
             'delivery_to' => 'Delivery To',
             'load_reference_number' => 'Load Reference Number',
             'vessel_eta' => 'Vessel Eta',
-            'billing_id' => 'Billing ID'
+            'billing_id' => 'Billing ID',
             'carrier_id' => 'Carrier ID',
         ];
     }
