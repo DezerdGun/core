@@ -47,6 +47,7 @@
                     ],
                     ['label' => 'Users', 'url' => ['user/index'], 'icon' => 'user'],
                     ['label' => 'Epos', 'url' => ['epos/index'], 'icon' => 'user'],
+                    ['label' => 'Tieto', 'url' => ['tieto-transaction-types/index'], 'icon' => 'user'],
                     ['label' => 'Pages', 'url' => ['page/index'], 'icon' => 'filter'],
                     ['label' => 'Load-Bid-History', 'url' => ['load-bid-history/index'], 'icon' => 'fa fa-history'],
                 ],
