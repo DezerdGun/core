@@ -3,6 +3,11 @@ Add the following lines to your hosts file (/etc/hosts in Linux/Mac OS c:\Window
 127.0.0.1   backend.tmp.loc
 127.0.0.1   frontend.tmp.loc
 127.0.0.1   api.tmp.loc
+
+[pgadmin] (http://localhost:8000/browser/)
+[backend.tmp.loc] (http://localhost:50/)
+[frontend.tmp.loc] http://localhost:51/
+[api.tmp.loc] http://localhost:52/
 ```
 Start/Stop/Down/Attach/Logs
 ```
