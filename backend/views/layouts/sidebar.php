@@ -42,7 +42,7 @@
                             ['label' => 'Truck types', 'url' => ['/truck-types'], 'iconStyle' => 'far'],
                             ['label' => 'Equipment', 'url' => ['/equipment'], 'iconStyle' => 'far'],
                             ['label' => 'Load modes', 'url' => ['loadmodes/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Owner list', 'url' => ['owner/index'], 'iconStyle' => 'far']
+                          ['label' => 'Owner list', 'url' => ['owner/index'], 'iconStyle' => 'far'],
                         ],
                     ],
                     ['label' => 'Users', 'url' => ['user/index'], 'icon' => 'user'],
@@ -50,8 +50,10 @@
                     ['label' => 'Tieto', 'url' => ['tieto-transaction-types/index'], 'icon' => 'user'],
                     ['label' => 'Pages', 'url' => ['page/index'], 'icon' => 'filter'],
                     ['label' => 'Load-Bid-History', 'url' => ['load-bid-history/index'], 'icon' => 'fa fa-history'],
+                    ['label' => 'Usefull', 'url' => ['usefull/index'], 'iconStyle' => 'fas fa-power-off']
                 ],
             ]);
+            // https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp
             ?>
         </nav>
         <!-- /.sidebar-menu -->
