@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.1-cli
 RUN apt-get update && echo "1"
 RUN apt-get install -y apt-utils libpq-dev unzip libzip-dev libpng-dev libfreetype6-dev git
 RUN apt-get install -y iproute2 iputils-ping
@@ -15,7 +15,9 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm composer-setup.php
 RUN docker-php-ext-configure gd --with-freetype
 RUN docker-php-ext-install zip pdo_pgsql pdo_mysql gd
-RUN pecl install xdebug-3.1.2
+RUN pecl channel-update pecl.php.net && \
+       pecl install xdebug-3.1.2 && \
+       docker-php-ext-enable xdebug
 RUN docker-php-ext-enable xdebug
 COPY cmd.sh .
 RUN chmod u+x cmd.sh

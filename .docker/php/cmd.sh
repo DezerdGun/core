@@ -13,5 +13,5 @@ php yii migrate --interactive=0 --migrationPath=@yii/rbac/migrations
 php yii migrate --interactive=0
 
 set -m
-php-fpm &
+#php-fpm &
 fg %1

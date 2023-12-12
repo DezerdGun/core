@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: nginx
+    image: nginx:latest
     container_name: tmp_nginx
     ports:
       - "50:50"
@@ -67,7 +67,7 @@ services:
       - "${REDISCOMMANDER_PORT}:8081"
 
   database:
-    image: mdillon/postgis
+    image: mdillon/postgis:latest
     container_name: tmp_postgres
     environment:
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -91,7 +91,7 @@ services:
 
   pgadmin:
     container_name: tmp_pgadmin4
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8.0
     depends_on:
     - database
     volumes:
