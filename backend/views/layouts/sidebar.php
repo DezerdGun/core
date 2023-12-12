@@ -50,7 +50,8 @@
                     ['label' => 'Tieto', 'url' => ['tieto-transaction-types/index'], 'icon' => 'user'],
                     ['label' => 'Pages', 'url' => ['page/index'], 'icon' => 'filter'],
                     ['label' => 'Load-Bid-History', 'url' => ['load-bid-history/index'], 'icon' => 'fa fa-history'],
-                    ['label' => 'Usefull', 'url' => ['usefull/index'], 'iconStyle' => 'fas fa-power-off']
+                    ['label' => 'Usefull', 'url' => ['usefull/index'], 'iconStyle' => 'fas fa-power-off'],
+                    ['label' => 'BankServices', 'url' => ['bank-services/index'], 'iconStyle' => 'fas fa-power-off'],
                 ],
             ]);
             // https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp
