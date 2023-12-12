@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:latest
+    image: nginx
     container_name: tmp_nginx
     ports:
       - "50:50"
@@ -67,7 +67,7 @@ services:
       - "${REDISCOMMANDER_PORT}:8081"
 
   database:
-    image: mdillon/postgis:latest
+    image: mdillon/postgis
     container_name: tmp_postgres
     environment:
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -79,21 +79,21 @@ services:
       - "TEST_DB_USER=${TEST_DB_USER}"
       - "TEST_DB_PASSWORD=${TEST_DB_PASSWORD}"
     volumes:
-     - "./postgres/initdb.sh:/docker-entrypoint-initdb.d/z1.sh"
-     - "./postgres/initdb-test.sh:/docker-entrypoint-initdb.d/z2.sh:ro"
-     - "./database:/var/lib/postgresql/data"
-# WINDOWS - comment upper line and uncomment lower line
-#     - "postgres_database:/var/lib/postgresql/data"
+      - "./postgres/initdb.sh:/docker-entrypoint-initdb.d/z1.sh"
+      - "./postgres/initdb-test.sh:/docker-entrypoint-initdb.d/z2.sh:ro"
+      - "./database:/var/lib/postgresql/data"
+    # WINDOWS - comment upper line and uncomment lower line
+    #     - "postgres_database:/var/lib/postgresql/data"
 
 
     ports:
-     - "${DB_PORT}:5432"
+      - "${DB_PORT}:5432"
 
   pgadmin:
     container_name: tmp_pgadmin4
-    image: dpage/pgadmin4:8.0
+    image: dpage/pgadmin4
     depends_on:
-    - database
+      - database
     volumes:
       - "./pgadmin_storage:/var/lib/pgadmin/storage"
       - "./postgres/pgservers.json:/tmp/output_file.json"
