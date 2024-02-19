@@ -52,6 +52,7 @@
                     ['label' => 'Load-Bid-History', 'url' => ['load-bid-history/index'], 'icon' => 'fa fa-history'],
                     ['label' => 'Usefull', 'url' => ['usefull/index'], 'iconStyle' => 'fas fa-power-off'],
                     ['label' => 'BankServices', 'url' => ['bank-services/index'], 'iconStyle' => 'fas fa-power-off'],
+                    ['label' => 'LinkProvider', 'url' => ['link-provider/index'], 'iconStyle' => 'fas fa-power-off'],
                 ],
             ]);
             // https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp
