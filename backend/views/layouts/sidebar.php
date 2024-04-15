@@ -54,6 +54,7 @@
                     ['label' => 'BankServices', 'url' => ['bank-services/index'], 'iconStyle' => 'fas fa-power-off'],
                     ['label' => 'LinkProvider', 'url' => ['link-provider/index'], 'iconStyle' => 'fas fa-power-off'],
                     ['label' => 'CardProductsReissueBlock', 'url' => ['card-products-reissue-block/index'], 'iconStyle' => 'fas fa-power-off'],
+                    ['label' => 'CardDelivery', 'url' => ['card-delivery/index'], 'iconStyle' => 'far'],
                 ],
             ]);
             // https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp
