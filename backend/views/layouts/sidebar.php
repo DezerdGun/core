@@ -55,6 +55,9 @@
                     ['label' => 'LinkProvider', 'url' => ['link-provider/index'], 'iconStyle' => 'fas fa-power-off'],
                     ['label' => 'CardProductsReissueBlock', 'url' => ['card-products-reissue-block/index'], 'iconStyle' => 'fas fa-power-off'],
                     ['label' => 'CardDelivery', 'url' => ['card-delivery/index'], 'iconStyle' => 'far'],
+                    ['label' => 'Survey', 'url' => ['survey/index'], 'iconStyle' => 'far'],
+                    ['label' => 'SurveyOptions', 'url' => ['survey-options/index'], 'iconStyle' => 'far'],
+                    ['label' => 'SurveyQuestions', 'url' => ['survey-questions/index'], 'iconStyle' => 'far'],
                 ],
             ]);
             // https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp
